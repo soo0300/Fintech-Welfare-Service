@@ -1,6 +1,6 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { testState } from "../recoil/atoms/TestState";
+import { testState } from "../recoil/atoms/testState";
 
 function TestCounter() {
   const [count, setCount] = useRecoilState(testState);
