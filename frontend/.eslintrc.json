@@ -27,6 +27,11 @@
     "no-param-reassign": "off",
     "no-unused-vars": "off",
     "quotes": ["error", "backtick"]
-  },
-  "eslint.workingDirectories": ["S09P22C209/frontend"]
+  }
 }
+
+// {
+//   "parser": "@babel/eslint-parser",
+//   "parserOptions": { "requireConfigFile": false },
+//   "extends": ["react-app"]
+// }
