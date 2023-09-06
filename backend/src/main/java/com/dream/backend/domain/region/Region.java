@@ -24,4 +24,10 @@ public class Region {
     @Column(nullable = false)
     private int level;
 
+    // - - - 비즈니스 로직 - - - -
+    public Region findRegion(){
+         Region region = findRegion();
+         return region;
+    }
+
 }
