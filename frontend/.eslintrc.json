@@ -26,7 +26,8 @@
     "react/destructuring-assignment": "off",
     "no-param-reassign": "off",
     "no-unused-vars": "off",
-    "quotes": ["error", "backtick"]
+    "quotes": ["error", "backtick"],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   }
 }
 
