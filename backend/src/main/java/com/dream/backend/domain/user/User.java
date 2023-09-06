@@ -1,5 +1,6 @@
 package com.dream.backend.domain.user;
 
+import com.dream.backend.domain.region.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +31,9 @@ public class User {
     @Column(nullable = false, updatable = false)
     private int residence_info;
 
-    //FK 만들기
+    @OneToOne
+    @JoinColumn(name="region_key")
+    private Region region;
 
     @Column(nullable = true)
     private LocalDateTime end_date;

@@ -21,7 +21,6 @@ public class Benefit {
     @JoinColumn(name="user_id")
     private User user;
 
-
     @OneToOne
     @JoinColumn(name="welfare_id")
     private Welfare welfare;
