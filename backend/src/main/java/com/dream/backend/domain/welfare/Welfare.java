@@ -52,4 +52,7 @@ public class Welfare {
     @Column
     private int support_period;
 
+    @Column
+    String etc;
+
 }
