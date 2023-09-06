@@ -1,25 +1,26 @@
-import React, { useEffect } from "react";
-import "./App.css";
-import TestCounter from "./components/TestCounter";
-import Router from "./router/Router";
-import Nav from "./components/Nav/Nav";
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-const App = () => {
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then(function (registration) {
-        console.log("Service Worker Registered");
-      });
-  }
+function App() {
   return (
     <div className="App">
-      <p>함께, 드림</p>
-      <TestCounter />
-      <Router />
-      <Nav />
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
     </div>
   );
-};
+}
 
 export default App;
