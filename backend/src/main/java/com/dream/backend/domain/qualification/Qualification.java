@@ -1,25 +1,20 @@
 package com.dream.backend.domain.qualification;
 
+import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.welfare.Welfare;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
-@Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED\)
-public class Qualification {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+@Embeddable
+public class Qualification implements Serializable {
     @OneToOne
-    @JoinColumn(name="welfare_id")
+    @JoinColumn(name = "welfare_id")
     private Welfare welfare;
 
     @OneToOne
-    @JoinColumn(name="region_key")
-    private Qualification qualification;
+    @JoinColumn(name = "region_key")
+    private Region region;
 
     @Column
     private int age;
