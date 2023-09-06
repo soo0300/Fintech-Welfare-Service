@@ -2,7 +2,7 @@ import React from "react";
 import { useRecoilState } from "recoil";
 import { testState } from "../recoil/atoms/testState";
 
-function TestCounter() {
+const TestCounter = () => {
   const [count, setCount] = useRecoilState(testState);
 
   const increment = () => {
@@ -19,6 +19,6 @@ function TestCounter() {
       <button onClick={decrement}>감소</button>
     </div>
   );
-}
+};
 
 export default TestCounter;
