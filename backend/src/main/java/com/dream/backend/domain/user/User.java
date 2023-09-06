@@ -1,5 +1,6 @@
 package com.dream.backend.domain.user;
 
+import com.dream.backend.domain.region.Region;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
@@ -31,17 +31,15 @@ public class User {
     @Column(nullable = false, updatable = false)
     private int residence_info;
 
+    @OneToOne
+    @JoinColumn(name="region_key")
+    private Region region;
+
     @Column(nullable = true)
     private LocalDateTime end_date;
 
     @Column(nullable = false)
     private boolean is_ended;
-
-    @Column(nullable = true, length = 50)
-    private String address_1;
-
-    @Column(nullable = true, length = 50)
-    private String address_2;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
