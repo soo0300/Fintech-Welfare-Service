@@ -30,17 +30,13 @@ public class User {
     @Column(nullable = false, updatable = false)
     private int residence_info;
 
+    //FK 만들기
+
     @Column(nullable = true)
     private LocalDateTime end_date;
 
     @Column(nullable = false)
     private boolean is_ended;
-
-    @Column(nullable = true, length = 50)
-    private String address_1;
-
-    @Column(nullable = true, length = 50)
-    private String address_2;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
