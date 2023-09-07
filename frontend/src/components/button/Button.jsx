@@ -42,6 +42,7 @@ const Button = (props) => {
     hovercolor,
     hoverbgcolor,
     weight,
+    onClick,
     border,
     children,
     text,
@@ -60,6 +61,7 @@ const Button = (props) => {
       hovercolor={hovercolor}
       hoverbgcolor={hoverbgcolor}
       weight={weight}
+      onClick={onClick}
       border={border}
       children={children}
       padding={padding}

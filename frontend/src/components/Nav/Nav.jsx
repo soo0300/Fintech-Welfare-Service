@@ -2,56 +2,52 @@ import React from "react";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 
+import { ReactComponent as ChatbotIcon } from "../../assets/img/Chatbot_icon.svg";
+import { ReactComponent as HomeIcon } from "../../assets/img/Home_icon.svg";
+import { ReactComponent as MypageIcon } from "../../assets/img/Mypage_icon.svg";
+import { ReactComponent as SearchIcon } from "../../assets/img/Search_icon.svg";
+import Button from "../button/Button";
+
 const StyledNav = styled.div`
-  background: black;
+  background: white;
   width: 100%;
   height: 100px;
   bottom: 0;
   position: fixed;
+  border-top: 1px solid;
+  border-color: black;
+  box-shadow: 0px -1px 10px 1px grey;
+  display: flex;
+  justify-content: center;
+  justify-content: space-evenly;
 `;
+
+const navIcons = [
+  { icon: HomeIcon, link: "business" },
+  { icon: ChatbotIcon, link: "chatbot" },
+  { icon: MypageIcon, link: "mypage" },
+  { icon: SearchIcon, link: "recommend" },
+];
 
 const Nav = () => {
   const navigate = useNavigate();
   const movepage = (link) => {
     navigate(`/${link}`);
   };
+
   return (
     <StyledNav>
-      <button
-        onClick={() => {
-          movepage("");
-        }}
-      >
-        인트로
-      </button>
-      <button
-        onClick={() => {
-          movepage("business");
-        }}
-      >
-        비지니스
-      </button>
-      <button
-        onClick={() => {
-          movepage("chatbot");
-        }}
-      >
-        챗봇
-      </button>
-      <button
-        onClick={() => {
-          movepage("mypage");
-        }}
-      >
-        마이페이지
-      </button>
-      <button
-        onClick={() => {
-          movepage("recommend");
-        }}
-      >
-        추천
-      </button>
+      {navIcons.map((navIcon, index) => (
+        <Button
+          key={index}
+          width="50px"
+          height="50px"
+          background="none"
+          onClick={() => movepage(navIcon.link)}
+        >
+          <navIcon.icon />
+        </Button>
+      ))}
     </StyledNav>
   );
 };
