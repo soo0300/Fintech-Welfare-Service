@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Intro from "../views/Intro";
 import Business from "../views/Business";
 import MyPage from "../views/MyPage";
@@ -10,11 +10,11 @@ const Router = () => {
   return (
     <>
       <Routes>
-        <Route path="/intro" element={<Intro />} />
+        <Route path="/" element={<Intro />} />
         <Route path="/business" element={<Business />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/chatbot" element={<ChatBot />} />
-        <Route path="/recommendpage" element={<RecommendPage />} />
+        <Route path="/recommend" element={<RecommendPage />} />
       </Routes>
     </>
   );
