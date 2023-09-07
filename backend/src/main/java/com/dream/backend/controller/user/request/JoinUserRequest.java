@@ -1,12 +1,10 @@
 package com.dream.backend.controller.user.request;
 
-import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.service.user.dto.JoinUserDto;
 import com.sun.istack.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.mapping.Join;
 
 import java.time.LocalDateTime;
 
@@ -22,14 +20,14 @@ public class JoinUserRequest {
     @NotNull
     private int residenceInfo;
     @NotNull
-    private int regionKey;
+    private Long regionKey;
     @NotNull
     private LocalDateTime endDate;
     @NotNull
     private boolean isEnded;
 
     @Builder
-    private JoinUserRequest(String name, String email, String password, int residenceInfo, int regionKey, LocalDateTime endDate, boolean isEnded) {
+    private JoinUserRequest(String name, String email, String password, int residenceInfo, Long regionKey, LocalDateTime endDate, boolean isEnded) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -50,6 +48,5 @@ public class JoinUserRequest {
                 .isEnded(isEnded)
                 .build();
     }
-
 
 }

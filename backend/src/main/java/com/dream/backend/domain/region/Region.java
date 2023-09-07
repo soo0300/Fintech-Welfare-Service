@@ -19,11 +19,10 @@ public class Region {
     private String name;
 
     @Column(nullable = false)
-    private int parent_key;
-
-    @Column(nullable = false)
     private int level;
 
+    @Column(nullable = true)
+    private int parent_key;
     // - - - 비즈니스 로직 - - - -
     public Region findRegion(){
          Region region = findRegion();
