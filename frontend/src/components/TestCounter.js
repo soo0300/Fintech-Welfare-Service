@@ -1,9 +1,9 @@
 import React from "react";
 import { useRecoilState } from "recoil";
-import { testState } from "../recoil/atoms/testState";
+import { TestState } from "../recoil/atoms/TestState";
 
 const TestCounter = () => {
-  const [count, setCount] = useRecoilState(testState);
+  const [count, setCount] = useRecoilState(TestState);
 
   const increment = () => {
     setCount(count + 1);

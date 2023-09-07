@@ -8,11 +8,11 @@ const StyledButton = styled(motion.button)`
   height: ${(props) =>
     props.type !== "icon" && !props.height ? "50px" : props.height};
   background: ${(props) =>
-    props.background ? `var(--${props.background})` : `var(--vanilla-cream)`};
+    props.background ? `var(--${props.background})` : `var(--primary)`};
   font-size: ${(props) => props.fontSize};
   color: ${(props) => (props.color ? `var(--${props.color})` : `var(--white)`)};
   font-weight: ${(props) => props.weight};
-  border-radius: ${(props) => (props.border ? props.border : "30px")};
+  border-radius: ${(props) => (props.border ? props.border : "14px")};
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -22,6 +22,15 @@ const StyledButton = styled(motion.button)`
   padding: ${(props) => (props.type === "icon" ? "0" : props.padding)};
   margin: ${(props) => props.margin};
   border: none;
+  transform: scale(1);
+  &:hover {
+    transition: all 0.4s;
+    transform: scale(0.9);
+    color: ${(props) =>
+      props.hovercolor ? `var(--${props.hovercolor})` : `var(--black)`};
+    background-color: ${(props) =>
+      props.hoverbgcolor ? `var(--${props.hoverbgcolor})` : `var(--coolblue)`};
+  }
 `;
 const Button = (props) => {
   const {
@@ -30,6 +39,8 @@ const Button = (props) => {
     background,
     fontSize,
     color,
+    hovercolor,
+    hoverbgcolor,
     weight,
     border,
     children,
@@ -37,7 +48,6 @@ const Button = (props) => {
     padding,
     margin,
     type,
-    plus,
   } = props;
 
   return (
@@ -47,13 +57,14 @@ const Button = (props) => {
       background={background}
       fontSize={fontSize}
       color={color}
+      hovercolor={hovercolor}
+      hoverbgcolor={hoverbgcolor}
       weight={weight}
       border={border}
       children={children}
       padding={padding}
       margin={margin}
       type={type}
-      plus={plus}
     >
       {text}
       {children}
