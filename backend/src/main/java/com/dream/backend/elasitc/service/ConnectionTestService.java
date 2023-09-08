@@ -1,5 +1,8 @@
 package com.dream.backend.elasitc.service;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import com.dream.backend.elasitc.repo.WelfareInfoRepo;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,16 +13,11 @@ import java.net.URL;
 
 public class ConnectionTestService {
     public static void main(String[] args) {
-        HttpUtils httpUtils = new HttpUtils();
 
         String url = "http://172.28.112.174:9200/broccolisearch/_search";
-        String method = "GET";
-        String result = "";
-        HttpURLConnection conn = null;
 
-        conn = httpUtils.getHttpURLConnection(url, method);
-        result = httpUtils.getHttpResponse(conn);
-        System.out.println(result);
+        WelfareInfoRepo infoRepo = new WelfareInfoRepo(url, 9200);
+        ElasticsearchClient elasticsearchClient = infoRepo.getElasticClient();
     }
 }
 
