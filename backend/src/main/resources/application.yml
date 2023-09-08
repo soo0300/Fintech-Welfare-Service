@@ -4,6 +4,3 @@ server:
 elasticsearch:
   host: localhost
   port: 9200
-  indecies:
-    studentsIndexName: students
-    testIndexName: tests
