@@ -4,19 +4,21 @@ import { styled } from "styled-components";
 const StyledInput = styled.input`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  border: none;
+  border: 1px solid;
   background-color: var(--white);
   color: var(--black);
   font-size: ${(props) => props.fontSize};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
-  border-radius: 10px;
+  border-radius: ${(props) => props.borderradius};
   ::placeholder {
     ${(props) => props.placeholder};
   }
   &:focus {
     outline: none;
   }
+  bottom: ${(props) => props.bottom};
+  position: ${(props) => props.position};
 `;
 
 const Input = (props) => {
@@ -31,6 +33,9 @@ const Input = (props) => {
     id,
     value,
     disabled,
+    borderradius,
+    bottom,
+    position,
   } = props;
 
   return (
@@ -45,6 +50,9 @@ const Input = (props) => {
       id={id}
       value={value}
       disabled={disabled}
+      borderradius={borderradius}
+      bottom={bottom}
+      position={position}
     />
   );
 };
