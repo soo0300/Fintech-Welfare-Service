@@ -25,8 +25,8 @@ const StyledNav = styled.div`
 const navIcons = [
   { icon: HomeIcon, link: "business" },
   { icon: ChatbotIcon, link: "chatbot" },
-  { icon: MypageIcon, link: "mypage" },
   { icon: SearchIcon, link: "recommend" },
+  { icon: MypageIcon, link: "mypage" },
 ];
 
 const Nav = () => {
