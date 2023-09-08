@@ -6,6 +6,6 @@ import org.elasticsearch.client.RestHighLevelClient;
 
 public interface ElasticsearchRepo {
 
-    public RestHighLevelClient getRestClient(RestClient client);
-    public ElasticsearchClient getElasticClient(RestClient client);
+    public RestHighLevelClient getRestClient();
+    public ElasticsearchClient getElasticClient();
 }

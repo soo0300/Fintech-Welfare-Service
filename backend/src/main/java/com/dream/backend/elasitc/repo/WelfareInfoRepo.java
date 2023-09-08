@@ -22,7 +22,7 @@ public class WelfareInfoRepo implements ElasticsearchRepo{
         client = lowClient.build();
     }
     @Override
-    public RestHighLevelClient getRestClient(RestClient client) {
+    public RestHighLevelClient getRestClient() {
 
         RestHighLevelClient restClient = new RestHighLevelClient(lowClient);
 
@@ -30,7 +30,7 @@ public class WelfareInfoRepo implements ElasticsearchRepo{
     }
 
     @Override
-    public ElasticsearchClient getElasticClient(RestClient client) {
+    public ElasticsearchClient getElasticClient() {
 
         ElasticsearchTransport transport = new RestClientTransport(this.client, new JacksonJsonpMapper());
         ElasticsearchClient esClient = new ElasticsearchClient(transport);
