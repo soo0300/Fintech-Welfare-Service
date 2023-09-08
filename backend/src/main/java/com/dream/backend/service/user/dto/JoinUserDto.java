@@ -35,6 +35,7 @@ public class JoinUserDto {
 //        여기에 regionKey 에 알맞는 region 객체를 찾아오고 싶음.
         Optional<Region> regionOptional = regionRepository.findById(regionKey);
         Region region = regionOptional.orElseThrow(() -> new NoSuchElementException("Region not found for regionKey: " + regionKey));
+        System.out.println("regionKey: "+region.getId());
         return User.builder()
                 .name(this.name)
                 .email(this.email)
