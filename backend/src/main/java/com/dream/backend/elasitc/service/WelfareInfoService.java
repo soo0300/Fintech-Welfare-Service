@@ -14,6 +14,4 @@ public class WelfareInfoService {
         // WelfareInfo Index 존재 검사 -> 없으면 Index 생성
 
     }
-
-
 }
