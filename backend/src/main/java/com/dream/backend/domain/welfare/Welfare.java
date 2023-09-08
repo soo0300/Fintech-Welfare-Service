@@ -44,7 +44,7 @@ public class Welfare {
     private String description;
 
     @Column
-    private String poster;
+    private String url;
 
     @Column
     private String img;
