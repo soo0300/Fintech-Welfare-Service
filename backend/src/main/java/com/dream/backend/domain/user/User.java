@@ -1,11 +1,13 @@
 package com.dream.backend.domain.user;
 
+import com.dream.backend.controller.user.response.UserFundResponse;
 import com.dream.backend.domain.region.Region;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Getter
@@ -66,4 +68,13 @@ public class User {
         this.total_fund = total_fund;
         this.account = account;
     }
+
+    // - - -비즈니스 로직
+    public UserFundResponse toFundResponse(Optional<User> user){
+        return UserFundResponse.builder()
+                .pre_fund(user.get().pre_fund)
+                .total_fund(user.get().total_fund)
+                .build();
+    }
+
 }
