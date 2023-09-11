@@ -44,6 +44,9 @@ public class Transaction {
     @JoinColumn(name = "inout_type")
     private int inoutType;
 
+    @Column(name = "tran_desc", length = 50)
+    private String tran_desc;
+
     @Column(name = "tran_amt")
     private int tranAmt;
 
