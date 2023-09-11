@@ -25,4 +25,28 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name="bank_code")
     private Bank bank;
+
+    @Column(name = "bank_name", length = 50)
+    private String bankName;
+
+    @Column(name = "branch_name", length = 50)
+    private String branchName;
+
+    @Column(name = "tran_date")
+    private int tranDate;
+
+    @Column(name = "tran_time")
+    private int tranTime;
+
+    @JoinColumn(name = "tran_type")
+    private int tranType;
+
+    @JoinColumn(name = "inout_type")
+    private int inoutType;
+
+    @Column(name = "tran_amt")
+    private int tranAmt;
+
+    @Column(name = "after_balanced_amt")
+    private int balance;
 }
