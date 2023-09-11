@@ -5,7 +5,8 @@ const StyledInput = styled.input`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border: none;
-  background-color: var(--white);
+  background: ${(props) =>
+    props.background ? `var(--${props.background})` : `var(--white)`};
   color: var(--black);
   font-size: ${(props) => props.fontSize};
   margin: ${(props) => props.margin};
@@ -30,6 +31,7 @@ const Input = (props) => {
     width,
     height,
     placeholder,
+    background,
     margin,
     padding,
     onChange,
@@ -45,6 +47,7 @@ const Input = (props) => {
       placeholder={placeholder}
       width={width}
       height={height}
+      background={background}
       margin={margin}
       padding={padding}
       onChange={onChange}
