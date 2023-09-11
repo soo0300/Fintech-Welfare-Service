@@ -3,10 +3,11 @@ import { styled } from "styled-components";
 import Button from "../components/button/Button";
 import { ReactComponent as BackIcon } from "../assets/img/arrow-left-bold.svg";
 import { ReactComponent as BotIcon } from "../assets/img/boticon.svg";
-import { ReactComponent as SendIcon } from "../assets/img/sendicon.svg";
-
+import { ReactComponent as SendIcon } from "../assets/img/Send_icon.svg";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
+import "./ChatBot.css";
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -18,10 +19,9 @@ const Container = styled.div`
 const ChatHeader = styled.div`
   width: 100%;
   height: 8%;
-  border-bottom: 1px solid;
   border-color: black;
   background-color: white;
-  box-shadow: 0px -1px 10px 1px grey;
+  box-shadow: 0px 0px 20px 0px grey;
   display: flex;
   align-items: center;
   position: fixed;
@@ -29,14 +29,14 @@ const ChatHeader = styled.div`
 `;
 
 const ChatContent = styled.div`
-  width: 90%;
+  width: 100%;
   margin-top: 18%;
   height: 78%;
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
   position: fixed;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const ChatForm = styled.form`
@@ -46,24 +46,22 @@ const ChatForm = styled.form`
   background-color: white;
   width: 80%;
   height: auto;
-  max-height: 200px;
   bottom: 5%;
   position: fixed;
   border-radius: 10px;
   font-size: 18px;
 `;
 
-const ChatInput = styled.textarea`
-  width: 80%;
-  margin: 10px;
-  /* border-radius: 85px; */
+const StyledTextarea = styled(TextareaAutosize)`
   font-size: 18px;
-  white-space: normal;
-  height: auto;
-  max-height: 180px;
-  min-height: 20px;
-  overflow-y: auto;
+  width: 80%;
+  height: 5%;
+  margin: 10px;
+  border: none;
   resize: none;
+  &:focus {
+    outline: none;
+  }
 `;
 
 const ChatContainer = styled.div`
@@ -90,17 +88,6 @@ const StyledEllipseIcon = styled.div`
   justify-content: space-evenly;
 `;
 
-const StyledTextarea = styled(TextareaAutosize)`
-  font-size: 12px;
-  width: 80%;
-  height: 5%;
-  margin: 10px;
-  border: none;
-  &:focus {
-    outline: none; /* 포커스 시 외곽선 제거 */
-  }
-`;
-
 function ChatBot() {
   const [message, setMessage] = useState([
     ["안녕하세요! 무엇을 도와드릴까요?", "bot"],
@@ -113,7 +100,9 @@ function ChatBot() {
   };
 
   const changeMessage = (e) => {
-    setMyMessage(e.target.value);
+    if (e.target.value.length <= 100) {
+      setMyMessage(e.target.value);
+    }
   };
 
   const sendMessage = (e) => {
@@ -145,16 +134,22 @@ function ChatBot() {
         {message.map((data, index) => (
           <div key={index}>
             {data[1] === "bot" ? (
-              <ChatContainer>
-                <StyledEllipseIcon>
-                  <BotIcon />
-                </StyledEllipseIcon>
-                <ChatBox>
-                  <div>{data[0]}</div>
-                </ChatBox>
-              </ChatContainer>
+              <>
+                <ChatContainer>
+                  <StyledEllipseIcon>
+                    <BotIcon />
+                  </StyledEllipseIcon>
+                  <ChatBox>
+                    <div class="yours messages">
+                      <div class="message last">{data[0]}</div>
+                    </div>
+                  </ChatBox>
+                </ChatContainer>
+              </>
             ) : (
-              <div className="message-yourbody">{data[0]}</div>
+              <div class="mine messages">
+                <div class="message last">Dude</div>
+              </div>
             )}
           </div>
         ))}
@@ -162,10 +157,11 @@ function ChatBot() {
 
       <ChatForm onSubmit={sendMessage}>
         <StyledTextarea
-          placeholder="메세지를 입력하세요"
+          required
+          placeholder="메세지를 입력하세요(최대 100자)"
           value={myMessage}
           onChange={changeMessage}
-        ></StyledTextarea>
+        />
         <Button width="50px" height="50px" background="none" type="submit">
           <SendIcon />
         </Button>
