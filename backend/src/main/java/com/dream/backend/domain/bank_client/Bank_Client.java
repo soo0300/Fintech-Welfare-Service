@@ -1,4 +1,4 @@
-package com.dream.backend.domain.bank;
+package com.dream.backend.domain.bank_client;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,16 +12,13 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Bank {
+public class Bank_Client {
+
     @Id
     @GeneratedValue()
-    @Column(name=" bank_code")
-    private int bankCode;
+    @Column(name=" client_key")
+    private int clientCode;
 
     @Column(nullable = false, length = 50)
-    private String bankName;
-
-    public String getBankName() {
-        return this.bankName;
-    }
+    private String clientName;
 }

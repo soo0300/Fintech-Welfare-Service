@@ -1,6 +1,7 @@
 package com.dream.backend.domain.account;
 
 import com.dream.backend.domain.bank.Bank;
+import com.dream.backend.domain.bank_client.Bank_Client;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,19 @@ public class Account {
     @Column(name="account_number")
      private Long number;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="bank_code")
     private Bank bank;
 
+    @ManyToOne
+    @JoinColumn(name = "client_key")
+    private Bank_Client client;
+
+    @Column(name = "branch_name", length = 50)
+    private String branch_name;
+
+    @Column(name = "balance")
+    private int balance;
+
+    public String getBranch_name() { return this.branch_name; }
 }
