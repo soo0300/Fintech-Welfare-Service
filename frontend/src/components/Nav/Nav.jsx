@@ -11,7 +11,7 @@ import Button from "../button/Button";
 const StyledNav = styled.div`
   background: white;
   width: 100%;
-  height: 100px;
+  height: 10%;
   bottom: 0;
   position: fixed;
   border-top: 1px solid;
