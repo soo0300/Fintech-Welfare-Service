@@ -4,14 +4,17 @@ import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 import { BrowserRouter } from "react-router-dom";
-import { RecoilRoot } from "recoil";
+import { Provider } from "react-redux";
+import store from "./store";
+import Modal from "./components/modal/Modal";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <RecoilRoot>
+    <Provider store={store}>
+      <Modal />
       <App />
-    </RecoilRoot>
+    </Provider>
   </BrowserRouter>
 );
 
