@@ -20,8 +20,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ApiResponse<Long> joinUser(JoinUserRequest request){
+    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request){
         JoinUserDto dto = request.toDto();
+        System.out.print("controller region key"+dto.getRegionKey());
          Long id = userService.joinUser(dto);
         return ApiResponse.ok(id);
     }

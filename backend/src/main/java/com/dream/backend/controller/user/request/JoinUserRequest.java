@@ -25,9 +25,11 @@ public class JoinUserRequest {
     private LocalDateTime endDate;
     @NotNull
     private boolean isEnded;
+    @NotNull
+    private LocalDateTime createdDate;
 
     @Builder
-    private JoinUserRequest(String name, String email, String password, int residenceInfo, Long regionKey, LocalDateTime endDate, boolean isEnded) {
+    private JoinUserRequest(String name, String email, String password, int residenceInfo, Long regionKey, LocalDateTime endDate, LocalDateTime createdDate, boolean isEnded) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -35,6 +37,7 @@ public class JoinUserRequest {
         this.regionKey = regionKey;
         this.endDate = endDate;
         this.isEnded = isEnded;
+        this.createdDate = createdDate;
     }
 
     public JoinUserDto toDto() {
@@ -44,8 +47,9 @@ public class JoinUserRequest {
                 .password(this.password)
                 .residenceInfo(this.residenceInfo)
                 .regionKey(this.regionKey)
-                .endDate(endDate)
-                .isEnded(isEnded)
+                .endDate(this.endDate)
+                .createdDate(this.createdDate)
+                .isEnded(this.isEnded)
                 .build();
     }
 
