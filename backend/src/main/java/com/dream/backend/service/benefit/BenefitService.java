@@ -47,6 +47,8 @@ public class BenefitService {
     }
 
 
+
+
     //- - - - - - - - - 비즈니스 로직 - - - - - - - - -
     private Benefit toEntity(Optional<Welfare> welfare, Optional<User> user, int status) {
         return Benefit.builder()
@@ -74,4 +76,8 @@ public class BenefitService {
 
     }
 
+    public List<BenefitResponse> getUserAllBenefit(Long userId) {
+        List<BenefitResponse> list = new ArrayList<>();
+        return list;
+    }
 }

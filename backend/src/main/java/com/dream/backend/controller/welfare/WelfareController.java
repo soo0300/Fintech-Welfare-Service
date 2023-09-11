@@ -18,7 +18,7 @@ public class WelfareController {
 
     private final WelfareService welfareService;
 
-    //복지 정보 전체 조회 하기
+    //전체 복지 정보 조회
     @GetMapping("/all")
     public List<WelfareResponse> getAllWelfare(){
         return welfareService.getAllWelfare();
