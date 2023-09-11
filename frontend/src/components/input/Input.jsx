@@ -10,7 +10,12 @@ const StyledInput = styled.input`
   font-size: ${(props) => props.fontSize};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
-  border-radius: 10px;
+  border-radius: ${(props) => props.borderRadius};
+  border: none;
+  border-bottom: 1px solid gray;
+  &:focus {
+    outline: none;
+  }
   ::placeholder {
     ${(props) => props.placeholder};
   }
@@ -30,6 +35,7 @@ const Input = (props) => {
     onChange,
     id,
     value,
+    borderRadius,
     disabled,
   } = props;
 
@@ -45,6 +51,7 @@ const Input = (props) => {
       id={id}
       value={value}
       disabled={disabled}
+      borderRadius={borderRadius}
     />
   );
 };
