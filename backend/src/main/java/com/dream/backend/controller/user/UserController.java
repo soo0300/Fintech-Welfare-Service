@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-@RestController
 @Slf4j
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -23,12 +23,19 @@ public class UserController {
     public ApiResponse<Long> joinUser(JoinUserRequest request){
         JoinUserDto dto = request.toDto();
          Long id = userService.joinUser(dto);
-        return ApiResponse.ok(1L);
+        return ApiResponse.ok(id);
     }
 
     @GetMapping("/fund/{user_id}")
     public UserFundResponse getUserFund(@PathVariable Long user_id) {
         Optional<User> user = userService.getUserFund(user_id);
+        UserFundResponse userResponse = user.get().toFundResponse(user);
+        return userResponse;
+    }
+
+    @GetMapping("/fund2")
+    public UserFundResponse getUserFund() {
+        Optional<User> user = userService.getUserFund(1L);
         UserFundResponse userResponse = user.get().toFundResponse(user);
         return userResponse;
     }
