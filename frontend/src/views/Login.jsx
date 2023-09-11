@@ -9,10 +9,10 @@ import BG3 from "../assets/img/login/Ellipse_478.svg";
 
 const LoginContainer = styled.div`
   display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+  justify-content: center;
+  align-items: center;
   text-align: left;
-  min-height: 100vh; /* Make the container at least the height of the viewport */
+  min-height: 100vh;
 `;
 
 const HeaderBox = styled.div`
