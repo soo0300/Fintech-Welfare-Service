@@ -34,7 +34,7 @@ function ChatBot() {
   };
   return (
     <>
-      <ChatHeader className="신대혁">
+      <ChatHeader>
         <Button width="40px" height="40px" background="none" onClick={moveBack}>
           <BackIcon />
         </Button>
