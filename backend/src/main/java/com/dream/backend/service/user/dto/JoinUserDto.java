@@ -4,11 +4,13 @@ import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.region.repository.RegionRepository;
 import com.dream.backend.domain.user.User;
 import lombok.Builder;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public class JoinUserDto {
 
     private RegionRepository regionRepository;
