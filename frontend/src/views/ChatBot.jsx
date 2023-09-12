@@ -14,15 +14,16 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  overscroll-behavior-y: auto;
+  overflow: hidden;
+  overscroll-behavior: none;
 `;
 
 const ChatHeader = styled.div`
   width: 100%;
-  height: 8%;
+  height: 70px;
   border-color: black;
   background-color: white;
-  box-shadow: 0px 0px 20px 0px grey;
+  box-shadow: 0px 0px 10px 0px grey;
   display: flex;
   align-items: center;
   position: fixed;
@@ -31,13 +32,24 @@ const ChatHeader = styled.div`
 
 const ChatContent = styled.div`
   width: 100%;
-  margin-top: 20%;
-  height: 80%;
+  margin-top: 80px;
+  margin-bottom: 70px;
+  height: calc(100% - 150px);
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
   position: fixed;
   overscroll-behavior-y: auto;
+`;
+
+const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 70px;
+  bottom: 0;
+  position: fixed;
 `;
 
 const ChatForm = styled.form`
@@ -47,7 +59,6 @@ const ChatForm = styled.form`
   background-color: white;
   width: 90%;
   height: auto;
-  bottom: 3%;
   position: fixed;
   border-radius: 30px;
   font-size: 18px;
@@ -139,17 +150,19 @@ function ChatBot() {
         ))}
       </ChatContent>
 
-      <ChatForm onSubmit={sendMessage}>
-        <StyledTextarea
-          required
-          placeholder=""
-          value={myMessage}
-          onChange={changeMessage}
-        />
-        <Button width="50px" height="50px" background="none" type="submit">
-          <SendIcon />
-        </Button>
-      </ChatForm>
+      <Footer>
+        <ChatForm onSubmit={sendMessage}>
+          <StyledTextarea
+            required
+            placeholder=""
+            value={myMessage}
+            onChange={changeMessage}
+          />
+          <Button width="50px" height="50px" background="none" type="submit">
+            <SendIcon />
+          </Button>
+        </ChatForm>
+      </Footer>
     </Container>
   );
 }
