@@ -39,11 +39,6 @@ const BoxVariants = {
     opacity: 1,
     scale: 1,
   },
-  exit: {
-    opacity: 0,
-    scale: 0,
-    y: 100,
-  },
 };
 
 const animationDuration = 2;
@@ -78,7 +73,6 @@ const Intro = () => {
           variants={BoxVariants}
           initial="initial"
           animate="visible"
-          exit="exit"
           transition={{
             duration: animationDuration,
           }}

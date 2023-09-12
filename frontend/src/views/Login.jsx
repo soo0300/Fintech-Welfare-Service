@@ -6,7 +6,7 @@ import Button from "../components/button/Button";
 import BG1 from "../assets/img/login/Ellipse_476.svg";
 import BG2 from "../assets/img/login/Ellipse_477.svg";
 import BG3 from "../assets/img/login/Ellipse_478.svg";
-
+import { useNavigate } from "react-router-dom";
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -84,6 +84,11 @@ const BackThird = styled.img`
   z-index: -2;
 `;
 const Login = () => {
+  const navigate = useNavigate();
+
+  const LoginAccess = () => {
+    navigate("/business");
+  };
   return (
     <LoginContainer className="LoginContainer">
       <LoginBox className="LoginBox">
@@ -112,9 +117,15 @@ const Login = () => {
             placeholder="비밀번호 입력"
             border-radius="none"
             background="--bgColor"
+            type="password"
           />
           <hr background="--gray" />
-          <Button width="270px" margin="20px" fontSize="15px">
+          <Button
+            onClick={LoginAccess}
+            width="270px"
+            margin="20px"
+            fontSize="15px"
+          >
             로그인
           </Button>
           <SignupBox>
