@@ -20,24 +20,32 @@ public class UserService {
     private final RegionRepository regionRepository;
 
     public Long joinUser(JoinUserDto dto) {
-        System.out.println("dtoregionkey: "+dto.getRegionKey());
+        System.out.println("dtoregionkey: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion);
-        System.out.println("before Repo: "+ user.getName());
+        System.out.println("before Repo: " + user.getName());
         User saveduser = userRepository.save(user);
-        System.out.println("after Repo"+saveduser.getId());
+        System.out.println("after Repo" + saveduser.getId());
+
+        // - - 비즈니스 로직 [만 나이 계산기]
         int my = saveduser.getResidence_info();
         //순서대로 : 생년/ 월,일 / 성별
-        System.out.println(my/100000);
-        System.out.println((my%100000)/10);
-        System.out.println(my%10);
+        int userBirthY = my / 100000 + 1900 ;
+        int userBirthMM = (my % 100000) / 10;
+        int gender = my % 10;
 
-        // - - 비즈니스 로직 필요
-        System.out.println("생년월일: "+saveduser.getResidence_info());
+        System.out.println("생년월일: " + saveduser.getResidence_info());
+        String nowDate = String.valueOf(saveduser.getCreated_date());
+        int year = Integer.parseInt(nowDate.substring(0, 4));
+        int birth = Integer.parseInt(nowDate.substring(5, 7) + nowDate.substring(8, 10));
+        System.out.println("현재시간 파싱: " + year + " " + birth);
+        int age = year - userBirthY;
+        if(userBirthMM<=birth) age-=1;
+        System.out.println(age);
         return saveduser.getId();
     }
 
-    public Optional<User> getUserFund(Long userId){
+    public Optional<User> getUserFund(Long userId) {
         return userRepository.findById(userId);
     }
 
