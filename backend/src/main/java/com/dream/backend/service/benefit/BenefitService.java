@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,12 @@ public class BenefitService {
         Benefit benefit = toEntity(welfare, user, status);
         Benefit savedBenefit = benefitRepository.save(benefit);
         return savedBenefit.getId();
+    }
+
+    public void addUserBenefit(Long userId, List<Integer>list){
+        //list는 사용자의 복지카드 리스트의 복지식별키이다.
+        //순회하면서
+
     }
 
     public List<BenefitResponse> getUserBenefit(Long userId, int status) {
