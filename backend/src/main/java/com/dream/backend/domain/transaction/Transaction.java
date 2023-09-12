@@ -3,12 +3,17 @@ package com.dream.backend.domain.transaction;
 import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.bank.Bank;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.naming.Name;
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
+//@Table(name = "transaction")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Transaction {
@@ -17,14 +22,12 @@ public class Transaction {
     @Column(name="transaction_id")
     private Long id;
 
-    @ManyToOne
     @JoinColumn(name="account_number")
-    private Account account;
+    private Long accountNumber;
 
     //account 테이블의 fk를 조인하고 싶을 때!
-    @ManyToOne
     @JoinColumn(name="bank_code")
-    private Bank bank;
+    private Long bank;
 
     @Column(name = "bank_name", length = 50)
     private String bankName;
@@ -33,10 +36,7 @@ public class Transaction {
     private String branchName;
 
     @Column(name = "tran_date")
-    private int tranDate;
-
-    @Column(name = "tran_time")
-    private int tranTime;
+    private LocalDateTime tranDate;
 
     @JoinColumn(name = "tran_type")
     private int tranType;
@@ -45,11 +45,32 @@ public class Transaction {
     private int inoutType;
 
     @Column(name = "tran_desc", length = 50)
-    private String tran_desc;
+    private String tranDesc;
 
     @Column(name = "tran_amt")
     private int tranAmt;
 
     @Column(name = "after_balanced_amt")
     private int balance;
+
+    @Builder
+    public Transaction(long id, Long accountNumber, Long bank, String bankName, String branchName, LocalDateTime tranDate, int tranType, int inoutType, String tranDesc, int tranAmt, int balance) {
+        this.id = id;
+        this.accountNumber = accountNumber;
+        this.bank = bank;
+        this.bankName = bankName;
+        this.branchName = branchName;
+        this.tranDate = tranDate;
+        this.tranType = tranType;
+        this.inoutType = inoutType;
+        this.tranDesc = tranDesc;
+        this.tranAmt = tranAmt;
+        this.balance = balance;
+    }
+
+    public LocalDateTime getTranDate() {
+        return tranDate;
+    }
+
+    // ----- 비지니스 로직 ------ //
 }

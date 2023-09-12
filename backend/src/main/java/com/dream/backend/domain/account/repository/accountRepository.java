@@ -1,4 +1,9 @@
 package com.dream.backend.domain.account.repository;
 
-public class accountRepository {
+import com.dream.backend.domain.account.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface accountRepository extends JpaRepository<Account, Long> {
+
+    Account findByAccountNumber(Long number);
 }
