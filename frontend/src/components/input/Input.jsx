@@ -4,25 +4,21 @@ import { styled } from "styled-components";
 const StyledInput = styled.input`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  border: none;
-  background: ${(props) =>
-    props.background ? `var(--${props.background})` : `var(--white)`};
+  border: 1px solid;
+  background-color: var(--white);
   color: var(--black);
   font-size: ${(props) => props.fontSize};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
-  border-radius: ${(props) => props.borderRadius};
-  border: none;
-  border-bottom: 1px solid gray;
-  &:focus {
-    outline: none;
-  }
+  border-radius: ${(props) => props.borderradius};
   ::placeholder {
     ${(props) => props.placeholder};
   }
   &:focus {
     outline: none;
   }
+  bottom: ${(props) => props.bottom};
+  position: ${(props) => props.position};
 `;
 
 const Input = (props) => {
@@ -31,14 +27,15 @@ const Input = (props) => {
     width,
     height,
     placeholder,
-    background,
     margin,
     padding,
     onChange,
     id,
     value,
-    borderRadius,
     disabled,
+    borderradius,
+    bottom,
+    position,
   } = props;
 
   return (
@@ -47,14 +44,15 @@ const Input = (props) => {
       placeholder={placeholder}
       width={width}
       height={height}
-      background={background}
       margin={margin}
       padding={padding}
       onChange={onChange}
       id={id}
       value={value}
       disabled={disabled}
-      borderRadius={borderRadius}
+      borderradius={borderradius}
+      bottom={bottom}
+      position={position}
     />
   );
 };
