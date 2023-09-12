@@ -25,7 +25,15 @@ public class UserService {
         User user = dto.toEntity(savedRegion);
         System.out.println("before Repo: "+ user.getName());
         User saveduser = userRepository.save(user);
-        System.out.print("after Repo"+saveduser.getId());
+        System.out.println("after Repo"+saveduser.getId());
+        int my = saveduser.getResidence_info();
+        //순서대로 : 생년/ 월,일 / 성별
+        System.out.println(my/100000);
+        System.out.println((my%100000)/10);
+        System.out.println(my%10);
+
+        // - - 비즈니스 로직 필요
+        System.out.println("생년월일: "+saveduser.getResidence_info());
         return saveduser.getId();
     }
 
