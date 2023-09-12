@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { openModal } from "../store/modalSlice";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
 import { ReactComponent as CalendarIcon } from "../assets/img/calendar_icon.svg";
 import Input from "../components/input/Input";
@@ -71,6 +73,15 @@ const Info = () => {
   const movePage = () => {
     navigate("/business");
   };
+  const dispatch = useDispatch();
+  const openCalendarModal = () => {
+    dispatch(
+      openModal({
+        modalType: "CalendarModal",
+        isOpen: true,
+      })
+    );
+  };
   return (
     <InfoContainer>
       <HeaderBox>
@@ -120,7 +131,13 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
           />
-          <Button type="icon" background="none">
+          <Button
+            type="icon"
+            background="none"
+            onClick={() => {
+              openCalendarModal();
+            }}
+          >
             <CalendarIcon />
           </Button>
         </DateBox>
