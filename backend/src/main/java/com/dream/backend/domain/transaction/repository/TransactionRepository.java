@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    public List<Transaction> findAllByAccount(Account accountNumber);
 }
