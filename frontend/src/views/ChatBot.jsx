@@ -14,6 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  overscroll-behavior-y: auto;
 `;
 
 const ChatHeader = styled.div`
@@ -30,13 +31,13 @@ const ChatHeader = styled.div`
 
 const ChatContent = styled.div`
   width: 100%;
-  margin-top: 18%;
-  height: 78%;
+  margin-top: 20%;
+  height: 80%;
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
   position: fixed;
-  gap: 20px;
+  overscroll-behavior-y: auto;
 `;
 
 const ChatForm = styled.form`
@@ -44,12 +45,13 @@ const ChatForm = styled.form`
   justify-content: center;
   align-items: center;
   background-color: white;
-  width: 80%;
+  width: 90%;
   height: auto;
-  bottom: 5%;
+  bottom: 3%;
   position: fixed;
-  border-radius: 10px;
+  border-radius: 30px;
   font-size: 18px;
+  overflow: hidden;
 `;
 
 const StyledTextarea = styled(TextareaAutosize)`
@@ -62,20 +64,6 @@ const StyledTextarea = styled(TextareaAutosize)`
   &:focus {
     outline: none;
   }
-`;
-
-const ChatContainer = styled.div`
-  display: flex;
-  gap: 20px;
-`;
-
-const ChatBox = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: white;
-  white-space: normal;
-  border-radius: 20px;
-  max-width: 70%;
 `;
 
 const StyledEllipseIcon = styled.div`
@@ -135,20 +123,16 @@ function ChatBot() {
           <div key={index}>
             {data[1] === "bot" ? (
               <>
-                <ChatContainer>
+                <div class="yours messages">
                   <StyledEllipseIcon>
                     <BotIcon />
                   </StyledEllipseIcon>
-                  <ChatBox>
-                    <div class="yours messages">
-                      <div class="message last">{data[0]}</div>
-                    </div>
-                  </ChatBox>
-                </ChatContainer>
+                  <div class="message last">{data[0]}</div>
+                </div>
               </>
             ) : (
               <div class="mine messages">
-                <div class="message last">Dude</div>
+                <div class="message last">{data[0]}</div>
               </div>
             )}
           </div>
@@ -158,7 +142,7 @@ function ChatBot() {
       <ChatForm onSubmit={sendMessage}>
         <StyledTextarea
           required
-          placeholder="메세지를 입력하세요(최대 100자)"
+          placeholder=""
           value={myMessage}
           onChange={changeMessage}
         />

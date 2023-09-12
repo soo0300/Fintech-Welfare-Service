@@ -20,6 +20,8 @@ html {
   --pink: #f9b4c2;
   --primary: #006ffd;
   --coolblue: #bddffa;
+  overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .App {
