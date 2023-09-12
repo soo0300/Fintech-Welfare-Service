@@ -7,12 +7,14 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import Modal from "./components/modal/Modal";
+import GlobalStyle from "./style/GlobalStyle";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <Provider store={store}>
       <Modal />
+      <GlobalStyle />
       <App />
     </Provider>
   </BrowserRouter>

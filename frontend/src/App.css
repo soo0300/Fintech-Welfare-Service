@@ -1,4 +1,6 @@
 html {
+  width: 393px;
+  height: 842px;
   --black: #282828;
   --ash-black: #222;
   --white: #ffffff;
@@ -20,6 +22,7 @@ html {
   --pink: #f9b4c2;
   --primary: #006ffd;
   --coolblue: #bddffa;
+  --bgColor: #f2f5fe;
   overflow: hidden;
   overscroll-behavior: none;
 }
