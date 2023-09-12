@@ -109,6 +109,8 @@ const Signup = () => {
           color="gray"
           placeholder="이메일 입력"
           border-radius="none"
+          border="none"
+          borderBottom="1px solid gray"
           background="--bgColor"
           id="email"
           onChange={handleEmailChange}
@@ -116,12 +118,13 @@ const Signup = () => {
         {!isEmailValid && email && (
           <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
         )}
-        <hr background="--gray" />
         <Input
           width="270px"
           height="50px"
           placeholder="비밀번호 입력"
           border-radius="none"
+          border="none"
+          borderBottom="1px solid gray"
           background="--bgColor"
           type="password"
           id="pwd"
@@ -132,6 +135,8 @@ const Signup = () => {
           height="50px"
           placeholder="비밀번호 확인"
           border-radius="none"
+          border="none"
+          borderBottom="1px solid gray"
           background="--bgColor"
           type="password"
           id="pwdcheck"
@@ -142,7 +147,6 @@ const Signup = () => {
             비밀번호가 일치하지 않거나 유효하지 않습니다.
           </p>
         )}
-        <hr background="--gray" />
       </MainBox>
       <FooterBox>
         <Button onClick={nextPage} width="270px" fontSize="15px">

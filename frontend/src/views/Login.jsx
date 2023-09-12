@@ -107,19 +107,21 @@ const Login = () => {
             height="50px"
             color="gray"
             placeholder="이메일 입력"
-            border-radius="none"
+            borderradius="none"
+            border="none"
+            borderBottom="1px solid gray"
             background="--bgColor"
           />
-          <hr background="--gray" />
           <Input
             width="270px"
             height="50px"
             placeholder="비밀번호 입력"
-            border-radius="none"
+            borderradius="none"
+            border="none"
+            borderBottom="1px solid gray"
             background="--bgColor"
             type="password"
           />
-          <hr background="--gray" />
           <Button
             onClick={LoginAccess}
             width="270px"

@@ -92,7 +92,9 @@ const Info = () => {
             height="50px"
             color="gray"
             placeholder="생년월일"
-            border-radius="none"
+            borderradius="none"
+            border="none"
+            borderBottom="1px solid gray"
             background="--bgColor"
           />
           -
@@ -101,6 +103,8 @@ const Info = () => {
             height="50px"
             color="gray"
             border-radius="none"
+            border="none"
+            borderBottom="1px solid gray"
             background="--bgColor"
           />
           ●●●●●●
@@ -112,6 +116,8 @@ const Info = () => {
             height="50px"
             placeholder="보호종료일"
             border-radius="none"
+            border="none"
+            borderBottom="1px solid gray"
             background="--bgColor"
           />
           <Button type="icon" background="none">
@@ -124,6 +130,8 @@ const Info = () => {
           height="50px"
           placeholder="거주지"
           border-radius="none"
+          border="none"
+          borderBottom="1px solid gray"
           background="--bgColor"
         />
         <hr background="--gray" />
