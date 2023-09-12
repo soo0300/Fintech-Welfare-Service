@@ -11,14 +11,13 @@ import Button from "../button/Button";
 const StyledNav = styled.div`
   background: white;
   width: 100%;
-  height: 100px;
+  height: 10%;
   bottom: 0;
   position: fixed;
   border-top: 1px solid;
   border-color: black;
   box-shadow: 0px -1px 10px 1px grey;
   display: flex;
-  justify-content: center;
   justify-content: space-evenly;
 `;
 

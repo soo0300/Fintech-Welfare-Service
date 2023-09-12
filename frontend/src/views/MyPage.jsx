@@ -1,7 +1,12 @@
 import React from "react";
+import Logo from "../components/Logo/Logo";
 
 function MyPage() {
-  return <div>MyPage</div>;
+  return (
+    <>
+      <Logo />
+    </>
+  );
 }
 
 export default MyPage;
