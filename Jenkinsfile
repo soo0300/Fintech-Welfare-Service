@@ -21,7 +21,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
-                    cd ./device/frontend/
+                    cd ./frontend
                     docker build -t ${docker_repo}:front-0.1 .
                 '''
             }
