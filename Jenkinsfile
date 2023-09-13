@@ -1,7 +1,7 @@
 pipeline {
     environment {
         docker_repo = "gugaro/hkdream"
-        docker_key = credentials("Docker_Hub_Key")
+        docker_key = credentials("Docker")
         docker_image = ''
     }
     agent any
