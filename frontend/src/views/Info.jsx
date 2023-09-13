@@ -99,6 +99,7 @@ const Info = () => {
         </h2>
         <BirthBox>
           <Input
+            type="number"
             width="135px"
             height="50px"
             color="gray"
@@ -110,6 +111,7 @@ const Info = () => {
           />
           -
           <Input
+            type="number"
             width="20px"
             height="50px"
             color="gray"
@@ -120,7 +122,6 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
-        <hr background="--gray" />
         <DateBox>
           <Input
             width="270px"
@@ -141,7 +142,6 @@ const Info = () => {
             <CalendarIcon />
           </Button>
         </DateBox>
-        <hr background="--gray" />
         <Input
           width="270px"
           height="50px"
@@ -151,7 +151,6 @@ const Info = () => {
           borderBottom="1px solid gray"
           background="--bgColor"
         />
-        <hr background="--gray" />
       </MainBox>
       <FooterBox>
         <Button onClick={movePage} width="270px" fontSize="15px">

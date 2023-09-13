@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import Button from "../button/Button";
 
 const CalendarWrapper = styled.div`
   display: flex;
@@ -26,6 +27,7 @@ const CalendarCell = styled.td`
   padding: 10px;
   text-align: center;
   border: 1px solid #ccc;
+  color: ${(props) => (props.isWeekend ? "red" : "inherit")};
 `;
 
 const CalendarModal = () => {
@@ -62,10 +64,17 @@ const CalendarModal = () => {
         if (i === 0 && j < firstDayOfMonth) {
           row.push(<CalendarCell key={j}></CalendarCell>);
         } else if (dayCounter <= daysInMonth) {
+          const currentDate = new Date(
+            selectedYear,
+            selectedMonth - 1,
+            dayCounter
+          );
+          const isWeekend =
+            currentDate.getDay() === 0 || currentDate.getDay() === 6;
+
           row.push(
-            <CalendarCell key={dayCounter}>
+            <CalendarCell key={dayCounter} isWeekend={isWeekend}>
               {dayCounter}
-              {/* 여기에 일자 관련 기능 추가 */}
             </CalendarCell>
           );
           dayCounter++;
@@ -81,9 +90,6 @@ const CalendarModal = () => {
   return (
     <CalendarWrapper>
       <CalendarHeader>
-        <button onClick={() => setSelectedYear(selectedYear - 1)}>
-          이전 달
-        </button>
         <div>
           <select
             value={selectedYear}
@@ -106,20 +112,31 @@ const CalendarModal = () => {
             ))}
           </select>
         </div>
-        <button onClick={() => setSelectedYear(selectedYear + 1)}>
-          다음 달
-        </button>
+        <Button
+          onClick={() => setSelectedYear(selectedYear - 1)}
+          background="none"
+          color="black"
+        >
+          ◀
+        </Button>
+        <Button
+          onClick={() => setSelectedYear(selectedYear + 1)}
+          background="none"
+          color="black"
+        >
+          ▶
+        </Button>
       </CalendarHeader>
       <CalendarTable>
         <thead>
           <tr>
-            <th>일</th>
+            <th style={{ color: "red" }}>일</th>
             <th>월</th>
             <th>화</th>
             <th>수</th>
             <th>목</th>
             <th>금</th>
-            <th>토</th>
+            <th style={{ color: "red" }}>토</th>
           </tr>
         </thead>
         <tbody>{renderCalendar()}</tbody>

@@ -21,7 +21,7 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index: 1;
+  z-index: 2;
   max-width: 80%;
   max-height: 80%;
   background-color: white; /* 모달 내부 배경색 지정 */
