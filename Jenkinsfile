@@ -43,8 +43,8 @@ pipeline {
                 def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                 mattermostSend (color: 'good', 
                 message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
-                endpoint: 'https://meeting.ssafy.com/hooks/f7i3ptr9hbg1md9r41p8ij9b9y', 
-                channel: 'C101-Jenkins'
+                endpoint: 'https://meeting.ssafy.com/hooks/a7iw43e87p8d3pbjfohcasr7sh', 
+                channel: 'C209-Jenkins'
                 )
             }
         }
@@ -54,8 +54,8 @@ pipeline {
                 def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                 mattermostSend (color: 'danger', 
                 message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)", 
-                endpoint: 'https://meeting.ssafy.com/hooks/f7i3ptr9hbg1md9r41p8ij9b9y', 
-                channel: 'C101-Jenkins'
+                endpoint: 'https://meeting.ssafy.com/hooks/a7iw43e87p8d3pbjfohcasr7sh', 
+                channel: 'C209-Jenkins'
                 )
             }
         }
