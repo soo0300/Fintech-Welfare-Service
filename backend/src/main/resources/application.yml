@@ -3,9 +3,9 @@ spring:
 #    pathmatch:
 #      matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:mysql://15.164.233.242:3306/dream
-    username: user
-    password: 1111
+    url: jdbc:mysql://j9c209.p.ssafy.io:3306/dream
+    username: dreamer
+    password: 175863
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
