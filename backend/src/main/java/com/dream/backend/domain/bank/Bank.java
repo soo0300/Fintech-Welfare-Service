@@ -15,8 +15,8 @@ import javax.persistence.Id;
 public class Bank {
     @Id
     @GeneratedValue()
-    @Column(name=" bank_code")
-    private Long bankCode;
+    @Column(name=" bank_code", length = 50)
+    private String bankCode;
 
     @Column(nullable = false, length = 50)
     private String bankName;

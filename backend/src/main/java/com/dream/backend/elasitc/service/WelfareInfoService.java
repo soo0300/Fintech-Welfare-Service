@@ -4,7 +4,6 @@ import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import com.dream.backend.elasitc.repo.WelfareInfoRepo;
 
 public class WelfareInfoService {
-
     private ElasticsearchClient client = null;
 
     public WelfareInfoService(ElasticsearchClient client) {

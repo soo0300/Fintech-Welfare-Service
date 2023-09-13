@@ -9,6 +9,7 @@ import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.dream.backend.elasitc.entity.Broccolisearch;
 import com.dream.backend.elasitc.entity.Product;
+import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
@@ -22,35 +23,37 @@ import org.elasticsearch.client.indices.AnalyzeResponse;
 import org.jboss.jandex.Index;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class ProductService {
-    public static void main(String[] args) throws IOException {
+
+    private RestClient restClient;
+    private RestHighLevelClient client;
+
+    public void setClient() throws IOException {
         String serverUrl = "http://172.28.112.174:9200";
 
-        RestClient restClient = RestClient
-            .builder(HttpHost.create(serverUrl))
-            .build();
+        restClient = RestClient
+                .builder(HttpHost.create(serverUrl))
+                .build();
 
-        RestHighLevelClient client = new RestHighLevelClient(
-            RestClient.builder(
-                new HttpHost("172.28.112.174", 9200, "http")));
-
-        ElasticsearchTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
-        ElasticsearchClient esClient = new ElasticsearchClient(transport);
-
-        esClient.indices().create(c -> c
-            .index("welfare_information")
-        );
-
-        client.close();
-        restClient.close();
+        client = new RestHighLevelClient(
+                RestClient.builder(
+                        new HttpHost("172.28.112.174", 9200, "http")));
     }
 
-    static String tokenized(RestHighLevelClient client, String text) {
+    public void closeAllClient() throws IOException {
+        restClient.close();
+        client.close();
+    }
+
+    public String tokenized(String text) {
         String results = "";
         try {
             AnalyzeRequest request = AnalyzeRequest.buildCustomAnalyzer("nori_tokenizer").build(text);

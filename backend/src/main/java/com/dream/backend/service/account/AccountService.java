@@ -15,9 +15,12 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public Optional<Account> getAccount(Long accountNumber) {
-        Optional<Account> account = accountRepository.findById(accountNumber);
+    public Optional<Account> getAccount(Long id) {
+        Optional<Account> account = accountRepository.findById(id);
         return account;
     }
 
+    public void insertAccount(Account item) {
+        accountRepository.save(item);
+    }
 }
