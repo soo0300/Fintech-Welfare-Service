@@ -16,7 +16,7 @@ public class Bank {
     @Id
     @GeneratedValue()
     @Column(name=" bank_code")
-    private int bankCode;
+    private Long bankCode;
 
     @Column(nullable = false, length = 50)
     private String bankName;
