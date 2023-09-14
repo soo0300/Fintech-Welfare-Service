@@ -2,6 +2,7 @@ package com.dream.backend.domain.transaction;
 
 import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.bank.Bank;
+import com.dream.backend.domain.bank_client.BankClient;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,16 +24,16 @@ public class Transaction {
 
 
     @JoinColumn(name="account_number")
-    private Long accountNumber;
+    private Account account;
 
     //account 테이블의 fk를 조인하고 싶을 때!
 
     @JoinColumn(name="bank_code")
-    private Long bank;
+    private Bank bank;
 
 
     @JoinColumn(name = "client_key")
-    private int client;
+    private BankClient client;
 
     @Column(name = "bank_name", length = 50)
     private String bankName;
@@ -43,10 +44,10 @@ public class Transaction {
     @Column(name = "tran_date")
     private LocalDateTime tranDate;
 
-    @JoinColumn(name = "tran_type")
+    @OneToOne
     private int tranType;
 
-    @JoinColumn(name = "inout_type")
+    @OneToOne
     private int inoutType;
 
     @Column(name = "tran_desc", length = 50)
@@ -59,9 +60,9 @@ public class Transaction {
     private int balance;
 
     @Builder
-    public Transaction(long id, Long accountNumber, Long bank, int clint, String bankName, String branchName, LocalDateTime tranDate, int tranType, int inoutType, String tranDesc, int tranAmt, int balance) {
+    public Transaction(long id, Account account, Bank bank, BankClient clint, String bankName, String branchName, LocalDateTime tranDate, int tranType, int inoutType, String tranDesc, int tranAmt, int balance) {
         this.id = id;
-        this.accountNumber = accountNumber;
+        this.account = account;
         this.bank = bank;
         this.client = clint;
         this.bankName = bankName;
