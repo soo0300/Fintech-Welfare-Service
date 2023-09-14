@@ -37,7 +37,9 @@ public class ProductController {
     public String getToken(@PathVariable("korean_text") String text) throws IOException {
 
         productService.setClient();
+        String result = productService.tokenized(text);
+        productService.closeAllClient();
 
-        return "전달 완료";
+        return result;
     }
 }

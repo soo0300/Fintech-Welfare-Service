@@ -40,11 +40,14 @@ public class ProductService {
     private ElasticsearchClient esClient;
 
     public void setClient() throws IOException {
-        String serverUrl = "https://j9c209.p.ssafy.io:9200";
-        String apiKey = "ZWxhc3RpYzoxNzU4NjM=";
+        String serverUrl = "http://j9c209.p.ssafy.io:9200";
+        String apiKey = "NFl3amtZb0JsSzJlT3lYcXhRcmc6WDBabGZhYlpUdmlfNHpLTE5RMjk4Zw==";
 
         restClient = RestClient
                 .builder(new HttpHost("j9c209.p.ssafy.io", 9200, "http"))
+                .setDefaultHeaders(new Header[] {
+                        new BasicHeader("Authorization", "ApiKey " + apiKey)
+                })
                 .build();
 
         client = new RestHighLevelClient(
@@ -52,7 +55,8 @@ public class ProductService {
                         new HttpHost("j9c209.p.ssafy.io", 9200, "http"))
                         .setDefaultHeaders(new Header[] {
                                 new BasicHeader("Authorization", "ApiKey " + apiKey)
-                        }));
+                        })
+                );
 
 
             ElasticsearchTransport transport = new RestClientTransport(
@@ -62,14 +66,15 @@ public class ProductService {
 
 //            esClient.indices().create(c -> c.index("welfare_info"));
 
-            WelfareInfo welfareInfo = new WelfareInfo(0, "지원사업 A", "자립준비청년 중 타인과의 교류가 없고 도움을 요청할 경제적·정서적 지지체계가 부족하거나 결핍된 고립 청년. 혹은 고립 청년 중에서도 외출 없이 제한된 공간에서 살아가는 청년을 대상으로 합니다.");
-
-            String tokens = this.tokenized(welfareInfo.getDescription());
-            welfareInfo.setKeywords(tokens);
-
+//            WelfareInfo welfareInfo = new WelfareInfo(1, "지원사업 A", "자립준비청년 중 타인과의 교류가 없고 도움을 요청할 경제적·정서적 지지체계가 부족하거나 결핍된 고립 청년. 혹은 고립 청년 중에서도 외출 없이 제한된 공간에서 살아가는 청년을 대상으로 합니다.");
+//
+//            String tokens = this.tokenized(welfareInfo.getDescription());
+//            System.out.println(tokens);
+//            welfareInfo.setKeywords(tokens);
+//
 //            IndexResponse  response = esClient.index(i -> i
 //                    .index("welfare_info")
-//                    .id("0")
+//                    .id("1")
 //                    .document(welfareInfo)
 //            );
     }
@@ -82,7 +87,6 @@ public class ProductService {
     public String tokenized(String text) {
         String results = "";
         try {
-
 //            Request request = new Request(
 //                    "GET",
 //                    "/_analyze"
