@@ -78,6 +78,15 @@ public class BenefitService {
 
     public List<BenefitResponse> getUserAllBenefit(Long userId) {
         List<BenefitResponse> list = new ArrayList<>();
+        List<Benefit> benefitList = benefitRepository.findAllByUser_Id(userId);
+        for (Benefit benefit : benefitList) {
+            Long welfareId = benefit.getWelfare().getId();
+            System.out.println("사용자 등록한 복지(2가지 종류, staus에 따라 결정)" + welfareId);
+            //welfareId 를 통해서 Welfare 객체를 가져온다.
+            Optional<Welfare> welfare = welfareRepository.findById(welfareId);
+            //Response 형태로 바꾼다.
+            list.add(toResponse(welfare));
+        }
         return list;
     }
 }
