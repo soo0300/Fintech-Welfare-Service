@@ -10,4 +10,7 @@ import java.util.Optional;
 @Repository
 public interface BenefitRepository extends JpaRepository<Benefit, Long> {
     Optional<List<Benefit>> findByUserIdAndStatus(Long user_id, int status);
+
+    List<Benefit> findAllByUser_Id(Long userId);
+
 }
