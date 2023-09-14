@@ -21,12 +21,18 @@ public class Transaction {
     @Column(name="transaction_id")
     private Long id;
 
+
     @JoinColumn(name="account_number")
     private Long accountNumber;
 
     //account 테이블의 fk를 조인하고 싶을 때!
+
     @JoinColumn(name="bank_code")
     private Long bank;
+
+
+    @JoinColumn(name = "client_key")
+    private int client;
 
     @Column(name = "bank_name", length = 50)
     private String bankName;
@@ -53,10 +59,11 @@ public class Transaction {
     private int balance;
 
     @Builder
-    public Transaction(long id, Long accountNumber, Long bank, String bankName, String branchName, LocalDateTime tranDate, int tranType, int inoutType, String tranDesc, int tranAmt, int balance) {
+    public Transaction(long id, Long accountNumber, Long bank, int clint, String bankName, String branchName, LocalDateTime tranDate, int tranType, int inoutType, String tranDesc, int tranAmt, int balance) {
         this.id = id;
         this.accountNumber = accountNumber;
         this.bank = bank;
+        this.client = clint;
         this.bankName = bankName;
         this.branchName = branchName;
         this.tranDate = tranDate;
