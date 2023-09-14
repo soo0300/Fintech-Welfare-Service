@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
-import { ReactComponent as CalendarIcon } from "../assets/img/calendar_icon.svg";
 import Input from "../components/input/Input";
 import Button from "../components/button/Button";
 import { useNavigate } from "react-router-dom";
@@ -69,7 +68,16 @@ const DateBox = styled.div`
 const Info = () => {
   const navigate = useNavigate();
   const movePage = () => {
+    console.log(typeof selectedTimestamp);
     navigate("/business");
+  };
+  // 날짜를 저장할 상태 변수
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTimestamp, setSelectedTimeStamp] = useState();
+  // 날짜가 변경될 때 호출되는 함수
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+    setSelectedTimeStamp(new Date(e.target.value).getTime());
   };
   return (
     <InfoContainer>
@@ -88,6 +96,7 @@ const Info = () => {
         </h2>
         <BirthBox>
           <Input
+            type="number"
             width="135px"
             height="50px"
             color="gray"
@@ -99,6 +108,7 @@ const Info = () => {
           />
           -
           <Input
+            type="number"
             width="20px"
             height="50px"
             color="gray"
@@ -109,22 +119,20 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
-        <hr background="--gray" />
         <DateBox>
           <Input
+            type="date"
             width="270px"
             height="50px"
-            placeholder="보호종료일"
             border-radius="none"
             border="none"
             borderBottom="1px solid gray"
             background="--bgColor"
+            fontSize="20px"
+            value={selectedDate}
+            onChange={handleDateChange}
           />
-          <Button type="icon" background="none">
-            <CalendarIcon />
-          </Button>
         </DateBox>
-        <hr background="--gray" />
         <Input
           width="270px"
           height="50px"
@@ -134,7 +142,6 @@ const Info = () => {
           borderBottom="1px solid gray"
           background="--bgColor"
         />
-        <hr background="--gray" />
       </MainBox>
       <FooterBox>
         <Button onClick={movePage} width="270px" fontSize="15px">

@@ -1,32 +1,41 @@
 import React from "react";
 import { styled } from "styled-components";
-import InputDateModal from "./InputDateModal";
 import SetWelfareModal from "./SetWelfareModal";
 import WelfareModal from "./WelfareModal";
 import { useDispatch, useSelector } from "react-redux";
 import { closeModal, selectModal } from "../../store/modalSlice";
 
-const ModalContainer = styled.div`
+const ModalWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: 100%;
+  max-height: 100%;
   position: fixed;
-  inset: 0;
-  z-index: 1;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+`;
+
+const ModalContainer = styled.div`
+  z-index: 2;
+  max-width: 80%;
+  max-height: 80%;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: auto;
 `;
 
 const MODAL_TYPES = {
-  InputDateModal: "InputDateModal",
+  CalendarModal: "CalendarModal",
   SetWelfareModal: "SetWelfareModal",
   WelfareModal: "WelfareModal",
 };
 
 const MODAL_COMPONENTS = [
-  {
-    type: MODAL_TYPES.InputDateModal,
-    component: <InputDateModal />,
-  },
   {
     type: MODAL_TYPES.SetWelfareModal,
     component: <SetWelfareModal />,
@@ -40,24 +49,26 @@ const MODAL_COMPONENTS = [
 const Modal = () => {
   const { modalType, isOpen } = useSelector(selectModal);
   const dispatch = useDispatch();
-  if (!isOpen) return;
+  if (!isOpen) return null;
 
-  const findModal = MODAL_COMPONENTS.find((modal) => {
-    return modal.type === modalType;
-  });
-  const showModal = () => {
-    return findModal.component;
+  const findModal = MODAL_COMPONENTS.find((modal) => modal.type === modalType);
+
+  // 모달 내부 클릭 이벤트 처리 함수
+  const handleModalClick = (e) => {
+    e.stopPropagation(); // 모달 바깥으로 이벤트 전파를 막음
   };
+
+  // 모달 바깥 클릭 이벤트 처리 함수
+  const handleModalWrapperClick = () => {
+    dispatch(closeModal());
+  };
+
   return (
-    <>
-      <ModalContainer
-        onClick={() => {
-          dispatch(closeModal());
-        }}
-      >
-        {showModal()}
+    <ModalWrapper onClick={handleModalWrapperClick}>
+      <ModalContainer className="ModalContainer" onClick={handleModalClick}>
+        {findModal.component}
       </ModalContainer>
-    </>
+    </ModalWrapper>
   );
 };
 
