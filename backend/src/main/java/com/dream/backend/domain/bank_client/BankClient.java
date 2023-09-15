@@ -12,12 +12,12 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Bank_Client {
+public class BankClient {
 
     @Id
     @GeneratedValue()
-    @Column(name=" client_key")
-    private int clientCode;
+    @Column(name="client_key")
+    private Long clientCode;
 
     @Column(nullable = false, length = 50)
     private String clientName;

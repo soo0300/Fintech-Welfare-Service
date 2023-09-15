@@ -14,11 +14,10 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Bank {
     @Id
-    @GeneratedValue()
-    @Column(name=" bank_code")
-    private int bankCode;
+    @Column(name="bank_code", length = 50)
+    private String bankCode;
 
-    @Column(nullable = false, length = 50)
+    @Column(name="bank_name", nullable = false, length = 50)
     private String bankName;
 
     public String getBankName() {
