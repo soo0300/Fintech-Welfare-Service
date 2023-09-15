@@ -25,7 +25,7 @@ public class UserService {
     private final BenefitService benefitService;
 
     public Long joinUser(JoinUserDto dto) {
-        System.out.println("dtoregionkey: " + dto.getRegionKey());
+        System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion);
         System.out.println("before Repo: " + user.getName());
@@ -33,7 +33,7 @@ public class UserService {
         System.out.println("after Repo" + saveduser.getId());
 
         // - - 비즈니스 로직 [사용자 거주 지역 코드]
-        int myRegion = dto.getRegionKey().intValue();
+        Long myRegion = dto.getRegionKey();
 
         // - - 비즈니스 로직 [만 나이 계산기]
         int my = saveduser.getResidence_info();
@@ -52,8 +52,14 @@ public class UserService {
         System.out.println(age);
 
         //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
-        List<Integer> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
+        List<Long> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
         //순회하면서 현재 사용자 id와 리스트이 key와 status[null]로 사용자복지정보 등록
+        System.out.print("size: " + getUserWelfareKey.size()+"\n사용자 맞춤형 복지 PK:");
+
+        for(int i=0; i< getUserWelfareKey.size(); i++){
+
+            System.out.print(getUserWelfareKey.get(i)+" ");
+        }
 
         benefitService.addUserBenefit(saveduser.getId(),getUserWelfareKey);
 
