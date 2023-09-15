@@ -54,14 +54,13 @@ public class UserService {
         //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
         List<Long> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
         //순회하면서 현재 사용자 id와 리스트이 key와 status[null]로 사용자복지정보 등록
-        System.out.print("size: " + getUserWelfareKey.size()+"\n사용자 맞춤형 복지 PK:");
+        System.out.print("size: " + getUserWelfareKey.size() + "\n사용자 맞춤형 복지 PK:");
 
-        for(int i=0; i< getUserWelfareKey.size(); i++){
-
-            System.out.print(getUserWelfareKey.get(i)+" ");
+        for (int i = 0; i < getUserWelfareKey.size(); i++) {
+            System.out.print(getUserWelfareKey.get(i) + " ");
         }
 
-        benefitService.addUserBenefit(saveduser.getId(),getUserWelfareKey);
+        benefitService.addUserBenefit(saveduser.getId(), getUserWelfareKey);
 
         return saveduser.getId();
     }
@@ -69,6 +68,7 @@ public class UserService {
     public Optional<User> getUserFund(Long userId) {
         return userRepository.findById(userId);
     }
+
 
 }
 
