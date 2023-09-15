@@ -4,6 +4,6 @@ public class hi {
         int j = 9;
         int k = j + 6;
         // 주석 추가!
-        System.out.println("hi" + " ");
+        System.out.println("hi" + " " + Integer.toString(k));
     }
 }
