@@ -29,6 +29,17 @@ public class WelfareService {
         return list;
     }
 
+    public List<Welfare> getRegionWelfare(List<Long> list) {
+        int i=0;
+        List<Welfare> welfareList = new ArrayList<>();
+        for (Long l : list) {
+            Optional<Welfare> welfare = welfareRepository.findById(list.get(i));
+            welfareList.add(welfare.get());
+            i++;
+        }
+        return welfareList;
+    }
+
 
     private WelfareResponse toResponse(Optional<Welfare> welfare) {
         return WelfareResponse.builder()

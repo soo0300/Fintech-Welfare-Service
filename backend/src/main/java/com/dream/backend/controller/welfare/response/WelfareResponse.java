@@ -1,5 +1,6 @@
 package com.dream.backend.controller.welfare.response;
 
+import com.dream.backend.domain.welfare.Welfare;
 import lombok.Builder;
 import lombok.Data;
 
@@ -48,5 +49,23 @@ public class WelfareResponse {
         this.img = img;
         this.support_period = support_period;
         this.etc = etc;
+    }
+
+//    - - -  비즈니스 로직 - - - - - -
+    public static WelfareResponse toResponse(Welfare welfare) {
+        return WelfareResponse.builder()
+                .name(welfare.getName())
+                .organization(welfare.getOrganization())
+                .start_date(welfare.getStart_date())
+                .end_date(welfare.getEnd_date())
+                .route(welfare.getRoute())
+                .submission(welfare.getSubmission())
+                .support_fund(welfare.getSupport_fund())
+                .description_origin(welfare.getDescription_origin())
+                .url(welfare.getUrl())
+                .img(welfare.getImg())
+                .support_period(welfare.getSupport_period())
+                .etc(welfare.getEtc())
+                .build();
     }
 }
