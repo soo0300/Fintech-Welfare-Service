@@ -22,7 +22,6 @@ html {
   --coolblue: #bddffa;
   --bgColor: #f2f5fe;
   overflow: hidden;
-  overscroll-behavior: none;
 }
 
 .App {

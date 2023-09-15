@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import "./ChatBot.css";
 
+// 전체 컨테이너
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -15,9 +16,11 @@ const Container = styled.div`
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  overscroll-behavior: none;
+  white-space: pre-line;
+  /* overscroll-behavior: none; */
 `;
 
+// 챗봇 상단바
 const ChatHeader = styled.div`
   width: 100%;
   height: 70px;
@@ -30,16 +33,17 @@ const ChatHeader = styled.div`
   gap: 20px;
 `;
 
+// 채팅창
 const ChatContent = styled.div`
   width: 100%;
   margin-top: 80px;
   margin-bottom: 70px;
-  height: calc(100% - 150px);
+  height: ${(props) => (props.isInputActive ? "200px" : "calc(100% -150px)")};
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
   position: fixed;
-  overscroll-behavior-y: auto;
+  font-size: 14px;
 `;
 
 const Footer = styled.div`
@@ -48,7 +52,7 @@ const Footer = styled.div`
   align-items: center;
   width: 100%;
   height: 70px;
-  bottom: 0;
+  bottom: ${(props) => (props.isInputActive ? "330px" : "0")};
   position: fixed;
 `;
 
@@ -87,16 +91,43 @@ const StyledEllipseIcon = styled.div`
   justify-content: space-evenly;
 `;
 
+const TodayBox = styled.div`
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  border-radius: 20px;
+  margin-bottom: 20px;
+`;
+
+// 오늘날짜
+function Today() {
+  const year = new Date().getFullYear() + "년";
+  const month = new Date().getMonth() + 1 + "월";
+  const day = new Date().getDate() + "일";
+
+  return (
+    <TodayBox>
+      {year} {month} {day}
+    </TodayBox>
+  );
+}
+
 function ChatBot() {
   const [message, setMessage] = useState([
-    ["안녕하세요! 무엇을 도와드릴까요?", "bot"],
+    ["안녕하세요! \n무엇을 도와드릴까요?", "bot"],
   ]);
   const [myMessage, setMyMessage] = useState("");
   const chatScrollRef = useRef(null);
+
   const navigate = useNavigate();
   const moveBack = () => {
     navigate("/business");
   };
+
+  const [isInputActive, setInputActive] = useState(false);
+  const [isButton, setisButton] = useState(false);
 
   const changeMessage = (e) => {
     if (e.target.value.length <= 100) {
@@ -108,6 +139,7 @@ function ChatBot() {
     e.preventDefault();
     setMessage([...message, [myMessage, "notbot"]]);
     setMyMessage("");
+    setInputActive(false);
   };
 
   useEffect(() => {
@@ -115,6 +147,16 @@ function ChatBot() {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
   }, [message]);
+
+  const handleInputFocus = () => {
+    setisButton(true);
+    setInputActive(true);
+  };
+
+  const handleInputBlur = () => {
+    setisButton(false);
+    setInputActive(false);
+  };
 
   return (
     <Container>
@@ -129,7 +171,8 @@ function ChatBot() {
         <h3>드림이</h3>
       </ChatHeader>
 
-      <ChatContent ref={chatScrollRef}>
+      <ChatContent ref={chatScrollRef} isInputActive={isInputActive}>
+        <Today />
         {message.map((data, index) => (
           <div key={index}>
             {data[1] === "bot" ? (
@@ -150,17 +193,23 @@ function ChatBot() {
         ))}
       </ChatContent>
 
-      <Footer>
+      <Footer isInputActive={isInputActive}>
         <ChatForm onSubmit={sendMessage}>
           <StyledTextarea
             required
             placeholder=""
             value={myMessage}
             onChange={changeMessage}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
           />
-          <Button width="50px" height="50px" background="none" type="submit">
-            <SendIcon />
-          </Button>
+          {isButton ? (
+            <Button width="50px" height="50px" background="none" type="submit">
+              <SendIcon />
+            </Button>
+          ) : (
+            ""
+          )}
         </ChatForm>
       </Footer>
     </Container>
