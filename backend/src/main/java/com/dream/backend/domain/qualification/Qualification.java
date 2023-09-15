@@ -27,7 +27,7 @@ public class Qualification {
     @Column
     private int age;
 
-    @Column
-    private int end_year;
+//    @Column
+//    private int end_year;
 
 }
