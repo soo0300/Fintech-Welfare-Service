@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,10 +31,10 @@ public class BenefitService {
         return savedBenefit.getId();
     }
 
-    public void addUserBenefit(Long userId, List<Long>list){
+    public void addUserBenefit(Long userId, List<Long> list) {
         //list는 사용자의 복지카드 리스트의 복지식별키이다.
         Optional<User> savedUser = userRepository.findById(userId);
-        for(int i=0; i<list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             Optional<Welfare> savedWelfare = welfareRepository.findById(list.get(i));
             Benefit benefit = Benefit.builder()
                     .user(savedUser.get())
@@ -48,7 +47,7 @@ public class BenefitService {
 
     public List<BenefitResponse> getUserBenefit(Long userId, int status) {
         List<BenefitResponse> list = new ArrayList<>();
-        List<Benefit> benefits = benefitRepository.findByUserIdAndStatus(userId,status).orElseThrow();
+        List<Benefit> benefits = benefitRepository.findByUserIdAndStatus(userId, status).orElseThrow();
         //순회하면서 해당 benefit의 welfare_id를 찾아온다.
         for (Benefit benefit : benefits) {
             Long welfareId = benefit.getWelfare().getId();
@@ -61,8 +60,19 @@ public class BenefitService {
         return list;
     }
 
-
-
+    public List<BenefitResponse> getUserAllBenefit(Long userId) {
+        List<BenefitResponse> list = new ArrayList<>();
+        List<Benefit> benefitList = benefitRepository.findAllByUser_Id(userId);
+        for (Benefit benefit : benefitList) {
+            Long welfareId = benefit.getWelfare().getId();
+            System.out.println("사용자 등록한 복지(2가지 종류, status에 따라 결정)" + welfareId);
+            //welfareId 를 통해서 Welfare 객체를 가져온다.
+            Optional<Welfare> welfare = welfareRepository.findById(welfareId);
+            //Response 형태로 바꾼다.
+            list.add(toResponse(welfare));
+        }
+        return list;
+    }
 
     //- - - - - - - - - 비즈니스 로직 - - - - - - - - -
     private Benefit toEntity(Optional<Welfare> welfare, Optional<User> user, int status) {
@@ -73,7 +83,7 @@ public class BenefitService {
                 .build();
     }
 
-    private BenefitResponse toResponse(Optional<Welfare> welfare){
+    private BenefitResponse toResponse(Optional<Welfare> welfare) {
         return BenefitResponse.builder()
                 .name(welfare.get().getName())
                 .organization(welfare.get().getOrganization())
@@ -91,17 +101,4 @@ public class BenefitService {
 
     }
 
-    public List<BenefitResponse> getUserAllBenefit(Long userId) {
-        List<BenefitResponse> list = new ArrayList<>();
-        List<Benefit> benefitList = benefitRepository.findAllByUser_Id(userId);
-        for (Benefit benefit : benefitList) {
-            Long welfareId = benefit.getWelfare().getId();
-            System.out.println("사용자 등록한 복지(2가지 종류, staus에 따라 결정)" + welfareId);
-            //welfareId 를 통해서 Welfare 객체를 가져온다.
-            Optional<Welfare> welfare = welfareRepository.findById(welfareId);
-            //Response 형태로 바꾼다.
-            list.add(toResponse(welfare));
-        }
-        return list;
-    }
 }

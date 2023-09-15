@@ -3,6 +3,7 @@ package com.dream.backend.controller.user;
 import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.user.request.JoinUserRequest;
 import com.dream.backend.controller.user.response.UserFundResponse;
+import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.service.user.UserService;
 import com.dream.backend.service.user.dto.JoinUserDto;
@@ -20,10 +21,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request){
+    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request) {
         JoinUserDto dto = request.toDto();
-        System.out.print("controller region key"+dto.getRegionKey());
-         Long id = userService.joinUser(dto);
+        System.out.print("controller region key" + dto.getRegionKey());
+        Long id = userService.joinUser(dto);
         return ApiResponse.ok(id);
     }
 
@@ -40,5 +41,12 @@ public class UserController {
         UserFundResponse userResponse = user.get().toFundResponse(user);
         return userResponse;
     }
+
+    @GetMapping("/{user_id}")
+    public UserResponse getUserInfo(@PathVariable Long user_id) {
+        UserResponse userResponse = userService.getUserInfo(user_id);
+        return userResponse;
+    }
+
 
 }
