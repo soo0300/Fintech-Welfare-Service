@@ -37,7 +37,9 @@ public class UserService {
         Long myRegion = dto.getRegionKey();
 
         // - - 비즈니스 로직 [만 나이 계산기]
+        //user 주민번호 필요, user createdDate 필요
         int my = saveduser.getResidence_info();
+        System.out.print("등록 시간: " + user.getCreated_date());
         //순서대로 : 생년/ 월,일 / 성별
         int userBirthY = my / 100000 + 1900;
         int userBirthMM = (my % 100000) / 10;
@@ -79,9 +81,12 @@ public class UserService {
 
 //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
 
-    public UserResponse toUserResponse(Optional<User> user){
-
+    public UserResponse toUserResponse(Optional<User> user) {
         return null;
+    }
+
+    public int getAge() {
+        return 0;
 
     }
 
