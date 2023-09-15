@@ -39,20 +39,9 @@ public class UserService {
         // - - 비즈니스 로직 [만 나이 계산기]
         //user 주민번호 필요, user createdDate 필요
         int my = saveduser.getResidence_info();
-        System.out.print("등록 시간: " + user.getCreated_date());
-        //순서대로 : 생년/ 월,일 / 성별
-        int userBirthY = my / 100000 + 1900;
-        int userBirthMM = (my % 100000) / 10;
-        int gender = my % 10;
 
-        System.out.println("생년월일: " + saveduser.getResidence_info());
-        String nowDate = String.valueOf(saveduser.getCreated_date());
-        int year = Integer.parseInt(nowDate.substring(0, 4));
-        int birth = Integer.parseInt(nowDate.substring(5, 7) + nowDate.substring(8, 10));
-        System.out.println("현재시간 파싱: " + year + " " + birth);
-        int age = year - userBirthY;
-        if (userBirthMM <= birth) age -= 1;
-        System.out.println(age);
+        int age = getAge(saveduser.getResidence_info(), String.valueOf(saveduser.getCreated_date()));
+        System.out.println("만 나이 계산 성공?: " + age);
 
         //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
         List<Long> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
@@ -72,21 +61,39 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-
     public UserResponse getUserInfo(Long userId) {
         Optional<User> user = userRepository.findById(userId);
         UserResponse response = toUserResponse(user);
         return response;
     }
 
-//    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
-
+    //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
     public UserResponse toUserResponse(Optional<User> user) {
-        return null;
+        return UserResponse.builder()
+                .name(user.get().getName())
+                .email(user.get().getEmail())
+                .regionKey(user.get().getRegion().getId())
+                .age(getAge(user.get().getResidence_info(), String.valueOf(user.get().getCreated_date())))
+                .password(user.get().getPassword())
+                .build();
     }
 
-    public int getAge() {
-        return 0;
+
+    //만 나이 계산 함수 작성
+    public int getAge(int residenceInfo, String now) {
+        //순서대로 : 사용자 생년/ 월,일
+        int userBirthY = residenceInfo / 100000 + 1900;
+        int userBirthMM = (residenceInfo % 100000) / 10;
+
+        //만 나이 계산을 위한 현재 시간 파싱, 순서대로 년도 / 월,일
+        int year = Integer.parseInt(now.substring(0, 4));
+        int birth = Integer.parseInt(now.substring(5, 7) + now.substring(8, 10));
+
+        //만 나이 계산 로직
+        int age = year - userBirthY;
+        if (userBirthMM <= birth) age -= 1;
+
+        return age;
 
     }
 
