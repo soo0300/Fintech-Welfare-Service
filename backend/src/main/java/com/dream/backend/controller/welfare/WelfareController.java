@@ -1,6 +1,5 @@
 package com.dream.backend.controller.welfare;
 
-import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.welfare.response.WelfareResponse;
 import com.dream.backend.domain.welfare.Welfare;
 import com.dream.backend.service.qualification.QualificationService;
@@ -32,8 +31,13 @@ public class WelfareController {
     public List<WelfareResponse> getRegionWelfare(@PathVariable Long regionKey) {
         List<WelfareResponse> response = new ArrayList<>();
         List<Long> list = qualificationService.getUserWelfareKey(0, regionKey);
-
-        return null;
+        List<Welfare> welfareList = welfareService.getRegionWelfare(list);
+        System.out.print("해당 지역의 복지 식별키: ");
+        for (Welfare welfare : welfareList) {
+            System.out.print(welfare.getId() + " ");
+            response.add(WelfareResponse.toResponse(welfare));
+        }
+        return response;
     }
 
 }
