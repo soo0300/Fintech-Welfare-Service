@@ -44,7 +44,7 @@ public class UserController {
 
     @GetMapping("/{user_id}")
     public UserResponse getUserInfo(@PathVariable Long user_id) {
-        UserResponse userResponse = null
+        UserResponse userResponse = userService.getUserInfo(user_id);
         return userResponse;
     }
 

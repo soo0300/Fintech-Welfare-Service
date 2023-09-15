@@ -1,5 +1,6 @@
 package com.dream.backend.service.user;
 
+import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.region.repository.RegionRepository;
 import com.dream.backend.domain.user.User;
@@ -69,6 +70,20 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
+
+    public UserResponse getUserInfo(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        UserResponse response = toUserResponse(user);
+        return response;
+    }
+
+//    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
+
+    public UserResponse toUserResponse(Optional<User> user){
+
+        return null;
+
+    }
 
 }
 
