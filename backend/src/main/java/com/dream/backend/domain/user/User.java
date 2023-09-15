@@ -30,7 +30,7 @@ public class User {
     @Column(nullable = false, updatable = false)
     private int residence_info;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="region_key")
     private Region region;
 
