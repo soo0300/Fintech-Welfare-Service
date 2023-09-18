@@ -10,7 +10,8 @@ pipeline {
             steps {
                 sh '''
                     cd ./backend
-                    ./gradlew bootJar
+                    chmod 777 ./gradlew
+                    ./gradlew clean build
                 '''
             }
         }
