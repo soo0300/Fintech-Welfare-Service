@@ -67,6 +67,12 @@ public class UserService {
         return response;
     }
 
+    public UserResponse changeUserInfo(Long userId, Long regionKey) {
+        UserResponse response = null;
+        return null;
+    }
+
+
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
     public UserResponse toUserResponse(Optional<User> user) {
         return UserResponse.builder()
@@ -96,6 +102,7 @@ public class UserService {
         return age;
 
     }
+
 
 }
 
