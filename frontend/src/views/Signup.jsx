@@ -56,6 +56,7 @@ const FooterBox = styled.div`
   bottom: 0px;
 `;
 const Signup = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [pwdcheck, setPwdCheck] = useState("");
@@ -72,7 +73,10 @@ const Signup = () => {
     setEmail(emailValue);
     setEmailValid(emailRegEx.test(emailValue));
   };
-
+  const handleNameChange = (e) => {
+    const nameValue = e.target.value;
+    setName(nameValue);
+  };
   const handlePasswordChange = (e) => {
     const passwordValue = e.target.value;
     setPwd(passwordValue);
@@ -86,7 +90,7 @@ const Signup = () => {
 
   const nextPage = () => {
     if (isEmailValid && isPasswordValid) {
-      navigate("/info");
+      navigate("/info", { state: { name, email, pwd } });
     } else {
       alert("유효한 이메일과 비밀번호를 입력해주세요.");
     }
@@ -107,6 +111,18 @@ const Signup = () => {
           width="270px"
           height="50px"
           color="gray"
+          placeholder="이름"
+          border-radius="none"
+          border="none"
+          borderBottom="1px solid gray"
+          background="--bgColor"
+          id="name"
+          onChange={handleNameChange}
+        />
+        <Input
+          width="270px"
+          height="50px"
+          color="gray"
           placeholder="이메일 입력"
           border-radius="none"
           border="none"
@@ -115,7 +131,7 @@ const Signup = () => {
           id="email"
           onChange={handleEmailChange}
         />
-        {!isEmailValid && email && (
+        {!isEmailValid && email && name && (
           <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
         )}
         <Input
