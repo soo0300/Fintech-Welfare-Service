@@ -44,4 +44,11 @@ public class Benefit {
         this.benefit_cnt = benefit_cnt;
         this.is_confirmed = is_confirmed;
     }
+
+
+//    - - - - - - - - - 비즈니스 로직 - - - - - - - - - - -
+    public void changeStatus(){
+        this.status = 1;
+    }
+
 }

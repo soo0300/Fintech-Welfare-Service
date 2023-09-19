@@ -1,8 +1,14 @@
 package com.dream.backend.service.user;
 
 import com.dream.backend.controller.user.response.UserResponse;
+import com.dream.backend.domain.benefit.Benefit;
+import com.dream.backend.domain.benefit.repostiory.BenefitRepository;
+import com.dream.backend.domain.qualification.Qualification;
+import com.dream.backend.domain.qualification.repository.QualificationRepository;
 import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.region.repository.RegionRepository;
+import com.dream.backend.domain.transaction.Transaction;
+import com.dream.backend.domain.transaction.repository.TransactionRepository;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.domain.user.repository.UserRepository;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
@@ -24,9 +30,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final RegionRepository regionRepository;
+    private final WelfareRepository welfareRepository;
+    private final TransactionRepository transactionRepository;
+    private final BenefitRepository benefitRepository;
+
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
-    private final WelfareRepository welfareRepository;
 
     public Long joinUser(JoinUserDto dto, int type) {
         System.out.println("dto region key: " + dto.getRegionKey());
@@ -68,6 +77,15 @@ public class UserService {
 
                 //+ 기간 설정 필요
                 //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
+                Transaction transaction = transactionRepository.findByTranDesc(welfare_code);
+                if (transaction != null) {
+                    //같은 것이 존재한다면
+                    //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
+                    Optional<Benefit> benefit = benefitRepository.findById(getFilteredWelfareKey.get(i));
+                    benefit.get().changeStatus();
+
+                }
+
                 //+ benefit 사용자 복지 테이블에서 welfare_id를 발견하면 benefit의 status 를 1로 바꾼다.
 //                getFilteredWelfareKey.add();
 
