@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Getter
@@ -28,16 +27,16 @@ public class Benefit {
     private Welfare welfare;
 
     @Column
-    private Integer status;
+    private int status;
 
     @Column
-    private Integer benefit_cnt;
+    private int benefit_cnt;
 
     @Column
     private boolean is_confirmed;
 
     @Builder
-    public Benefit(Long id, User user, Welfare welfare, Integer status, Integer benefit_cnt, boolean is_confirmed) {
+    public Benefit(Long id, User user, Welfare welfare, int status, int benefit_cnt, boolean is_confirmed) {
         this.id = id;
         this.user = user;
         this.welfare = welfare;
