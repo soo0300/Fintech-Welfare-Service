@@ -7,6 +7,7 @@ import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.dream.backend.elasitc.entity.Product;
 import com.dream.backend.elasitc.entity.WelfareInfo;
 import com.dream.backend.elasitc.service.ProductService;
+import com.dream.backend.elasitc.service.WelfareInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
@@ -31,14 +32,14 @@ import java.net.URL;
 @Slf4j
 public class ProductController {
 
-    private final ProductService productService;
+    private final WelfareInfoService welfareInfoService;
 
     @GetMapping("/{korean_text}")
     public String getToken(@PathVariable("korean_text") String text) throws IOException {
 
-        productService.setClient();
-        String result = productService.tokenized(text);
-        productService.closeAllClient();
+        welfareInfoService.setClient();
+        String result = welfareInfoService.tokenized(text);
+        welfareInfoService.closeAllClient();
 
         return result;
     }

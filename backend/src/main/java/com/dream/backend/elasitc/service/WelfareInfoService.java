@@ -163,7 +163,7 @@ public class WelfareInfoService {
 //                    ContentType.APPLICATION_JSON
 //            ));
 
-            AnalyzeRequest request = AnalyzeRequest.buildCustomAnalyzer("nori_tokenizer").build(text);
+            AnalyzeRequest request = AnalyzeRequest.withIndexAnalyzer("korean_analyzer", "nori_analyzer", text);
             AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
 
             List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();

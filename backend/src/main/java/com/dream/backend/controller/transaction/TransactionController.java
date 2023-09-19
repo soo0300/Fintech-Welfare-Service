@@ -1,6 +1,5 @@
 package com.dream.backend.controller.transaction;
 
-
 import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.service.account.AccountService;
 import com.dream.backend.service.transaction.TransactionService;
@@ -17,7 +16,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/transaction")
+@RequestMapping("/banking/transaction")
 @Slf4j
 public class TransactionController {
 
@@ -30,7 +29,7 @@ public class TransactionController {
         return result;
     }
 
-    @GetMapping("/range/{start_date}/{end_date}/{account_number}")
+    @GetMapping("/range/{account_number}/{start_date}/{end_date}")
     public List<Transaction> getRangedTransaction(
             @PathVariable("start_date") String start,
             @PathVariable("end_date") String end,
@@ -49,5 +48,12 @@ public class TransactionController {
         LocalDate eDate = LocalDate.of(year, month, day + 1);
 
         return transactionService.getTransactionByDateRange(sDate.atStartOfDay(), eDate.atStartOfDay(), account);
+    }
+
+    @GetMapping("/{account_number}")
+    public List<Transaction> getTransactionByAccount(
+            @PathVariable("account_number") Long account) {
+
+        return transactionService.getTransactionByAccountNumber(account);
     }
 }

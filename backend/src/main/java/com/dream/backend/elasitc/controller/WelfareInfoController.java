@@ -1,13 +1,11 @@
 package com.dream.backend.elasitc.controller;
 
 import com.dream.backend.elasitc.entity.WelfareInfo;
+import com.dream.backend.elasitc.entity.WelfareInfoRequestDto;
 import com.dream.backend.elasitc.service.WelfareInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -45,5 +43,19 @@ public class WelfareInfoController {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @PostMapping("/index")
+    public String indexInfo(@RequestBody WelfareInfoRequestDto dto) {
+        try {
+            welfareInfoService.setClient();
+            welfareInfoService.insertDocument(dto.getWelfareId(), dto.getName(), dto.getDescription());
+            welfareInfoService.closeAllClient();
+        } catch(IOException e) {
+            e.printStackTrace();
+            return "Bad Request...";
+        }
+
+        return "OK";
     }
 }
