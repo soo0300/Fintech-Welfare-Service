@@ -53,7 +53,7 @@ public class User {
     @Column(nullable = true)
     private int account;
 
-    @Column(nullable = true, columnDefinition = "false")
+    @Column(nullable = true)
     private boolean my_data;
 
     @Column(nullable = true)
