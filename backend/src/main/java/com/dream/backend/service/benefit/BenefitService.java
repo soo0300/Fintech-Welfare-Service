@@ -31,7 +31,7 @@ public class BenefitService {
         return savedBenefit.getId();
     }
 
-    public void addUserBenefit(Long userId, List<Long> list) {
+    public void addUserBenefit(Long userId, List<Long> list, int status) {
         //list는 사용자의 복지카드 리스트의 복지식별키이다.
         Optional<User> savedUser = userRepository.findById(userId);
         for (int i = 0; i < list.size(); i++) {
@@ -39,6 +39,7 @@ public class BenefitService {
             Benefit benefit = Benefit.builder()
                     .user(savedUser.get())
                     .welfare(savedWelfare.get())
+                    .status(status)
                     .build();
             benefitRepository.save(benefit);
         }

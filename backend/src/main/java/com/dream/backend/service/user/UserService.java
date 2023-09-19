@@ -5,6 +5,7 @@ import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.region.repository.RegionRepository;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.domain.user.repository.UserRepository;
+import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.service.benefit.BenefitService;
 import com.dream.backend.service.qualification.QualificationService;
 import com.dream.backend.service.user.dto.JoinUserDto;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,8 +26,9 @@ public class UserService {
     private final RegionRepository regionRepository;
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
+    private final WelfareRepository welfareRepository;
 
-    public Long joinUser(JoinUserDto dto) {
+    public Long joinUser(JoinUserDto dto, int type) {
         System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion);
@@ -43,17 +46,37 @@ public class UserService {
         int age = getAge(saveduser.getResidence_info(), String.valueOf(saveduser.getCreated_date()));
         System.out.println("만 나이 계산 성공?: " + age);
 
-        //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
+
+        //사용자 자격조건에 맞는 복지 식별키 리스트 가져오기
         List<Long> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
+
+        //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
         //순회하면서 현재 사용자 id와 리스트이 key와 status[null]로 사용자복지정보 등록
         System.out.print("size: " + getUserWelfareKey.size() + "\n사용자 맞춤형 복지 PK:");
-
         for (int i = 0; i < getUserWelfareKey.size(); i++) {
             System.out.print(getUserWelfareKey.get(i) + " ");
         }
+        benefitService.addUserBenefit(saveduser.getId(), getUserWelfareKey, 0);
 
-        benefitService.addUserBenefit(saveduser.getId(), getUserWelfareKey);
+        //마이데이터 불러오기를 한 경우,\
+        List<Long> getFilteredWelfareKey = new ArrayList<>();
+        if (type == 1) {
+            //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
+            List<String> welfareCodeList = new ArrayList<>();
+            for (int i = 0; i < getUserWelfareKey.size(); i++) {
+                String welfare_code = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
 
+                //+ 기간 설정 필요
+                //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
+                //+ benefit 사용자 복지 테이블에서 welfare_id를 발견하면 benefit의 status 를 1로 바꾼다.
+//                getFilteredWelfareKey.add();
+
+            }
+            //거래내역 테이블에서 파싱하기
+
+            //파싱한 값을 가지고 자격조건 테이블에서
+
+        }
         return saveduser.getId();
     }
 
