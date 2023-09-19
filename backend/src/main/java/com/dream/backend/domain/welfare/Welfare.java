@@ -55,4 +55,7 @@ public class Welfare {
     @Column
     String etc;
 
+    @Column
+    private String welfare_code;
+
 }
