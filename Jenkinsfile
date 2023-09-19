@@ -11,7 +11,7 @@ pipeline {
                 sh '''
                     cd ./backend
                     chmod 777 ./gradlew
-                    ./gradlew bootJar
+                    ./gradlew clean bootJar
                 '''
             }
         }
