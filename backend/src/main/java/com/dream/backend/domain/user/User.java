@@ -53,8 +53,15 @@ public class User {
     @Column(nullable = true)
     private int account;
 
+    @Column(nullable = true)
+    private boolean my_data;
+
+    @Column(nullable = true)
+    private LocalDateTime refresh_time;
+
+
     @Builder
-    public User(Long id, String name, String email, String password, int residence_info, Region region, LocalDateTime end_date, boolean is_ended, LocalDateTime created_date, int pre_fund, int total_fund, int account) {
+    public User(Long id, String name, String email, String password, int residence_info, Region region, LocalDateTime end_date, boolean is_ended, LocalDateTime created_date, int pre_fund, int total_fund, int account, boolean my_data, LocalDateTime refresh_time) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -67,6 +74,8 @@ public class User {
         this.pre_fund = pre_fund;
         this.total_fund = total_fund;
         this.account = account;
+        this.my_data = my_data;
+        this.refresh_time=refresh_time;
     }
 
     // - - -비즈니스 로직
