@@ -69,7 +69,7 @@ public class UserService {
 
     public UserResponse changeUserInfo(Long userId, Long regionKey) {
         Optional<User> user = userRepository.findById(userId);
-        user.change(regionKey);
+//        user.change(regionKey);
         UserResponse userResponse = toUserResponse(user);
         return null;
     }
