@@ -67,6 +67,14 @@ public class UserService {
         return response;
     }
 
+    public UserResponse changeUserInfo(Long userId, Long regionKey) {
+        Optional<User> user = userRepository.findById(userId);
+//        user.change(regionKey);
+        UserResponse userResponse = toUserResponse(user);
+        return null;
+    }
+
+
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
     public UserResponse toUserResponse(Optional<User> user) {
         return UserResponse.builder()
@@ -96,6 +104,7 @@ public class UserService {
         return age;
 
     }
+
 
 }
 

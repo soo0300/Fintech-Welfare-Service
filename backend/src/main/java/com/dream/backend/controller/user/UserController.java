@@ -48,5 +48,12 @@ public class UserController {
         return userResponse;
     }
 
+    @PatchMapping("/{user_id}/{region_key}")
+    public UserResponse changeUserInfo(@PathVariable Long user_id, @PathVariable Long region_key){
+        UserResponse userResponse = userService.changeUserInfo(user_id, region_key);
+        return userResponse;
+    }
+
+
 
 }
