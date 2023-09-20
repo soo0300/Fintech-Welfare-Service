@@ -17,7 +17,6 @@ const Container = styled.div`
   align-items: center;
   overflow: hidden;
   white-space: pre-line;
-  /* overscroll-behavior: none; */
 `;
 
 // 챗봇 상단바
@@ -29,30 +28,27 @@ const ChatHeader = styled.div`
   box-shadow: 0px 0px 10px 0px grey;
   display: flex;
   align-items: center;
-  position: fixed;
   gap: 20px;
 `;
 
 // 채팅창
 const ChatContent = styled.div`
   width: 100%;
-  margin-top: 80px;
-  margin-bottom: 70px;
-  height: ${(props) => (props.isInputActive ? "200px" : "calc(100% -150px)")};
+  height: calc(100% - 150px);
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
-  position: fixed;
   font-size: 14px;
 `;
 
+//채팅입력창
 const Footer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 70px;
-  bottom: ${(props) => (props.isInputActive ? "330px" : "0")};
+  bottom: 0;
   position: fixed;
 `;
 
@@ -93,12 +89,12 @@ const StyledEllipseIcon = styled.div`
 
 const TodayBox = styled.div`
   width: 50%;
+  margin-top: 20px;
+  margin-bottom: 20px;
   margin-left: 25%;
-  margin-right: 25%;
   background-color: rgba(255, 255, 255, 0.5);
   color: black;
   border-radius: 20px;
-  margin-bottom: 20px;
 `;
 
 // 오늘날짜
@@ -201,7 +197,6 @@ function ChatBot() {
             value={myMessage}
             onChange={changeMessage}
             onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
           />
           {isButton ? (
             <Button width="50px" height="50px" background="none" type="submit">
