@@ -8,9 +8,6 @@ const DropdownContainer = styled.div`
   font-size: 12px;
   color: black;
   overflow-y: scroll;
-  ::-webkit-scrollbar {
-    width: 12px; /* 수직 스크롤 막대의 너비를 조절합니다. */
-  }
 `;
 
 const DropdownUl = styled.ul`

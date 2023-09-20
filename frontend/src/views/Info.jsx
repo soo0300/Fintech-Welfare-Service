@@ -85,6 +85,7 @@ const SecondKeyBox = styled.div`
   flex-direction: column;
 `;
 const Info = () => {
+  const [regionKey, setRegionKey] = useState();
   const navigate = useNavigate();
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
@@ -95,7 +96,7 @@ const Info = () => {
       name: name,
       email: email,
       password: pwd,
-      region_key: "18",
+      region_key: regionKey,
       residence_info: residenceInfo,
       end_date: selectedTimestamp,
       is_ended: isEnded,
@@ -126,36 +127,44 @@ const Info = () => {
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [subRegions, setSubRegions] = useState([]);
-  const [selectedSubRegion, setSelectedSubRegion] = useState("");
+  const [selectedRegionText, setSelectedRegionText] = useState("시/도 ▼");
+  const [selectedSubRegionText, setSelectedSubRegionText] =
+    useState("시/군/구 ▼");
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
-    // 선택된 시/도(region)에 따라 시/군/구(subRegions)를 설정
-    const selectedRegionData = jsonData.find((item) => item.name === region);
+    setSelectedRegionText(region);
+    const curRegion = jsonData.find((item) => item.name === region);
+    setRegionKey(curRegion.region_key);
+    const selectedRegionData = jsonData.filter(
+      (item) => item.parent_key === curRegion.region_key
+    );
     if (selectedRegionData) {
-      setSubRegions(selectedRegionData.subRegions || []);
+      const subRegionData = selectedRegionData.map((item) => item.name);
+      setSubRegions(subRegionData);
     } else {
       setSubRegions([]);
     }
+    setIsFirstDropdownView(false);
   };
 
-  const handleSubRegionSelect = (subRegion) => {
-    setSelectedSubRegion(subRegion);
+  const handleSubRegionSelect = (region) => {
+    setSelectedSubRegionText(region);
+    const curRegion = jsonData.find((item) => item.name === region);
+    setRegionKey(curRegion.region_key);
+    setIsSecondDropdownView(false);
   };
+
   useEffect(() => {
-    // jsonData 배열에서 처음 17개의 항목을 추출합니다.
     const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
-
-  useEffect(() => {
-    console.log("지역", regions);
-  }, [regions]);
 
   // 날짜를 저장할 상태 변수
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isFirstDropdownView, setIsFirstDropdownView] = useState(false);
   const [isSecondDropdownView, setIsSecondDropdownView] = useState(false);
   const [selectedTimestamp, setSelectedTimeStamp] = useState();
+
   // 날짜가 변경될 때 호출되는 함수
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
@@ -164,12 +173,13 @@ const Info = () => {
 
   const handleClickFirstDropdown = () => {
     setIsFirstDropdownView(!isFirstDropdownView);
-    console.log("버튼클릭");
   };
 
   const handleClickSecondDropdown = () => {
+    console.log(selectedRegion);
     setIsSecondDropdownView(!isSecondDropdownView);
   };
+
   return (
     <InfoContainer>
       <HeaderBox>
@@ -228,7 +238,7 @@ const Info = () => {
         <RegionBox>
           <FirstKeyBox>
             <Button
-              text="시/도 ▼"
+              text={selectedRegionText}
               onClick={handleClickFirstDropdown}
               background="none"
               color="black"
@@ -240,7 +250,7 @@ const Info = () => {
           </FirstKeyBox>
           <SecondKeyBox>
             <Button
-              text="시/군/구 ▼"
+              text={selectedSubRegionText}
               onClick={handleClickSecondDropdown}
               background="none"
               color="black"
