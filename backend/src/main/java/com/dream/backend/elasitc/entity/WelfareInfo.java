@@ -17,13 +17,13 @@ import javax.persistence.Id;
 public class WelfareInfo {
 
     @Id
-    private int welfareId;
+    private Long welfareId;
     private String name;
     private String description;
     private String keywords;
     private double score;
 
-    public WelfareInfo(int welfareId, String name, String description, String keywords) {
+    public WelfareInfo(Long welfareId, String name, String description, String keywords) {
         this.welfareId = welfareId;
         this.name = name;
         this.description = description;
@@ -34,6 +34,6 @@ public class WelfareInfo {
         this.keywords = words;
     }
 
-    public int getWelfareId() { return this.welfareId; }
+    public Long getWelfareId() { return this.welfareId; }
     public String getDescription() { return this.description; }
 }

@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class WelfareInfoRequestDto {
 
-    private int welfareId;
+    private Long welfareId;
     private String name;
     private String description;
 }

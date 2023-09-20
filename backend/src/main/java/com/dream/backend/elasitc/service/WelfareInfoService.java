@@ -71,13 +71,13 @@ public class WelfareInfoService {
 //            );
     }
 
-    public void insertDocument(int id, String name, String desc) {
+    public void insertDocument(Long id, String name, String desc) {
         WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, "");
         welfareInfo.setKeywords(this.tokenized(desc));
         try {
             IndexResponse response = esClient.index(i -> i
                     .index("welfare_info")
-                    .id(Integer.toString(id))
+                    .id(Long.toString(id))
                     .document(welfareInfo)
             );
         } catch (IOException e) {
