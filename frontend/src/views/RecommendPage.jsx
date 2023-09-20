@@ -181,10 +181,12 @@ function Business() {
           welfares.map((welfare) => (
             <Card
               key={welfare.id}
+              fontSize=" 2vw"
+              // Card
               cardWidth="45%"
               cardHeight="23vh"
+              // Poster
               posterWidth="30rem"
-              fontSize=" 2vw"
               // welfare props
               title={welfare.name}
               region="전국"
