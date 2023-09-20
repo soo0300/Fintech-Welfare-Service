@@ -10,6 +10,7 @@ const StyledButton = styled(motion.button)`
   background: ${(props) =>
     props.background ? `var(--${props.background})` : `var(--primary)`};
   font-size: ${(props) => props.fontSize};
+  font-family: ${(props) => props.fontFamily || "initial"};
   color: ${(props) => (props.color ? `var(--${props.color})` : `var(--white)`)};
   font-weight: ${(props) => props.weight};
   border-radius: ${(props) => (props.border ? props.border : "14px")};
@@ -30,6 +31,7 @@ const Button = (props) => {
     height,
     background,
     fontSize,
+    fontFamily,
     color,
     weight,
     onClick,
@@ -47,6 +49,7 @@ const Button = (props) => {
       height={height}
       background={background}
       fontSize={fontSize}
+      fontFamily={fontFamily}
       color={color}
       weight={weight}
       onClick={onClick}
