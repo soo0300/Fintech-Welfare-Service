@@ -10,6 +10,7 @@ const StyledInput = styled.input`
     props.background ? `var(--${props.background})` : `var(--white)`};
   color: var(--black);
   font-size: ${(props) => props.fontSize};
+  font-family: ${(props) => props.fontFamily || "initial"};
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   border-radius: ${(props) => props.borderradius};
@@ -33,6 +34,7 @@ const Input = (props) => {
     padding,
     onChange,
     id,
+    fontFamily,
     value,
     disabled,
     borderradius,
@@ -53,6 +55,7 @@ const Input = (props) => {
       padding={padding}
       onChange={onChange}
       id={id}
+      fontFamily={fontFamily}
       value={value}
       disabled={disabled}
       borderradius={borderradius}

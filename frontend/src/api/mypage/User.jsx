@@ -2,7 +2,8 @@ import { baseAxios } from "../Api";
 
 export async function Signup(props) {
   try {
-    const res = await baseAxios.post("user/signup", {
+    const curStatus = props.my_data ? "1" : "0";
+    const res = await baseAxios.post(`user/signup/${curStatus}`, {
       name: props.name,
       email: props.email,
       password: props.password,
@@ -10,6 +11,7 @@ export async function Signup(props) {
       region_key: props.region_key,
       end_date: props.end_date,
       is_ended: props.is_ended,
+      my_data: props.my_data,
     });
     return res;
   } catch (e) {

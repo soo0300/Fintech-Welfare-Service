@@ -111,6 +111,7 @@ const Login = () => {
             border="none"
             borderBottom="1px solid gray"
             background="--bgColor"
+            fontFamily="surround"
           />
           <Input
             width="270px"
@@ -121,12 +122,14 @@ const Login = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             type="password"
+            fontFamily="surround"
           />
           <Button
             onClick={LoginAccess}
             width="270px"
             margin="20px"
             fontSize="15px"
+            fontFamily="surround"
           >
             로그인
           </Button>

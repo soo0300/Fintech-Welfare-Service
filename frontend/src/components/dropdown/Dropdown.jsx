@@ -4,7 +4,7 @@ import styled from "styled-components";
 const DropdownContainer = styled.div`
   background-color: none;
   width: 35vw;
-  height: 160px;
+  height: 170px;
   font-size: 12px;
   color: black;
   overflow-y: scroll;
