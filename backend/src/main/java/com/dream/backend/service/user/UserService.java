@@ -114,7 +114,8 @@ public class UserService {
 
     public UserResponse changeUserRegion(Long userId, Long regionKey) {
         Optional<User> user = userRepository.findById(userId);
-        user.get().changeRegion(regionKey);
+        Optional<Region> savedRegion = regionRepository.findById(regionKey);
+        user.get().changeRegion(savedRegion.get());
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
     }
