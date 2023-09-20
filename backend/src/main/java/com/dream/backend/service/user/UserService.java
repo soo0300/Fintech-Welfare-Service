@@ -112,11 +112,18 @@ public class UserService {
         return response;
     }
 
-    public UserResponse changeUserInfo(Long userId, Long regionKey) {
+    public UserResponse changeUserRegion(Long userId, Long regionKey) {
         Optional<User> user = userRepository.findById(userId);
-//        user.change(regionKey);
+        user.get().changeRegion(regionKey);
         UserResponse userResponse = toUserResponse(user);
-        return null;
+        return userResponse;
+    }
+
+    public UserResponse changeUserPwd(Long userId, String pwd) {
+        Optional<User> user = userRepository.findById(userId);
+        user.get().changePwd(pwd);
+        UserResponse userResponse = toUserResponse(user);
+        return  userResponse;
     }
 
 
