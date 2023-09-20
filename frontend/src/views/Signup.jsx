@@ -24,7 +24,7 @@ const HeaderBox = styled.div`
 `;
 const LineBox = styled.div`
   width: 70vw;
-  height: 10px;
+  height: 2vh;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -51,7 +51,7 @@ const LineStatus = styled.div`
 `;
 const FooterBox = styled.div`
   width: 70vw;
-  height: 30vh;
+  height: 28vh;
   display: flex;
   bottom: 0px;
 `;
@@ -112,6 +112,7 @@ const Signup = () => {
           height="50px"
           color="gray"
           placeholder="이름"
+          fontFamily="surround"
           border-radius="none"
           border="none"
           borderBottom="1px solid gray"
@@ -124,6 +125,7 @@ const Signup = () => {
           height="50px"
           color="gray"
           placeholder="이메일 입력"
+          fontFamily="surround"
           border-radius="none"
           border="none"
           borderBottom="1px solid gray"
@@ -138,6 +140,7 @@ const Signup = () => {
           width="270px"
           height="50px"
           placeholder="비밀번호 입력"
+          fontFamily="surround"
           border-radius="none"
           border="none"
           borderBottom="1px solid gray"
@@ -150,6 +153,7 @@ const Signup = () => {
           width="270px"
           height="50px"
           placeholder="비밀번호 확인"
+          fontFamily="surround"
           border-radius="none"
           border="none"
           borderBottom="1px solid gray"
@@ -165,7 +169,12 @@ const Signup = () => {
         )}
       </MainBox>
       <FooterBox>
-        <Button onClick={nextPage} width="270px" fontSize="15px">
+        <Button
+          onClick={nextPage}
+          width="270px"
+          fontSize="15px"
+          fontFamily="surround"
+        >
           다음
         </Button>
       </FooterBox>

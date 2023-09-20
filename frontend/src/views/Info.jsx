@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
 import Input from "../components/input/Input";
 import Button from "../components/button/Button";
@@ -27,7 +28,7 @@ const HeaderBox = styled.div`
 `;
 const LineBox = styled.div`
   width: 70vw;
-  height: 10px;
+  height: 2vh;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -45,18 +46,19 @@ const Line = styled.div`
   height: 1px;
   background-color: gray;
 `;
-const LineStatus = styled.div`
+const LineStatus = styled(motion.div)`
   width: 35vw;
   height: 2px;
   background-color: black;
   position: absolute;
-  left: 35vw;
+  left: 0;
 `;
 const FooterBox = styled.div`
   width: 70vw;
-  height: 30vh;
+  height: 28vh;
   display: flex;
-  bottom: 0px;
+  flex-direction: row;
+  align-items: center;
 `;
 const BirthBox = styled.div`
   display: flex;
@@ -86,22 +88,28 @@ const SecondKeyBox = styled.div`
 `;
 const Info = () => {
   const [regionKey, setRegionKey] = useState();
+  const [myData, setMydata] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
-  const movePage = async () => {
-    const currentDate = new Date().getTime();
+  const movePage = async (isMydata) => {
+    if (isMydata) {
+      setMydata(true);
+    }
+    const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
+    const endDate = selectedDate + "T23:59:59";
+    console.log(endDate);
     const requestData = {
       name: name,
       email: email,
       password: pwd,
-      region_key: regionKey,
-      residence_info: residenceInfo,
-      end_date: selectedTimestamp,
-      is_ended: isEnded,
+      regionKey: regionKey,
+      residence_info: residenceInfo.concat(residenceBack),
+      endDate: endDate,
+      isEnded: isEnded,
+      myData: myData,
     };
-
     try {
       // API 요청
       const response = await Signup(requestData);
@@ -119,9 +127,14 @@ const Info = () => {
     }
   };
   const [residenceInfo, setResidenceInfo] = useState("");
+  const [residenceBack, setResidenceBack] = useState("");
   const handleResidenceChange = (e) => {
     const residenceValue = e.target.value;
     setResidenceInfo(residenceValue);
+  };
+  const handleResidenceBackChange = (e) => {
+    const residenceValue = e.target.value;
+    setResidenceBack(residenceValue);
   };
 
   const [regions, setRegions] = useState([]);
@@ -188,9 +201,13 @@ const Info = () => {
       </HeaderBox>
       <LineBox>
         <Line />
-        <LineStatus />
+        <LineStatus
+          initial={{ left: 0 }}
+          animate={{ left: "35vw" }}
+          transition={{ duration: 0.5 }}
+        />
       </LineBox>
-      <MainBox>
+      <MainBox className="MainBox">
         <h2>
           맞춤 정보를 제공하기 위해
           <br /> 입력해주세요 :)
@@ -205,7 +222,8 @@ const Info = () => {
             borderradius="none"
             border="none"
             borderBottom="1px solid gray"
-            background="--bgColor"
+            background="none"
+            fontFamily="surround"
             onChange={handleResidenceChange}
           />
           -
@@ -218,6 +236,8 @@ const Info = () => {
             border="none"
             borderBottom="1px solid gray"
             background="--bgColor"
+            fontFamily="surround"
+            onChange={handleResidenceBackChange}
           />
           ●●●●●●
         </BirthBox>
@@ -231,6 +251,7 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             fontSize="20px"
+            fontFamily="surround"
             value={selectedDate}
             onChange={handleDateChange}
           />
@@ -243,6 +264,7 @@ const Info = () => {
               background="none"
               color="black"
               width="35vw"
+              fontFamily="surround"
             />
             {isFirstDropdownView && (
               <Dropdown items={regions} onItemClick={handleRegionSelect} />
@@ -255,6 +277,7 @@ const Info = () => {
               background="none"
               color="black"
               width="35vw"
+              fontFamily="surround"
             />
             {isSecondDropdownView && (
               <Dropdown
@@ -266,7 +289,21 @@ const Info = () => {
         </RegionBox>
       </MainBox>
       <FooterBox>
-        <Button onClick={movePage} width="270px" fontSize="15px">
+        <Button
+          onClick={() => movePage(true)}
+          width="270px"
+          fontSize="15px"
+          background="success"
+          fontFamily="surround"
+        >
+          마이데이터
+        </Button>
+        <Button
+          onClick={() => movePage(false)}
+          width="270px"
+          fontSize="15px"
+          fontFamily="surround"
+        >
           회원가입
         </Button>
       </FooterBox>
