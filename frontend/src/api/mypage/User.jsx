@@ -11,7 +11,6 @@ export async function Signup(props) {
       region_key: props.region_key,
       end_date: props.end_date,
       is_ended: props.is_ended,
-      my_data: props.my_data,
     });
     return res;
   } catch (e) {

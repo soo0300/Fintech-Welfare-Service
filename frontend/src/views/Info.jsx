@@ -96,39 +96,45 @@ const Info = () => {
     if (isMydata) {
       setMydata(true);
     }
-    const currentDate = new Date().getTime();
+    const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
+    const endDate = selectedDate + "T23:59:59";
+    console.log(endDate);
     const requestData = {
       name: name,
       email: email,
       password: pwd,
-      region_key: regionKey,
-      residence_info: residenceInfo,
-      end_date: selectedTimestamp,
-      is_ended: isEnded,
-      my_data: myData,
+      regionKey: regionKey,
+      residence_info: residenceInfo.concat(residenceBack),
+      endDate: endDate,
+      isEnded: isEnded,
+      myData: myData,
     };
-    console.log(requestData);
-    // try {
-    //   // API 요청
-    //   const response = await Signup(requestData);
+    try {
+      // API 요청
+      const response = await Signup(requestData);
 
-    //   // API 응답 처리
-    //   if (response.status === 200) {
-    //     console.log("회원가입 성공:", response.data);
-    //     navigate("/business");
-    //   } else {
-    //     console.error("회원가입 실패:", response.data);
-    //   }
-    // } catch (error) {
-    //   console.error("API 요청 오류:", error);
-    //   // 에러 처리 로직 추가
-    // }
+      // API 응답 처리
+      if (response.status === 200) {
+        console.log("회원가입 성공:", response.data);
+        navigate("/business");
+      } else {
+        console.error("회원가입 실패:", response.data);
+      }
+    } catch (error) {
+      console.error("API 요청 오류:", error);
+      // 에러 처리 로직 추가
+    }
   };
   const [residenceInfo, setResidenceInfo] = useState("");
+  const [residenceBack, setResidenceBack] = useState("");
   const handleResidenceChange = (e) => {
     const residenceValue = e.target.value;
     setResidenceInfo(residenceValue);
+  };
+  const handleResidenceBackChange = (e) => {
+    const residenceValue = e.target.value;
+    setResidenceBack(residenceValue);
   };
 
   const [regions, setRegions] = useState([]);
@@ -231,6 +237,7 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             fontFamily="surround"
+            onChange={handleResidenceBackChange}
           />
           ●●●●●●
         </BirthBox>
