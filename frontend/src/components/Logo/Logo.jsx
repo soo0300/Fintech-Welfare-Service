@@ -4,11 +4,11 @@ import { styled } from "styled-components";
 
 const StyledLogo = styled.div`
   display: flex;
+  width: 100%;
+  height: 70px;
 `;
 
-const LogoImg = styled.img`
-    width: 18%;
-`;
+const LogoImg = styled.img``;
 
 function Logo() {
   return (

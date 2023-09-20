@@ -1,11 +1,3 @@
-.chat {
-  width: 300px;
-  border: solid 1px #eee;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
 .messages {
   display: flex;
   gap: 10px;

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
-import { ReactComponent as CalendarIcon } from "../assets/img/calendar_icon.svg";
 import Input from "../components/input/Input";
 import Button from "../components/button/Button";
-import { useNavigate } from "react-router-dom";
+import Dropdown from "../components/dropdown/Dropdown";
+import { Signup } from "../api/mypage/User";
+import { useLocation, useNavigate } from "react-router-dom";
+import jsonData from "../assets/data/region.json";
 
 const InfoContainer = styled.div`
   display: flex;
@@ -66,11 +68,118 @@ const DateBox = styled.div`
   flex-direction: row;
   align-items: center;
 `;
+
+const RegionBox = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
+const FirstKeyBox = styled.div`
+  width: 35vw;
+  display: flex;
+  flex-direction: column;
+`;
+const SecondKeyBox = styled.div`
+  width: 35vw;
+  display: flex;
+  flex-direction: column;
+`;
 const Info = () => {
+  const [regionKey, setRegionKey] = useState();
   const navigate = useNavigate();
-  const movePage = () => {
-    navigate("/business");
+  const location = useLocation();
+  const { name, email, pwd } = location.state || {};
+  const movePage = async () => {
+    const currentDate = new Date().getTime();
+    const isEnded = selectedTimestamp < currentDate;
+    const requestData = {
+      name: name,
+      email: email,
+      password: pwd,
+      region_key: regionKey,
+      residence_info: residenceInfo,
+      end_date: selectedTimestamp,
+      is_ended: isEnded,
+    };
+
+    try {
+      // API 요청
+      const response = await Signup(requestData);
+
+      // API 응답 처리
+      if (response.status === 200) {
+        console.log("회원가입 성공:", response.data);
+        navigate("/business");
+      } else {
+        console.error("회원가입 실패:", response.data);
+      }
+    } catch (error) {
+      console.error("API 요청 오류:", error);
+      // 에러 처리 로직 추가
+    }
   };
+  const [residenceInfo, setResidenceInfo] = useState("");
+  const handleResidenceChange = (e) => {
+    const residenceValue = e.target.value;
+    setResidenceInfo(residenceValue);
+  };
+
+  const [regions, setRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [subRegions, setSubRegions] = useState([]);
+  const [selectedRegionText, setSelectedRegionText] = useState("시/도 ▼");
+  const [selectedSubRegionText, setSelectedSubRegionText] =
+    useState("시/군/구 ▼");
+  const handleRegionSelect = (region) => {
+    setSelectedRegion(region);
+    setSelectedRegionText(region);
+    const curRegion = jsonData.find((item) => item.name === region);
+    setRegionKey(curRegion.region_key);
+    const selectedRegionData = jsonData.filter(
+      (item) => item.parent_key === curRegion.region_key
+    );
+    if (selectedRegionData) {
+      const subRegionData = selectedRegionData.map((item) => item.name);
+      setSubRegions(subRegionData);
+    } else {
+      setSubRegions([]);
+    }
+    setIsFirstDropdownView(false);
+  };
+
+  const handleSubRegionSelect = (region) => {
+    setSelectedSubRegionText(region);
+    const curRegion = jsonData.find((item) => item.name === region);
+    setRegionKey(curRegion.region_key);
+    setIsSecondDropdownView(false);
+  };
+
+  useEffect(() => {
+    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    setRegions(filteredNames);
+  }, []);
+
+  // 날짜를 저장할 상태 변수
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isFirstDropdownView, setIsFirstDropdownView] = useState(false);
+  const [isSecondDropdownView, setIsSecondDropdownView] = useState(false);
+  const [selectedTimestamp, setSelectedTimeStamp] = useState();
+
+  // 날짜가 변경될 때 호출되는 함수
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+    setSelectedTimeStamp(new Date(e.target.value).getTime());
+  };
+
+  const handleClickFirstDropdown = () => {
+    setIsFirstDropdownView(!isFirstDropdownView);
+  };
+
+  const handleClickSecondDropdown = () => {
+    console.log(selectedRegion);
+    setIsSecondDropdownView(!isSecondDropdownView);
+  };
+
   return (
     <InfoContainer>
       <HeaderBox>
@@ -88,6 +197,7 @@ const Info = () => {
         </h2>
         <BirthBox>
           <Input
+            type="number"
             width="135px"
             height="50px"
             color="gray"
@@ -96,9 +206,11 @@ const Info = () => {
             border="none"
             borderBottom="1px solid gray"
             background="--bgColor"
+            onChange={handleResidenceChange}
           />
           -
           <Input
+            type="number"
             width="20px"
             height="50px"
             color="gray"
@@ -109,32 +221,49 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
-        <hr background="--gray" />
         <DateBox>
           <Input
+            type="date"
             width="270px"
             height="50px"
-            placeholder="보호종료일"
             border-radius="none"
             border="none"
             borderBottom="1px solid gray"
             background="--bgColor"
+            fontSize="20px"
+            value={selectedDate}
+            onChange={handleDateChange}
           />
-          <Button type="icon" background="none">
-            <CalendarIcon />
-          </Button>
         </DateBox>
-        <hr background="--gray" />
-        <Input
-          width="270px"
-          height="50px"
-          placeholder="거주지"
-          border-radius="none"
-          border="none"
-          borderBottom="1px solid gray"
-          background="--bgColor"
-        />
-        <hr background="--gray" />
+        <RegionBox>
+          <FirstKeyBox>
+            <Button
+              text={selectedRegionText}
+              onClick={handleClickFirstDropdown}
+              background="none"
+              color="black"
+              width="35vw"
+            />
+            {isFirstDropdownView && (
+              <Dropdown items={regions} onItemClick={handleRegionSelect} />
+            )}
+          </FirstKeyBox>
+          <SecondKeyBox>
+            <Button
+              text={selectedSubRegionText}
+              onClick={handleClickSecondDropdown}
+              background="none"
+              color="black"
+              width="35vw"
+            />
+            {isSecondDropdownView && (
+              <Dropdown
+                items={subRegions}
+                onItemClick={handleSubRegionSelect}
+              />
+            )}
+          </SecondKeyBox>
+        </RegionBox>
       </MainBox>
       <FooterBox>
         <Button onClick={movePage} width="270px" fontSize="15px">

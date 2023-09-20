@@ -15,6 +15,7 @@ const IntroContainer = styled(motion.div)`
   width: 100vw;
   height: 100vh;
 `;
+
 const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
@@ -25,9 +26,15 @@ const TitleBox = styled.div`
   text-align: center;
   align-items: center;
 `;
+
 const LogoImg = styled.img`
   width: 35vw;
   max-width: 100%;
+`;
+
+const TextBelowIntroPicture = styled(motion.div)`
+  font-size: 24px;
+  margin-top: 20px;
 `;
 
 const BoxVariants = {
@@ -41,10 +48,25 @@ const BoxVariants = {
   },
 };
 
+const TextVariants = {
+  hidden: {
+    opacity: 0,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 1,
+    },
+  },
+};
+
 const animationDuration = 2;
 
 const Intro = () => {
   const [showing, setShowing] = useState(true);
+  const [textVisible, setTextVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,8 +74,13 @@ const Intro = () => {
       setShowing(true);
     }, animationDuration * 1000);
 
+    const textShowTimeout = setTimeout(() => {
+      setTextVisible(true);
+    }, 2000);
+
     return () => {
       clearTimeout(showTimeout);
+      clearTimeout(textShowTimeout);
     };
   }, []);
 
@@ -83,6 +110,13 @@ const Intro = () => {
             함께, 드림
           </TitleBox>
           <IntroPicture />
+          <TextBelowIntroPicture
+            variants={TextVariants}
+            initial="hidden"
+            animate={textVisible ? "visible" : "hidden"}
+          >
+            화면을 클릭해주세요
+          </TextBelowIntroPicture>
         </IntroContainer>
       ) : null}
     </AnimatePresence>

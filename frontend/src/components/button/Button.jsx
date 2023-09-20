@@ -23,14 +23,6 @@ const StyledButton = styled(motion.button)`
   margin: ${(props) => props.margin};
   border: none;
   transform: scale(1);
-  &:hover {
-    transition: all 0.4s;
-    transform: scale(0.9);
-    color: ${(props) =>
-      props.hovercolor ? `var(--${props.hovercolor})` : `var(--black)`};
-    background-color: ${(props) =>
-      props.hoverbgcolor ? `var(--${props.hoverbgcolor})` : `var(--coolblue)`};
-  }
 `;
 const Button = (props) => {
   const {
@@ -39,8 +31,6 @@ const Button = (props) => {
     background,
     fontSize,
     color,
-    hovercolor,
-    hoverbgcolor,
     weight,
     onClick,
     border,
@@ -58,8 +48,6 @@ const Button = (props) => {
       background={background}
       fontSize={fontSize}
       color={color}
-      hovercolor={hovercolor}
-      hoverbgcolor={hoverbgcolor}
       weight={weight}
       onClick={onClick}
       border={border}
