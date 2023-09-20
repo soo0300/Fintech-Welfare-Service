@@ -1,9 +1,11 @@
-import React, { useState } from "react"; // useState import
+import { React, useState, useEffect } from "react"; // useState import
 import Nav from "../components/Nav/Nav";
-import Button from "../components/button/Button";
 import { styled } from "styled-components";
 import Header from "../components/header/Header";
 import Card from "../components/card/Card";
+
+//API
+import { AllWelfare } from "../api/welfare/Welfare";
 
 // Icon
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
@@ -14,11 +16,12 @@ import { ReactComponent as MinusIcon } from "../assets/img/minus.svg";
 const BusinessContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 90%;
   height: calc(100%-154px);
   /* padding-top: 30px; */
-  /* padding-bottom: 94px; */
+  padding-bottom: 94px;
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 // 카드를 넣었을 때와 안넣었을 때 박스 공통 설정
@@ -150,9 +153,8 @@ function CustomBusinesss() {
       <p>맞춤 지원 사업</p>
       <HR />
       <CustomCardBox>
-        {/* <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" /> */}
-        {/* <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" /> */}
+        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
+        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
       </CustomCardBox>
     </CustomContainer>
   );

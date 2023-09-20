@@ -3,7 +3,7 @@ import { baseAxios } from "../Api";
 export async function AllWelfare() {
   try {
     const res = await baseAxios.get(`welfare/all`);
-    return res;
+    return res.data;
   } catch (e) {
     console.error(e);
   }
