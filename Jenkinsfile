@@ -31,7 +31,7 @@ pipeline {
                 sh '''
                     docker stop front-app
                     docker rm front-app
-                    docker run -d --name front-app --restart=always -p 80:80 -p 443:443 --add-host host.docker.internal:host-gateway --volume /etc/letsencrypt/:/etc/letsencrypt ${docker_repo}:front-0.1
+                    docker run -d --name front-app --restart=always -p 80:80 -p 443:443 -p 8090:8090 --add-host host.docker.internal:host-gateway --volume /etc/letsencrypt/:/etc/letsencrypt ${docker_repo}:front-0.1
                 '''
             }
         }
