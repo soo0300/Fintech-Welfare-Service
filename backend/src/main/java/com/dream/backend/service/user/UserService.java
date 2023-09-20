@@ -11,6 +11,7 @@ import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.domain.transaction.repository.TransactionRepository;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.domain.user.repository.UserRepository;
+import com.dream.backend.domain.welfare.Welfare;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.service.benefit.BenefitService;
 import com.dream.backend.service.qualification.QualificationService;
@@ -73,16 +74,23 @@ public class UserService {
             //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
             List<String> welfareCodeList = new ArrayList<>();
             for (int i = 0; i < getUserWelfareKey.size(); i++) {
-                String welfare_code = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
+//                String welfare_code = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
+                Welfare welfare = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
+                String welfare_code = welfare.getWelfare_code();
+                if(welfare_code!=null){
+                    System.out.println("거래 내역과 매칭된 입금 내역 코드 : "+ welfare_code);
+                    Transaction transaction = transactionRepository.findByTranDesc(welfare_code);
+                    if (transaction != null) {
+                        //같은 것이 존재한다면
+                        //+ 기간 설정 필요
+                        //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
 
-                //+ 기간 설정 필요
-                //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
-                Transaction transaction = transactionRepository.findByTranDesc(welfare_code);
-                if (transaction != null) {
-                    //같은 것이 존재한다면
-                    //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
-                    Optional<Benefit> benefit = benefitRepository.findById(getFilteredWelfareKey.get(i));
-                    benefit.get().changeStatus();
+
+                        //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
+//                    Optional<Benefit> benefit = benefitRepository.findById(getFilteredWelfareKey.get(i));
+//                    benefit.get().changeStatus();
+
+                    }
 
                 }
 
