@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +26,11 @@ public class TransactionService {
 
     public List<Transaction> getAllTransaction() {
         return transactionRepository.findAll();
+    }
+
+    public List<Transaction> getTransactionByAccountNumber(Long accountNumber) {
+        Optional<Account> account = accountRepository.findById(accountNumber);
+        return transactionRepository.findAllByAccount(account);
     }
 
     public List<Transaction> getTransactionByDateRange(LocalDateTime startDate, LocalDateTime endDate, Long accountNumber) {

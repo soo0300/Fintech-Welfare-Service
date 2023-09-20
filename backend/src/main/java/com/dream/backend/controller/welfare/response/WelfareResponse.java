@@ -3,10 +3,12 @@ package com.dream.backend.controller.welfare.response;
 import com.dream.backend.domain.welfare.Welfare;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Data
+@Getter
 public class WelfareResponse {
 
     private Long id;

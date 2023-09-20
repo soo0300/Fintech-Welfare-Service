@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,23 +34,21 @@ public class WelfareInfoService {
     private RestHighLevelClient client;
     private ElasticsearchClient esClient;
 
-    public void setClient() throws IOException {
+    public void setClient() {
         String serverUrl = "http://j9c209.p.ssafy.io:9200";
         String apiKey = "NFl3amtZb0JsSzJlT3lYcXhRcmc6WDBabGZhYlpUdmlfNHpLTE5RMjk4Zw==";
 
+        HttpHost httphost = new HttpHost("j9c209.p.ssafy.io", 9200, "http");
+        BasicHeader header = new BasicHeader("Authorization", "ApiKey " + apiKey);
+
         restClient = RestClient
-                .builder(new HttpHost("j9c209.p.ssafy.io", 9200, "http"))
-                .setDefaultHeaders(new Header[] {
-                        new BasicHeader("Authorization", "ApiKey " + apiKey)
-                })
+                .builder(httphost)
+                .setDefaultHeaders(new Header[] {header})
                 .build();
 
-        client = new RestHighLevelClient(
-                RestClient.builder(
-                                new HttpHost("j9c209.p.ssafy.io", 9200, "http"))
-                        .setDefaultHeaders(new Header[] {
-                                new BasicHeader("Authorization", "ApiKey " + apiKey)
-                        })
+        client = new RestHighLevelClient(RestClient
+                .builder(httphost)
+                .setDefaultHeaders(new Header[] {header})
         );
 
         ElasticsearchTransport transport = new RestClientTransport(
@@ -59,26 +58,26 @@ public class WelfareInfoService {
 
 //            esClient.indices().create(c -> c.index("welfare_info"));
 
-//            WelfareInfo welfareInfo = new WelfareInfo(1, "지원사업 A", "자립준비청년 중 타인과의 교류가 없고 도움을 요청할 경제적·정서적 지지체계가 부족하거나 결핍된 고립 청년. 혹은 고립 청년 중에서도 외출 없이 제한된 공간에서 살아가는 청년을 대상으로 합니다.");
+//            WelfareInfo welfareInfo = new WelfareInfo(2, "지원사업 B", "강남구청 가족 정책과에서 시행하는 강남구 거주 3개월 이상 경과 자v립 준비 청년을 대상으로 경제적 심리적 지원을 해주는 지원 사업입니다.", "");
 //
 //            String tokens = this.tokenized(welfareInfo.getDescription());
 //            System.out.println(tokens);
 //            welfareInfo.setKeywords(tokens);
 //
-//            IndexResponse  response = esClient.index(i -> i
+//            IndexResponse response = esClient.index(i -> i
 //                    .index("welfare_info")
-//                    .id("1")
+//                    .id("2")
 //                    .document(welfareInfo)
 //            );
     }
 
-    public void insertDocument(int id, String name, String desc) {
-        WelfareInfo welfareInfo = new WelfareInfo(id, name, desc);
+    public void insertDocument(Long id, String name, String desc) {
+        WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, "");
         welfareInfo.setKeywords(this.tokenized(desc));
         try {
             IndexResponse response = esClient.index(i -> i
                     .index("welfare_info")
-                    .id(Integer.toString(id))
+                    .id(Long.toString(id))
                     .document(welfareInfo)
             );
         } catch (IOException e) {
@@ -87,7 +86,6 @@ public class WelfareInfoService {
     }
 
     public WelfareInfo getDocument(int id) {
-        WelfareInfo welfareInfo = null;
         try {
             GetResponse<WelfareInfo> response = esClient.get(g -> g
                     .index("welfare_info")
@@ -96,13 +94,13 @@ public class WelfareInfoService {
             );
 
             if(response.found()) {
-                welfareInfo = response.source();
+                return response.source();
             }
         } catch(IOException e) {
             e.printStackTrace();
         }
 
-        return welfareInfo;
+        return null;
     }
 
     public void removeDocument(int id) {
@@ -118,7 +116,7 @@ public class WelfareInfoService {
     }
 
     public List<WelfareInfo> searchDocument(String words) {
-        List<WelfareInfo> results = null;
+        List<WelfareInfo> results = new ArrayList<>();
         SearchResponse<WelfareInfo> response;
         try {
              response = esClient.search(s -> s
@@ -135,6 +133,7 @@ public class WelfareInfoService {
             List<Hit<WelfareInfo>> hits = response.hits().hits();
             for(Hit<WelfareInfo> hit: hits) {
                 WelfareInfo welfareInfo = hit.source();
+                welfareInfo.setScore(hit.score());
                 results.add(welfareInfo);
             }
 
@@ -164,7 +163,7 @@ public class WelfareInfoService {
 //                    ContentType.APPLICATION_JSON
 //            ));
 
-            AnalyzeRequest request = AnalyzeRequest.buildCustomAnalyzer("nori_tokenizer").build(text);
+            AnalyzeRequest request = AnalyzeRequest.withIndexAnalyzer("korean_analyzer", "nori_analyzer", text);
             AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
 
             List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
