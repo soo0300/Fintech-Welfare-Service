@@ -50,6 +50,22 @@ public class WelfareInfoController {
         return null;
     }
 
+    @GetMapping("/search/reliable/{expression}")
+    public List<WelfareInfo> reliableSearchInfo(@PathVariable("expression") String expr) {
+        try {
+            welfareInfoService.setClient();
+            String query = welfareInfoService.tokenized(expr);
+            List<WelfareInfo> results = welfareInfoService.searchReliableDocument(query);
+            welfareInfoService.closeAllClient();
+            if(!results.isEmpty())
+                return results;
+
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @PostMapping("/index")
     public String indexInfo(@RequestBody WelfareInfoRequestDto dto) {
         try {

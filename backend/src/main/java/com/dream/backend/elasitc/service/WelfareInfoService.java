@@ -145,6 +145,39 @@ public class WelfareInfoService {
         return null;
     }
 
+    public List<WelfareInfo> searchReliableDocument(String words) {
+        List<WelfareInfo> results = new ArrayList<>();
+        SearchResponse<WelfareInfo> response;
+        try {
+            response = esClient.search(s -> s
+                            .index("welfare_info")
+                            .query(q -> q
+                                    .match(t -> t
+                                            .field("keywords")
+                                            .query(words)
+                                    )
+                            ),
+                    WelfareInfo.class
+            );
+
+            List<Hit<WelfareInfo>> hits = response.hits().hits();
+            double lowestLimit = response.hits().maxScore() * 0.8;
+            for(Hit<WelfareInfo> hit: hits) {
+                if(hit.score() >= lowestLimit) {
+                    WelfareInfo welfareInfo = hit.source();
+                    welfareInfo.setScore(hit.score());
+                    results.add(welfareInfo);
+                }
+            }
+
+            return results;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void closeAllClient() throws IOException {
         restClient.close();
         client.close();
