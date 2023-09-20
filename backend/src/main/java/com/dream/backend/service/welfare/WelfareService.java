@@ -40,6 +40,14 @@ public class WelfareService {
         return welfareList;
     }
 
+    public WelfareResponse getWelfare(Long welfare_id) {
+        Optional<Welfare> welfare = welfareRepository.findById(welfare_id);
+        WelfareResponse response = toResponse(welfare);
+        return response;
+    }
+
+//    - - - - - - - 비즈니스 로직 - - - - - - -- -
+
 
     private WelfareResponse toResponse(Optional<Welfare> welfare) {
         return WelfareResponse.builder()
