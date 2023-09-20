@@ -1,10 +1,21 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Header from "../components/header/Header";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
+
+// API
+import { AllWelfare } from "../api/welfare/Welfare";
+
+const RecommandPageBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-y: scroll;
+  align-items: center;
+`;
 
 const SearchBarContainer = styled.div`
   display: flex;
@@ -21,7 +32,7 @@ const StyledSearchIcon = styled(SearchIcon)`
 `;
 
 const SearchInput = styled.input`
-  width: 31vh;
+  width: 33vh;
   height: 4vh;
   border-radius: 30px;
   font-size: 2vh;
@@ -34,18 +45,17 @@ function SearchBar() {
   return (
     <SearchBarContainer>
       <StyledSearchIcon />
-      <SearchInput placeholder="" />
+      <SearchInput />
     </SearchBarContainer>
   );
 }
 
 const TagContainer = styled.div`
-  width: 38vh;
-  height: 100%;
+  width: 90%;
   background-color: #bddffa;
   border-radius: 10px;
   margin-top: 4vh;
-  margin-bottom: 9vh;
+  margin-bottom: 4vh;
 `;
 
 const ButtonContainer = styled.div`
@@ -127,7 +137,7 @@ function Tag() {
 
 const BusinessContainer = styled.div`
   background-color: #fff;
-  width: 38vh;
+  width: 90%;
   border-radius: 10px;
 `;
 
@@ -147,6 +157,18 @@ const CardContainer = styled.div`
 `;
 
 function Business() {
+  const [welfares, setWalfares] = useState([]);
+
+  useEffect(() => {
+    const fetchWelfares = async () => {
+      const data = await AllWelfare();
+      setWalfares(data);
+    };
+
+    fetchWelfares();
+  }, []);
+
+  console.log(welfares);
   return (
     <BusinessContainer>
       <BusinessHeader>
@@ -155,9 +177,20 @@ function Business() {
       </BusinessHeader>
       <HR />
       <CardContainer>
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
+        {welfares &&
+          welfares.map((welfare) => (
+            <Card
+              key={welfare.id}
+              cardWidth="45%"
+              cardHeight="23vh"
+              posterWidth="30rem"
+              fontSize=" 2vw"
+              // welfare props
+              title={welfare.name}
+              region="전국"
+              support_period={welfare.start_date}
+            />
+          ))}
       </CardContainer>
     </BusinessContainer>
   );
@@ -167,9 +200,11 @@ function RecommendPage() {
   return (
     <>
       <Header />
-      <SearchBar />
-      <Tag />
-      <Business />
+      <RecommandPageBody>
+        <SearchBar />
+        <Tag />
+        <Business />
+      </RecommandPageBody>
     </>
   );
 }
