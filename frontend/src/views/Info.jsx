@@ -99,7 +99,6 @@ const Info = () => {
     const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
     const endDate = selectedDate + "T23:59:59";
-    console.log(endDate);
     const requestData = {
       name: name,
       email: email,
@@ -110,6 +109,7 @@ const Info = () => {
       isEnded: isEnded,
       myData: myData,
     };
+    console.log(requestData);
     try {
       // API 요청
       const response = await Signup(requestData);
@@ -123,7 +123,6 @@ const Info = () => {
       }
     } catch (error) {
       console.error("API 요청 오류:", error);
-      // 에러 처리 로직 추가
     }
   };
   const [residenceInfo, setResidenceInfo] = useState("");
@@ -189,7 +188,6 @@ const Info = () => {
   };
 
   const handleClickSecondDropdown = () => {
-    console.log(selectedRegion);
     setIsSecondDropdownView(!isSecondDropdownView);
   };
 
