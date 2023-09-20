@@ -74,7 +74,6 @@ const Intro = () => {
       setShowing(true);
     }, animationDuration * 1000);
 
-    // 1초 후에 TextBelowIntroPicture를 표시합니다.
     const textShowTimeout = setTimeout(() => {
       setTextVisible(true);
     }, 2000);

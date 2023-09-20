@@ -19,14 +19,24 @@ html {
   --yellow: #ecd78d;
   --pink: #f9b4c2;
   --primary: #006ffd;
+  --success: #5cb85c;
+  --sky: #50bcdf;
   --coolblue: #bddffa;
   --bgColor: #f2f5fe;
   overflow: hidden;
-  overscroll-behavior: none;
 }
 
 .App {
   text-align: center;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (min-width: 500px) {
+  .App {
+    width: 500px;
+  }
 }
