@@ -48,11 +48,20 @@ public class UserController {
         return userResponse;
     }
 
-    @PatchMapping("/{user_id}/{region_key}")
+    @PatchMapping("/{user_id}/region/{region_key}")
     public UserResponse changeUserInfo(@PathVariable Long user_id, @PathVariable Long region_key) {
-        UserResponse userResponse = userService.changeUserInfo(user_id, region_key);
+        UserResponse userResponse = userService.changeUserRegion(user_id, region_key);
         return userResponse;
     }
+
+    @PatchMapping("/{user_id}/pwd/{pwd}")
+    public ApiResponse<UserResponse> changeUserPwd(@PathVariable Long user_id, @PathVariable String pwd) {
+        UserResponse response = userService.changeUserPwd(user_id, pwd);
+        return ApiResponse.ok(response);
+    }
+
+
+
 
 
 }

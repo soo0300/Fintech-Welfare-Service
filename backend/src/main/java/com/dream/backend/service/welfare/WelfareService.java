@@ -43,6 +43,7 @@ public class WelfareService {
 
     private WelfareResponse toResponse(Optional<Welfare> welfare) {
         return WelfareResponse.builder()
+                .id(welfare.get().getId())
                 .name(welfare.get().getName())
                 .organization(welfare.get().getOrganization())
                 .start_date(welfare.get().getStart_date())

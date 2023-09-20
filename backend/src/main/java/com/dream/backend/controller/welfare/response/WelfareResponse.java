@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 @Data
 public class WelfareResponse {
 
+    private Long id;
+
     private String name;
 
     private String organization;
@@ -25,7 +27,6 @@ public class WelfareResponse {
 
     private String description_origin;
 
-//    private String description;
 
     private String url;
 
@@ -36,7 +37,8 @@ public class WelfareResponse {
     String etc;
 
     @Builder
-    public WelfareResponse(String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc) {
+    public WelfareResponse(Long id, String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc) {
+        this.id = id;
         this.name = name;
         this.organization = organization;
         this.start_date = start_date;
@@ -54,6 +56,7 @@ public class WelfareResponse {
 //    - - -  비즈니스 로직 - - - - - -
     public static WelfareResponse toResponse(Welfare welfare) {
         return WelfareResponse.builder()
+                .id(welfare.getId())
                 .name(welfare.getName())
                 .organization(welfare.getOrganization())
                 .start_date(welfare.getStart_date())
