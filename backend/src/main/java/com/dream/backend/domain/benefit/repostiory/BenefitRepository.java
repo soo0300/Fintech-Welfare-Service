@@ -13,4 +13,5 @@ public interface BenefitRepository extends JpaRepository<Benefit, Long> {
 
     List<Benefit> findAllByUser_Id(Long userId);
 
+    Optional<Benefit> findByUserIdAndWelfareId(Long id, Long welfareKey);
 }

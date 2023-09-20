@@ -20,11 +20,11 @@ import java.util.Optional;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/signup")
-    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request) {
+    @PostMapping("/signup/{type}")
+    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request, @PathVariable int type) {
         JoinUserDto dto = request.toDto();
         System.out.print("controller region key" + dto.getRegionKey());
-        Long id = userService.joinUser(dto);
+        Long id = userService.joinUser(dto, type);
         return ApiResponse.ok(id);
     }
 
@@ -49,11 +49,10 @@ public class UserController {
     }
 
     @PatchMapping("/{user_id}/{region_key}")
-    public UserResponse changeUserInfo(@PathVariable Long user_id, @PathVariable Long region_key){
+    public UserResponse changeUserInfo(@PathVariable Long user_id, @PathVariable Long region_key) {
         UserResponse userResponse = userService.changeUserInfo(user_id, region_key);
         return userResponse;
     }
-
 
 
 }

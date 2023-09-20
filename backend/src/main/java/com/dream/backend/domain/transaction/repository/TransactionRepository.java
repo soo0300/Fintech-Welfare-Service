@@ -12,5 +12,8 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    public List<Transaction> findAllByAccount(Optional<Account> account);
+    List<Transaction> findAllByAccount(Optional<Account> account);
+
+//    @Query("SELECT t FROM Transaction t WHERE t.tranDesc LIKE %:welfareCode%")
+    Transaction findByTranDesc(String welfareCode);
 }
