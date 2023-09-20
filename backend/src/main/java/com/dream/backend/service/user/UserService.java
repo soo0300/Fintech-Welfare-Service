@@ -3,8 +3,6 @@ package com.dream.backend.service.user;
 import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.benefit.Benefit;
 import com.dream.backend.domain.benefit.repostiory.BenefitRepository;
-import com.dream.backend.domain.qualification.Qualification;
-import com.dream.backend.domain.qualification.repository.QualificationRepository;
 import com.dream.backend.domain.region.Region;
 import com.dream.backend.domain.region.repository.RegionRepository;
 import com.dream.backend.domain.transaction.Transaction;
@@ -73,34 +71,32 @@ public class UserService {
         if (type == 1) {
             //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
             List<String> welfareCodeList = new ArrayList<>();
-            for (int i = 0; i < getUserWelfareKey.size(); i++) {
-//                String welfare_code = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
-                Welfare welfare = welfareRepository.findWelfareCodeById(getUserWelfareKey.get(i));
-                String welfare_code = welfare.getWelfare_code();
-                if(welfare_code!=null){
-                    System.out.println("거래 내역과 매칭된 입금 내역 코드 : "+ welfare_code);
-                    Transaction transaction = transactionRepository.findByTranDesc(welfare_code);
-                    if (transaction != null) {
+            for (int i = 0; i < getUserWelfareKey.size(); i++) { // 2 3 6
+                Long welfare_key = getUserWelfareKey.get(i);
+                Welfare welfare = welfareRepository.findWelfareCodeById(welfare_key);
+                String welfare_code = welfare.getWelfare_code(); //BVE ABC ABC
+                if (welfare_code != null) {
+                    System.out.println("거래 내역과 매칭된 입금 내역 코드 : " + welfare_code);
+                    Transaction transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서  ABC를 찾는다
+                    System.out.println("거래내역과 복지 코드 매칭: " + transaction.getTranDesc());
+                    if (transaction.getId() != null) {
                         //같은 것이 존재한다면
                         //+ 기간 설정 필요
                         //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
 
 
                         //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
-//                    Optional<Benefit> benefit = benefitRepository.findById(getFilteredWelfareKey.get(i));
-//                    benefit.get().changeStatus();
+                        System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + saveduser.getId());
+                        //user_id 와 welfare_key가 같으면 바꿔줘.,
+                        Optional<Benefit> benefit = benefitRepository.findByUserIdAndWelfareId(saveduser.getId(), welfare_key);
+                        benefit.get().changeStatus();
 
                     }
 
                 }
 
-                //+ benefit 사용자 복지 테이블에서 welfare_id를 발견하면 benefit의 status 를 1로 바꾼다.
-//                getFilteredWelfareKey.add();
-
             }
-            //거래내역 테이블에서 파싱하기
 
-            //파싱한 값을 가지고 자격조건 테이블에서
 
         }
         return saveduser.getId();
@@ -153,7 +149,6 @@ public class UserService {
         return age;
 
     }
-
 
 }
 
