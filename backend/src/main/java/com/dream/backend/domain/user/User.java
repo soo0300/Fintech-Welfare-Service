@@ -78,12 +78,20 @@ public class User {
         this.refresh_time=refresh_time;
     }
 
-    // - - -비즈니스 로직
+    // - - - - - - - - - -비즈니스 로직 - - - -- - - - -
+
     public UserFundResponse toFundResponse(Optional<User> user){
         return UserFundResponse.builder()
                 .pre_fund(user.get().pre_fund)
                 .total_fund(user.get().total_fund)
                 .build();
     }
+    public void changeRegion(Long regionKey) {
 
+//        this.region.getId() = regionKey;
+
+    }
+    public void changePwd(String pwd){
+        this.password = pwd;
+    }
 }
