@@ -7,7 +7,6 @@ const BusinessHead = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  /* position: fixed; */
   height: 70px;
   width: 100%;
   background-color: #f2f5fe;
