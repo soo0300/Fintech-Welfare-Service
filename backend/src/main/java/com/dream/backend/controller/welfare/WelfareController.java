@@ -44,8 +44,5 @@ public class WelfareController {
     public WelfareResponse getWelfare(@PathVariable Long welfare_id) {
 
         return welfareService.getWelfare(welfare_id);
-
     }
-
-
 }

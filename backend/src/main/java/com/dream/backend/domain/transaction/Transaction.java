@@ -1,5 +1,6 @@
 package com.dream.backend.domain.transaction;
 
+import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.bank.Bank;
 import com.dream.backend.domain.bank_client.BankClient;
@@ -24,16 +25,16 @@ public class Transaction {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="transaction_id")
+    @Column(name = "transaction_id")
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="account_number")
+    @JoinColumn(name = "account_number")
     private Account account;
 
     //account 테이블의 fk를 조인하고 싶을 때!
 
-    @Column(name="bank_code")
+    @Column(name = "bank_code")
     private String bank;
 
     @Column(name = "client_key")
@@ -78,4 +79,15 @@ public class Transaction {
     }
 
     // ----- 비지니스 로직 ------ //
+
+    public static Transaction toEntity(TransactionRequest request, Account account, int after_amt, InoutType type) {
+        return  Transaction.builder()
+                .account(account)
+                .tranAmt(request.getTran_amt())
+                .tranDesc(request.getTran_desc())
+                .inoutType(type)
+                .tranDate(LocalDateTime.now())
+                .balance(after_amt)
+                .build();
+    }
 }
