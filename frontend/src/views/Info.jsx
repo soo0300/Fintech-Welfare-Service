@@ -126,7 +126,7 @@ const Info = () => {
       email: email,
       password: pwd,
       regionKey: regionKey,
-      residence_info: Number(residenceInfo.concat(residenceBack)),
+      residenceInfo: Number(residenceInfo.concat(residenceBack)),
       endDate: endDate,
       isEnded: isEnded,
       myData: myData,

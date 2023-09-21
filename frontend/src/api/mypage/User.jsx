@@ -7,10 +7,11 @@ export async function Signup(props) {
       name: props.name,
       email: props.email,
       password: props.password,
-      residence_info: props.residence_info,
-      region_key: props.region_key,
-      end_date: props.end_date,
-      is_ended: props.is_ended,
+      residenceInfo: props.residence_info,
+      regionKey: props.region_key,
+      endDate: props.end_date,
+      isEnded: props.is_ended,
+      createdDate: props.createdDate,
     });
     return res;
   } catch (e) {
