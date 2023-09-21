@@ -90,10 +90,12 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const handleEmailValue = (e) => {
     const curEmailValue = e.target.value;
+    console.log(curEmailValue);
     setEmail(curEmailValue);
   };
   const handlePwdValue = (e) => {
     const curPwdValue = e.target.value;
+    console.log(curPwdValue);
     setPassword(curPwdValue);
   };
   const LoginAccess = async () => {
