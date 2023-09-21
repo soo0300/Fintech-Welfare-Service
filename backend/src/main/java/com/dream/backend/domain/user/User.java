@@ -37,7 +37,7 @@ public class User {
     @Column(nullable = true)
     private LocalDateTime end_date;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private boolean is_ended;
 
     @CreatedDate
