@@ -5,9 +5,11 @@ import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
+import Nav from "../components/Nav/Nav";
 
 // API
 import { AllWelfare } from "../api/welfare/Welfare";
+import WelfareModal from "../components/modal/WelfareModal";
 
 const RecommandPageBody = styled.div`
   display: flex;
@@ -157,6 +159,7 @@ const CardContainer = styled.div`
 `;
 
 function Business() {
+  // 카드 안에 내용
   const [welfares, setWalfares] = useState([]);
 
   useEffect(() => {
@@ -169,6 +172,9 @@ function Business() {
   }, []);
 
   console.log(welfares);
+
+  // 상세보기 모듈
+
   return (
     <BusinessContainer>
       <BusinessHeader>
@@ -181,13 +187,8 @@ function Business() {
           welfares.map((welfare) => (
             <Card
               key={welfare.id}
-              fontSize=" 2vw"
-              // Card
-              cardWidth="45%"
-              cardHeight="23vh"
-              // Poster
-              posterWidth="30rem"
               // welfare props
+              id={welfare.id}
               title={welfare.name}
               region="전국"
               support_period={welfare.start_date}
@@ -207,6 +208,7 @@ function RecommendPage() {
         <Tag />
         <Business />
       </RecommandPageBody>
+      <Nav />
     </>
   );
 }
