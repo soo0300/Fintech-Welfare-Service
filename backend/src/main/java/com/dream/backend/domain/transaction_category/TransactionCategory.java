@@ -20,4 +20,9 @@ public class TransactionCategory {
 
     @Column(name = "category_name")
     private String name;
+
+    public TransactionCategory(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +33,11 @@ public class WelfareInfoController {
         welfareInfoService.closeAllClient();
 
         return welfareInfo;
+    }
+
+    @GetMapping("/search")
+    public String searchException() {
+        return "No Expression...";
     }
 
     @GetMapping("/search/{expression}")
@@ -87,9 +93,7 @@ public class WelfareInfoController {
             List<Welfare> list = welfareRepository.findAll();
 
             for(Welfare item: list) {
-                String token = welfareInfoService.tokenized(item.getDescription_origin());
-
-                welfareInfoService.insertDocument(item.getId(), item.getName(), token);
+                welfareInfoService.insertDocument(item.getId(), item.getName(), item.getDescription_origin());
             }
 
             welfareInfoService.closeAllClient();

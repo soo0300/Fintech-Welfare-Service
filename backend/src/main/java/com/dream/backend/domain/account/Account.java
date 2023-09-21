@@ -5,11 +5,13 @@ import com.dream.backend.domain.bank_client.BankClient;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Account {
     @Id
@@ -32,4 +34,10 @@ public class Account {
     private int balance;
 
     public String getBranch_name() { return this.branch_name; }
+
+    // - - - 비지니스 로직 - - -
+
+    public void changeBalance(int after_amt) {
+        this.balance = after_amt;
+    }
 }

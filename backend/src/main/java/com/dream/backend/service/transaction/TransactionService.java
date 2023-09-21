@@ -1,9 +1,14 @@
 package com.dream.backend.service.transaction;
 
+import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.account.repository.AccountRepository;
+import com.dream.backend.domain.inout_type.InoutType;
+import com.dream.backend.domain.inout_type.Repository.InoutTypeRepository;
 import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.domain.transaction.repository.TransactionRepository;
+import com.dream.backend.domain.transaction_category.Repository.TransactionCategoryRepository;
+import com.dream.backend.domain.transaction_category.TransactionCategory;
 import com.dream.backend.service.transaction.dto.GetTransactionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,8 @@ public class TransactionService {
 
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
+    private final InoutTypeRepository inoutTypeRepository;
+    private final TransactionCategoryRepository transactionCategoryRepository;
 
     public List<Transaction> getAllTransaction() {
         return transactionRepository.findAll();
@@ -50,5 +57,19 @@ public class TransactionService {
         }
 
         return filtered;
+    }
+
+    public void insertTransaction(TransactionRequest request) {
+        Optional<Account> account = accountRepository.findById(request.getAccount_number());
+        int amt = request.getInout_type() == 0 ? request.getTran_amt() : -request.getTran_amt();
+        int after_amt = account.get().getBalance() + amt;
+        Optional<InoutType> type = inoutTypeRepository.findById(request.getInout_type());
+        System.out.println("=================inout type: " + type.get().getDesc());
+        Transaction transaction = Transaction.toEntity(request, account.get(), after_amt, type.get());
+        transactionRepository.save(transaction);
+
+        Account update = account.get();
+        update.setBalance(after_amt);
+        accountRepository.save(update);
     }
 }

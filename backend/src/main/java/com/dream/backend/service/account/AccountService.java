@@ -23,4 +23,10 @@ public class AccountService {
     public void insertAccount(Account item) {
         accountRepository.save(item);
     }
+
+    public void updateBalance(Long accountNumber, int after_amt) {
+        Optional<Account> account = accountRepository.findById(accountNumber);
+
+        account.get().changeBalance(after_amt);
+    }
 }
