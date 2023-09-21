@@ -58,4 +58,7 @@ public class Welfare {
     @Column
     private String welfare_code;
 
+    @Column
+    private int welfare_type;
+
 }
