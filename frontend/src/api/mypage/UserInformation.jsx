@@ -2,7 +2,7 @@ import { baseAxios } from "../Api";
 
 export async function GetUser(props) {
   try {
-    const res = await baseAxios.get(`user/get/${props}`);
+    const res = await baseAxios.get(`user/${props}`);
     return res;
   } catch (e) {
     console.error(e);
@@ -29,6 +29,18 @@ export async function PutUser(props) {
       end_date: props.end_date,
       is_ended: props.is_ended,
     });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function ChangePassword(props) {
+  try {
+    const res = await baseAxios.patch(
+      `user/${props.user_id}/pwd/${props.pwd}`,
+      {}
+    );
     return res;
   } catch (e) {
     console.error(e);

@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import Logo from "../components/Logo/Logo";
 import styled from "styled-components";
 import MyData from "../components/mydata/MyData";
+import MyInfo from "../components/mydata/MyInfo";
 import Nav from "../components/Nav/Nav";
 
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import Settings from "@mui/icons-material/Settings";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import { ReactComponent as AvartarIcon } from "../assets/img/Avartar.svg";
 
@@ -39,13 +40,17 @@ const Info = styled.div`
 `;
 
 function MyPage() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showInfo, setShowInfo] = useState(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleInfo = () => {
+    setShowInfo(true);
   };
   return (
     <>
@@ -98,14 +103,14 @@ function MyPage() {
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
           <MenuItem onClick={handleClose}>
-            <Avatar /> 내정보
+            <Avatar /> 신대혁님
           </MenuItem>
           <Divider />
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handleInfo}>
             <ListItemIcon>
               <Settings fontSize="small" />
             </ListItemIcon>
-            Settings
+            정보수정
           </MenuItem>
           <MenuItem onClick={handleClose}>
             <ListItemIcon>
@@ -115,9 +120,7 @@ function MyPage() {
           </MenuItem>
         </Menu>
       </Header>
-      <Content>
-        <MyData></MyData>
-      </Content>
+      <Content>{showInfo ? <MyInfo /> : <MyData />}</Content>
       <Nav></Nav>
     </>
   );
