@@ -25,9 +25,11 @@ public class JoinUserDto {
     private LocalDateTime endDate;
     private boolean isEnded;
     private LocalDateTime createdDate;
+    private boolean myData;
+
 
     @Builder
-    public JoinUserDto(String name, String email, String password, int residenceInfo, Long regionKey, LocalDateTime endDate, LocalDateTime createdDate, boolean isEnded) {
+    public JoinUserDto(String name, String email, String password, int residenceInfo, Long regionKey, LocalDateTime endDate, LocalDateTime createdDate, boolean isEnded, boolean myData) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -36,6 +38,7 @@ public class JoinUserDto {
         this.endDate = endDate;
         this.createdDate = createdDate;
         this.isEnded = isEnded;
+        this.myData = myData;
     }
 
     public User toEntity(Optional<Region> region) {
@@ -52,6 +55,7 @@ public class JoinUserDto {
                 .is_ended(this.isEnded)
                 .end_date(this.endDate)
                 .created_date(this.createdDate)
+                .my_data(this.myData)
                 .build();
     }
 }
