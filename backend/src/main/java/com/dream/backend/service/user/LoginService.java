@@ -1,5 +1,6 @@
 package com.dream.backend.service.user;
 
+import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,14 @@ public class LoginService {
 
     private final UserRepository userRepository;
 
-    public Long loginUser(String email, String pwd) {
+    public UserLoginResponse loginUser(String email, String pwd) {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmailAndPassword(email, pwd));
         if (user.isPresent()) {
-            return user.get().getId();
+            UserLoginResponse userLoginResponse = UserLoginResponse.builder()
+                    .id(user.get().getId())
+                    .myData(user.get().isMy_data())
+                    .build();
+            return userLoginResponse;
         } else {
             // 예외 처리: 유저를 찾을 수 없는 경우
             throw new NoSuchElementException("아이디와 비밀번호를 확인하세요");
