@@ -16,6 +16,8 @@ const StyledNav = styled.div`
   border-color: black;
   box-shadow: 0px -1px 10px 1px grey;
   display: flex;
+  /* position: fixed;
+  bottom: 0; */
   justify-content: space-evenly;
   align-items: center;
 `;
