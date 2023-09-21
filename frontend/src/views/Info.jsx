@@ -140,6 +140,7 @@ const Info = () => {
       // API 응답 처리
       if (response.status === 200) {
         console.log("회원가입 성공:", response.data);
+        sessionStorage.setItem("id", response.data.data);
         navigate("/business");
       } else {
         console.error("회원가입 실패:", response.data);
