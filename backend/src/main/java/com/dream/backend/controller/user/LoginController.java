@@ -1,6 +1,7 @@
 package com.dream.backend.controller.user;
 
 import com.dream.backend.controller.ApiResponse;
+import com.dream.backend.controller.user.request.UserLoginRequest;
 import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.service.user.LoginService;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,11 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping("/login/{user_email}/{user_pwd}")
-    public ApiResponse<UserLoginResponse> login(@PathVariable String user_email, @PathVariable String user_pwd){
-        UserLoginResponse response = loginService.loginUser(user_email,user_pwd);
+    @GetMapping("/login/user_info")
+    public ApiResponse<UserLoginResponse> login(@RequestBody UserLoginRequest request){
+        String user_email = request.getEmail();
+        String user_password = request.getPassword();
+        UserLoginResponse response = loginService.loginUser(user_email,user_password);
         return ApiResponse.ok(response);
     }
 

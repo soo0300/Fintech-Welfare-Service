@@ -54,8 +54,8 @@ public class UserController {
         return userResponse;
     }
 
-    @PatchMapping("/{user_id}/pwd/{pwd}")
-    public ApiResponse<UserResponse> changeUserPwd(@PathVariable Long user_id, @PathVariable String pwd) {
+    @PatchMapping("/{user_id}/pwd")
+    public ApiResponse<UserResponse> changeUserPwd(@PathVariable Long user_id, @RequestBody String pwd) {
         UserResponse response = userService.changeUserPwd(user_id, pwd);
         return ApiResponse.ok(response);
     }
