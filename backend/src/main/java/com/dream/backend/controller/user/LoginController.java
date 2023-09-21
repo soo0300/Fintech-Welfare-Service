@@ -16,7 +16,7 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ApiResponse<UserLoginResponse> login(@RequestBody UserLoginRequest request){
         String user_email = request.getEmail();
         String user_password = request.getPassword();
