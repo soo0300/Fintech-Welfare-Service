@@ -93,6 +93,28 @@ const Info = () => {
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
   const movePage = async (isMydata) => {
+    let now = new Date();
+    let todayYear = now.getFullYear();
+    let todayMonth =
+      now.getMonth() + 1 > 9 ? now.getMonth() + 1 : "0" + (now.getMonth() + 1);
+    let todayDate = now.getDate() > 9 ? now.getDate() : "0" + now.getDate();
+    let hours = now.getHours() > 9 ? now.getHours() : "0" + now.getHours();
+    let minutes =
+      now.getMinutes() > 9 ? now.getMinutes() : "0" + now.getMinutes();
+    let seconds =
+      now.getSeconds() > 9 ? now.getSeconds() : "0" + now.getSeconds();
+    let createdDate =
+      todayYear +
+      "-" +
+      todayMonth +
+      "-" +
+      todayDate +
+      "T" +
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
     if (isMydata) {
       setMydata(true);
     }
@@ -104,10 +126,11 @@ const Info = () => {
       email: email,
       password: pwd,
       regionKey: regionKey,
-      residence_info: residenceInfo.concat(residenceBack),
+      residence_info: Number(residenceInfo.concat(residenceBack)),
       endDate: endDate,
       isEnded: isEnded,
       myData: myData,
+      createdDate: createdDate,
     };
     console.log(requestData);
     try {
