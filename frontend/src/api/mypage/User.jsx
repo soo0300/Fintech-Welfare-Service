@@ -22,7 +22,7 @@ export async function Signup(props) {
 
 export async function Login(props) {
   try {
-    const res = await baseAxios.post("login", {
+    const res = await baseAxios.get("login", {
       email: props.email,
       password: props.password,
     });
