@@ -27,7 +27,7 @@ public class User {
     @Column(nullable = false, length = 225)
     private String password;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, length = 10)
     private int residence_info;
 
     @OneToOne(fetch = FetchType.LAZY)
