@@ -86,9 +86,9 @@ public class User {
                 .total_fund(user.get().total_fund)
                 .build();
     }
-    public void changeRegion(Long regionKey) {
+    public void changeRegion(Region region) {
 
-//        this.region.getId() = regionKey;
+        this.region = region;
 
     }
     public void changePwd(String pwd){

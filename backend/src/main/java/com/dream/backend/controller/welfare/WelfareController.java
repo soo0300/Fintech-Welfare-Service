@@ -40,4 +40,12 @@ public class WelfareController {
         return response;
     }
 
+    @GetMapping("/detail/{welfare_id}")
+    public WelfareResponse getWelfare(@PathVariable Long welfare_id) {
+
+        return welfareService.getWelfare(welfare_id);
+
+    }
+
+
 }
