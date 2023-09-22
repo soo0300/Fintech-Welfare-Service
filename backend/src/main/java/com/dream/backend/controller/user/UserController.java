@@ -3,6 +3,7 @@ package com.dream.backend.controller.user;
 import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.user.request.JoinUserRequest;
 import com.dream.backend.controller.user.response.UserFundResponse;
+import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.service.user.UserService;
@@ -21,11 +22,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup/{type}")
-    public ApiResponse<Long> joinUser(@RequestBody JoinUserRequest request, @PathVariable int type) {
+    public UserLoginResponse joinUser(@RequestBody JoinUserRequest request, @PathVariable int type) {
         JoinUserDto dto = request.toDto();
         System.out.print("controller region key" + dto.getRegionKey());
-        Long id = userService.joinUser(dto, type);
-        return ApiResponse.ok(id);
+        UserLoginResponse response = userService.joinUser(dto, type);
+        return response;
     }
 
     @GetMapping("/fund/{user_id}")

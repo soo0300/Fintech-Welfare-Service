@@ -1,5 +1,6 @@
 package com.dream.backend.service.user;
 
+import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.benefit.Benefit;
 import com.dream.backend.domain.benefit.repostiory.BenefitRepository;
@@ -36,7 +37,7 @@ public class UserService {
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
 
-    public Long joinUser(JoinUserDto dto, int type) {
+    public UserLoginResponse joinUser(JoinUserDto dto, int type) {
         System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion);
@@ -66,18 +67,18 @@ public class UserService {
         }
         benefitService.addUserBenefit(saveduser.getId(), getUserWelfareKey, 0);
 
-        //마이데이터 불러오기를 한 경우,\
+        //마이데이터 불러오기를 한 경우,
         List<Long> getFilteredWelfareKey = new ArrayList<>();
         if (type == 1) {
             //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
             List<String> welfareCodeList = new ArrayList<>();
-            for (int i = 0; i < getUserWelfareKey.size(); i++) { // 2 3 6
+            for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
                 Long welfare_key = getUserWelfareKey.get(i);
                 Welfare welfare = welfareRepository.findWelfareCodeById(welfare_key);
                 String welfare_code = welfare.getWelfare_code(); //BVE ABC ABC
                 if (welfare_code != null) {
                     System.out.println("거래 내역과 매칭된 입금 내역 코드 : " + welfare_code);
-                    Transaction transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서  ABC를 찾는다
+                    Transaction transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서 ABC를 찾는다
                     System.out.println("거래내역과 복지 코드 매칭: " + transaction.getTranDesc());
                     if (transaction.getId() != null) {
                         //같은 것이 존재한다면
@@ -99,7 +100,11 @@ public class UserService {
 
 
         }
-        return saveduser.getId();
+        UserLoginResponse response = UserLoginResponse.builder()
+                .id(saveduser.getId())
+                .myData(saveduser.isMy_data())
+                .build();
+        return response;
     }
 
     public Optional<User> getUserFund(Long userId) {
@@ -152,7 +157,7 @@ public class UserService {
 
         //만 나이 계산 로직
         int age = year - userBirthY;
-        if (userBirthMM <= birth) age -= 1;
+        if (userBirthMM >= birth) age -= 1;
 
         return age;
 
