@@ -53,7 +53,7 @@ public class Welfare {
     private int support_period;
 
     @Column
-    String etc;
+    private String etc;
 
     @Column
     private String welfare_code;
