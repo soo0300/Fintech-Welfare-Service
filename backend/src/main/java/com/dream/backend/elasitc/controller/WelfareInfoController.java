@@ -72,6 +72,24 @@ public class WelfareInfoController {
         return null;
     }
 
+    @GetMapping("/search/complex/{must}/{expression}")
+    public List<WelfareInfo> complexSearchInfo(@PathVariable("must") String must, @PathVariable("expression") String expr) {
+        try {
+            welfareInfoService.setClient();
+            String query = welfareInfoService.tokenized(expr);
+
+            List<WelfareInfo> results = welfareInfoService.complexSearchDocument(must, query);
+            welfareInfoService.closeAllClient();
+
+            if(!results.isEmpty())
+                return results;
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @PostMapping("/index")
     public String indexInfo(@RequestBody WelfareInfoRequestDto dto) {
         try {

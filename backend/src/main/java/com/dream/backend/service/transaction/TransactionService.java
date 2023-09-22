@@ -64,7 +64,6 @@ public class TransactionService {
         int amt = request.getInout_type() == 0 ? request.getTran_amt() : -request.getTran_amt();
         int after_amt = account.get().getBalance() + amt;
         Optional<InoutType> type = inoutTypeRepository.findById(request.getInout_type());
-        System.out.println("=================inout type: " + type.get().getDesc());
         Transaction transaction = Transaction.toEntity(request, account.get(), after_amt, type.get());
         transactionRepository.save(transaction);
 
