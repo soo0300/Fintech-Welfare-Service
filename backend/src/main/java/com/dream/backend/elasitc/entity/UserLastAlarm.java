@@ -5,16 +5,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder()
+@Builder
 public class UserLastAlarm {
 
     private Long id;
-    private LocalDateTime dateTime;
+    private Long dateTime;
 
-
+    // - - - - 비지니스 로직 - - - - //
 }

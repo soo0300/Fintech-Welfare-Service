@@ -51,7 +51,7 @@ public class User {
     private int total_fund;
 
     @Column(nullable = true)
-    private int account;
+    private Long account;
 
     @Column(nullable = true)
     private boolean my_data;
@@ -61,7 +61,7 @@ public class User {
 
 
     @Builder
-    public User(Long id, String name, String email, String password, int residence_info, Region region, LocalDateTime end_date, boolean is_ended, LocalDateTime created_date, int pre_fund, int total_fund, int account, boolean my_data, LocalDateTime refresh_time) {
+    public User(Long id, String name, String email, String password, int residence_info, Region region, LocalDateTime end_date, boolean is_ended, LocalDateTime created_date, int pre_fund, int total_fund, Long account, boolean my_data, LocalDateTime refresh_time) {
         this.id = id;
         this.name = name;
         this.email = email;

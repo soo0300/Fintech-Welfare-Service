@@ -1,12 +1,15 @@
 package com.dream.backend.elasitc.service;
 
+import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
+import com.dream.backend.domain.user.User;
 import com.dream.backend.elasitc.entity.UserLastAlarm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Service
@@ -24,13 +27,36 @@ public class UserLastAlarmService extends ElasticConnectionService {
 
     public String insertDate(Long userId) {
         try {
+            Long unixNow = Timestamp.valueOf(LocalDateTime.now()).getTime();
+            UserLastAlarm data = UserLastAlarm.builder()
+                    .id(userId)
+                    .dateTime(unixNow)
+                    .build();
             IndexResponse response = esClient.index(i -> i
                     .index("user_alarm_date")
-                    .document(UserLastAlarm.builder().id(userId).dateTime(LocalDateTime.now()).build()));
+                    .id(Long.toString(userId))
+                    .document(data));
         } catch(IOException e) {
             e.printStackTrace();
         }
 
-        return "";
+        return "OK";
+    }
+
+    public UserLastAlarm getDateTime(Long userId) {
+        try {
+            GetResponse<UserLastAlarm> response = esClient.get(g -> g
+                            .index("user_alarm_date")
+                            .id(Long.toString(userId)),
+                    UserLastAlarm.class
+            );
+
+            if(response.found())
+                return response.source();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
