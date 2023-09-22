@@ -12,14 +12,14 @@ const StyledCard = styled.div`
   align-items: center;
   text-align: center;
   border-radius: 10px;
-  background-color: var(--vanilla-cream);
+  background-color: ${(props) => props.backgroundColor || getRandomColor()};
 `;
 
 const Poster = styled.img`
   width: 90%;
   height: 50%;
   object-fit: fill;
-  margin-top: 5%;
+  margin: 5% 5% 0% 5%;
 `;
 
 const ContentBox = styled.div`
@@ -33,6 +33,17 @@ const ContentBox = styled.div`
 `;
 
 // 모달
+const ModalBackground = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 모달 외부 배경 색상 및 투명도 조절 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 const ModalContainer = styled.div`
   position: fixed;
   top: 50%;
@@ -44,12 +55,22 @@ const ModalContainer = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 2vh;
+  border-radius: 10px;
 `;
 
 const ModalContant = styled.div`
   flex: 1;
   overflow: auto;
+  margin: 0% 5% 5% 5%;
+  overflow-x: hidden;
 `;
+
+// 카드 색 랜덤 추출
+function getRandomColor() {
+  const colors = ["#EEA8A8", "#F8EBBE", "#9CEFEA", "#EEBEF2", "#B0D5F8"];
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  return colors[randomIndex];
+}
 
 // 모달
 function Modal({ data, onClose }) {
@@ -62,19 +83,30 @@ function Modal({ data, onClose }) {
   };
 
   return (
-    <ModalContainer onClick={closeModal}>
-      <Poster src={Testimg}></Poster>
-      <h2>{data.name}</h2>
-      <ModalContant onClick={stopPropagation}>
-        <p>모집 지역 : 전국</p>
-        <p>모집 기한 : {data.start_date}</p>
-        <p>기관명 : {data.organization}</p>
-        <p>총 지원 금액 : {data.support_fund}원</p>
-        <p>
-          신청 url: <a href={data.url}>{data.url}</a>
-        </p>
-      </ModalContant>
-    </ModalContainer>
+    <ModalBackground onClick={closeModal}>
+      <ModalContainer onClick={stopPropagation}>
+        <Poster src={Testimg}></Poster>
+
+        <ModalContant onClick={stopPropagation}>
+          <h2>{data.name}</h2>
+          <p>{data.description_origin}</p>
+          <p>모집 지역 : 전국</p>
+          <p>모집 기한 : {data.start_date}</p>
+          <p>기관명 : {data.organization}</p>
+          <p>
+            총 지원 금액 : {data.support_fund}원 / {data.support_period}달
+          </p>
+          <p>제출 서류 : {data.submission}</p>
+          <p>신청 방법 : {data.route}</p>
+          <p>
+            신청 url:{" "}
+            <a href={data.url} target="_blank" rel="noopener noreferrer">
+              {data.url}
+            </a>
+          </p>
+        </ModalContant>
+      </ModalContainer>
+    </ModalBackground>
   );
 }
 
@@ -90,19 +122,22 @@ const Card = (props) => {
 
   // 데이터 가져오기
   async function handleCardClick() {
-    try {
-      const res = await DetailWelfare(id);
-      setWelfareData(res.data);
-      setModalVisible(true);
-      console.log(setWelfareData);
-    } catch (e) {
-      console.error(e);
+    // 모달이 열려있지 않을 때만 데이터를 가져오고 모달을 엽니다.
+    if (!modalVisible) {
+      try {
+        const res = await DetailWelfare(id);
+        setWelfareData(res.data);
+        setModalVisible(true);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 
   return (
     <StyledCard
       onClick={handleCardClick}
+      backgroundColor={getRandomColor()}
       cardWidth={cardWidth}
       cardHeight={cardHeight}
       fontSize={fontSize}
@@ -120,7 +155,11 @@ const Card = (props) => {
           모집 기간 : {support_period}
         </p>
         {modalVisible && (
-          <Modal data={welfareData} onClose={() => setModalVisible(false)} />
+          <Modal
+            data={welfareData}
+            onClose={() => setModalVisible(false)}
+            backgroundColor={props.backgroundColor}
+          />
         )}
       </ContentBox>
     </StyledCard>
