@@ -38,7 +38,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 70vw;
-  height: 50vh;
+  height: 60vh;
 `;
 
 const Line = styled.div`
@@ -55,7 +55,7 @@ const LineStatus = styled(motion.div)`
 `;
 const FooterBox = styled.div`
   width: 70vw;
-  height: 28vh;
+  height: 18vh;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -155,11 +155,15 @@ const Info = () => {
   const [residenceBack, setResidenceBack] = useState("");
   const handleResidenceChange = (e) => {
     const residenceValue = e.target.value;
-    setResidenceInfo(residenceValue);
+    if (residenceValue.length <= 6) {
+      setResidenceInfo(residenceValue);
+    }
   };
   const handleResidenceBackChange = (e) => {
     const residenceValue = e.target.value;
-    setResidenceBack(residenceValue);
+    if (residenceValue.length <= 1 && residenceValue <= 4) {
+      setResidenceBack(residenceValue);
+    }
   };
 
   const [regions, setRegions] = useState([]);
@@ -249,6 +253,7 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="none"
             fontFamily="surround"
+            value={residenceInfo}
             onChange={handleResidenceChange}
           />
           -
@@ -262,6 +267,7 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             fontFamily="surround"
+            value={residenceBack}
             onChange={handleResidenceBackChange}
           />
           ●●●●●●

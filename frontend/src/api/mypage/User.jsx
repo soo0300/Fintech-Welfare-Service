@@ -2,8 +2,7 @@ import { baseAxios } from "../Api";
 
 export async function Signup(props) {
   try {
-    const curStatus = props.myData ? "1" : "0";
-    const res = await baseAxios.post(`user/signup/${curStatus}`, {
+    const res = await baseAxios.post(`user/signup/${props.myData}`, {
       name: props.name,
       email: props.email,
       password: props.password,

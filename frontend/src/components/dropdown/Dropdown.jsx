@@ -7,7 +7,9 @@ const DropdownContainer = styled.div`
   height: 170px;
   font-size: 12px;
   color: black;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: red transparent;
 `;
 
 const DropdownUl = styled.ul`
