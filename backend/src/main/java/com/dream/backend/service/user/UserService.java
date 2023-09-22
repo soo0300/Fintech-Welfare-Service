@@ -37,10 +37,10 @@ public class UserService {
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
 
-    public UserLoginResponse joinUser(JoinUserDto dto, int type) {
+    public UserLoginResponse joinUser(JoinUserDto dto, boolean type) {
         System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
-        User user = dto.toEntity(savedRegion);
+        User user = dto.toEntity(savedRegion,type);
         System.out.println("before Repo: " + user.getName());
         User saveduser = userRepository.save(user);
         System.out.println("after Repo" + saveduser.getId());
@@ -69,7 +69,7 @@ public class UserService {
 
         //마이데이터 불러오기를 한 경우,
         List<Long> getFilteredWelfareKey = new ArrayList<>();
-        if (type == 1) {
+        if (type) {
             //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
             List<String> welfareCodeList = new ArrayList<>();
             for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
