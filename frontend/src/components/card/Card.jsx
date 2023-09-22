@@ -56,9 +56,13 @@ function Modal({ data, onClose }) {
   const stopPropagation = (e) => {
     e.stopPropagation();
   };
-  console.log(data);
+
+  const closeModal = () => {
+    onClose();
+  };
+
   return (
-    <ModalContainer onClick={onClose}>
+    <ModalContainer onClick={closeModal}>
       <Poster src={Testimg}></Poster>
       <h2>{data.name}</h2>
       <ModalContant onClick={stopPropagation}>
