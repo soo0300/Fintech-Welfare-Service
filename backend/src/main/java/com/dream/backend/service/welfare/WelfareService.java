@@ -23,6 +23,7 @@ public class WelfareService {
         //모든 Welfare 테이블을 순회하면서 response 로 바꿔준다.
         List<Welfare> welfareAll = welfareRepository.findAll();
         for (Welfare welfare : welfareAll) {
+            System.out.print(welfare.getId()+" ");
             list.add(toResponse(Optional.ofNullable(welfare)));
         }
 
@@ -64,6 +65,7 @@ public class WelfareService {
                 .img(welfare.get().getImg())
                 .support_period(welfare.get().getSupport_period())
                 .etc(welfare.get().getEtc())
+                .welfare_type(welfare.get().getWelfare_type())
                 .build();
 
     }

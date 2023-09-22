@@ -4,8 +4,11 @@ import com.dream.backend.domain.welfare.Welfare;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface WelfareRepository extends JpaRepository<Welfare, Long> {
-//    String findWelfareCodeById(Long welfareId);
+
+    List<Welfare> findAll();
     Welfare findWelfareCodeById(Long welfareId);
 }
