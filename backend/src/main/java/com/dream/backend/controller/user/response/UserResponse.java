@@ -17,14 +17,17 @@ public class UserResponse {
 
     private Long regionKey;
 
+    private boolean my_data;
+
 //    private int account;
 
     @Builder
-    public UserResponse(String name, String email, String password, int age,Long regionKey) {
+    public UserResponse(String name, String email, String password, int age, Long regionKey, boolean my_data) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.age = age;
-        this.regionKey=regionKey;
+        this.regionKey = regionKey;
+        this.my_data = my_data;
     }
 }
