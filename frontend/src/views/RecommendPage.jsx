@@ -9,7 +9,6 @@ import Nav from "../components/Nav/Nav";
 
 // API
 import { AllWelfare } from "../api/welfare/Welfare";
-import WelfareModal from "../components/modal/WelfareModal";
 
 const RecommandPageBody = styled.div`
   display: flex;
@@ -43,11 +42,15 @@ const SearchInput = styled.input`
   padding-left: 5vh;
 `;
 
-function SearchBar() {
+function SearchBar({ userInput, setUserInput }) {
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
   return (
     <SearchBarContainer>
       <StyledSearchIcon />
-      <SearchInput />
+      <SearchInput value={userInput} onChange={handleInputChange} />
     </SearchBarContainer>
   );
 }
@@ -158,20 +161,28 @@ const CardContainer = styled.div`
   margin-left: 6%;
 `;
 
-function Business() {
+function Business({ userInput }) {
   // 카드 안에 내용
-  const [welfares, setWalfares] = useState([]);
+  const [welfares, setWelfares] = useState([]);
+  const [filteredWelfares, setFilteredWelfares] = useState([]);
 
   useEffect(() => {
     const fetchWelfares = async () => {
       const data = await AllWelfare();
-      setWalfares(data);
+      setWelfares(data);
+      setFilteredWelfares(data);
     };
 
     fetchWelfares();
   }, []);
 
-  console.log(welfares);
+  // 이름 필터링
+  useEffect(() => {
+    const searched = welfares.filter((welfare) =>
+      welfare.name.includes(userInput)
+    );
+    setFilteredWelfares(searched);
+  }, [userInput]);
 
   // 상세보기 모듈
 
@@ -183,30 +194,31 @@ function Business() {
       </BusinessHeader>
       <HR />
       <CardContainer>
-        {welfares &&
-          welfares.map((welfare) => (
-            <Card
-              key={welfare.id}
-              // welfare props
-              id={welfare.id}
-              title={welfare.name}
-              region="전국"
-              support_period={welfare.start_date}
-            />
-          ))}
+        {filteredWelfares.map((welfare) => (
+          <Card
+            key={welfare.id}
+            // welfare props
+            id={welfare.id}
+            title={welfare.name}
+            region="전국"
+            support_period={welfare.start_date}
+          />
+        ))}
       </CardContainer>
     </BusinessContainer>
   );
 }
 
 function RecommendPage() {
+  const [userInput, setUserInput] = useState("");
+
   return (
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar />
+        <SearchBar userInput={userInput} setUserInput={setUserInput} />
         <Tag />
-        <Business />
+        <Business userInput={userInput} />
       </RecommandPageBody>
       <Nav />
     </>
