@@ -44,6 +44,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
 const ModalContainer = styled.div`
   position: fixed;
   top: 50%;
@@ -65,6 +66,29 @@ const ModalContant = styled.div`
   overflow-x: hidden;
 `;
 
+// 포스터 모달
+const FullscreenModalBackground = styled.div``;
+
+const FullscreenImage = styled.img`
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* object-fit: fill; */
+  overflow-y: auto;
+`;
+
+// 포스터 모달
+function FullscreenImageModal({ src, onClose }) {
+  return (
+    <FullscreenModalBackground onClick={onClose}>
+      <FullscreenImage src={src} />
+    </FullscreenModalBackground>
+  );
+}
+
 // 카드 색 랜덤 추출
 function getRandomColor() {
   const colors = ["#EEA8A8", "#F8EBBE", "#9CEFEA", "#EEBEF2", "#B0D5F8"];
@@ -82,10 +106,24 @@ function Modal({ data, onClose }) {
     onClose();
   };
 
+  // 포스터 모달 열기
+  const [fullscreenVisible, setFullscreenVisible] = useState(false);
+
+  const handlePosterClick = () => {
+    setFullscreenVisible(true);
+  };
+
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
-        <Poster src={Testimg}></Poster>
+        <Poster src={Testimg} onClick={handlePosterClick} />
+
+        {fullscreenVisible && (
+          <FullscreenImageModal
+            src={Testimg}
+            onClose={() => setFullscreenVisible(false)}
+          />
+        )}
 
         <ModalContant onClick={stopPropagation}>
           <h2>{data.name}</h2>
