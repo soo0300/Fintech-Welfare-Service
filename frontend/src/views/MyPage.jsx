@@ -4,7 +4,6 @@ import styled from "styled-components";
 import MyData from "../components/mydata/MyData";
 import MyInfo from "../components/mydata/MyInfo";
 import Nav from "../components/Nav/Nav";
-
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -15,6 +14,7 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import { ReactComponent as AvartarIcon } from "../assets/img/Avartar.svg";
+import { useNavigate } from "react-router-dom";
 
 const Header = styled.div`
   width: 90%;
@@ -32,14 +32,8 @@ const Content = styled.div`
   }
 `;
 
-const Info = styled.div`
-  width: 20%;
-  height: 40px;
-  display: flex;
-  border: 1px solid;
-`;
-
 function MyPage() {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [showInfo, setShowInfo] = useState(false);
   const open = Boolean(anchorEl);
@@ -51,6 +45,13 @@ function MyPage() {
   };
   const handleInfo = () => {
     setShowInfo(true);
+  };
+
+  //로그아웃
+  const handlelogout = () => {
+    localStorage.clear();
+    window.alert("로그아웃 되었습니다.");
+    navigate("/login");
   };
   return (
     <>
@@ -102,7 +103,7 @@ function MyPage() {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem onClick={handleClose}>
+          <MenuItem>
             <Avatar /> 신대혁님
           </MenuItem>
           <Divider />
@@ -112,7 +113,7 @@ function MyPage() {
             </ListItemIcon>
             정보수정
           </MenuItem>
-          <MenuItem onClick={handleClose}>
+          <MenuItem onClick={handlelogout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

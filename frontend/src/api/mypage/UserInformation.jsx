@@ -38,8 +38,10 @@ export async function PutUser(props) {
 export async function ChangePassword(props) {
   try {
     const res = await baseAxios.patch(
-      `user/${props.user_id}/pwd/${props.pwd}`,
-      {}
+      `user/${localStorage.getItem("id")}/pwd`,
+      {
+        pwd: props,
+      }
     );
     return res;
   } catch (e) {
