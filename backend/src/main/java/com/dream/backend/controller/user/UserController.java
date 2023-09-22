@@ -1,6 +1,7 @@
 package com.dream.backend.controller.user;
 
 import com.dream.backend.controller.ApiResponse;
+import com.dream.backend.controller.user.request.ChangePwdRequest;
 import com.dream.backend.controller.user.request.JoinUserRequest;
 import com.dream.backend.controller.user.response.UserFundResponse;
 import com.dream.backend.controller.user.response.UserLoginResponse;
@@ -56,7 +57,8 @@ public class UserController {
     }
 
     @PatchMapping("/{user_id}/pwd")
-    public ApiResponse<UserResponse> changeUserPwd(@PathVariable Long user_id, @RequestBody String pwd) {
+    public ApiResponse<UserResponse> changeUserPwd(@PathVariable Long user_id, @RequestBody ChangePwdRequest request) {
+        String pwd = request.getPwd();
         UserResponse response = userService.changeUserPwd(user_id, pwd);
         return ApiResponse.ok(response);
     }

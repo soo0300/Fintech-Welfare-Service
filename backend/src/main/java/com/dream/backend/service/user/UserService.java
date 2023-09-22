@@ -127,6 +127,7 @@ public class UserService {
 
     public UserResponse changeUserPwd(Long userId, String pwd) {
         Optional<User> user = userRepository.findById(userId);
+        System.out.println("바뀐 비밀번호: " + pwd);
         user.get().changePwd(pwd);
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
