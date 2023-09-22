@@ -14,9 +14,6 @@ import java.io.Serializable;
 //extend serializable 생략
 public class Qualification {
     @Id
-//    @OneToOne
-//    @JoinColumn(name = "welfare_id")
-//    private Welfare welfare;
     @Column(name = "welfare_id")
     private Long id;
 
