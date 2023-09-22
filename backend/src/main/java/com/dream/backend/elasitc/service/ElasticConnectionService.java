@@ -9,9 +9,14 @@ import org.apache.http.HttpHost;
 import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 
+
+@Service
+@Transactional
 public class ElasticConnectionService {
 
     protected RestClient restClient;
