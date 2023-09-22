@@ -4,6 +4,7 @@ import co.elastic.clients.elasticsearch.core.GetResponse;
 import co.elastic.clients.elasticsearch.core.IndexResponse;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.elasitc.entity.UserLastAlarm;
+import com.dream.backend.elasitc.entity.UserLastAlarmDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +44,7 @@ public class UserLastAlarmService extends ElasticConnectionService {
         return "OK";
     }
 
-    public UserLastAlarm getDateTime(Long userId) {
+    public Long getDateTime(Long userId) {
         try {
             GetResponse<UserLastAlarm> response = esClient.get(g -> g
                             .index("user_alarm_date")
@@ -52,7 +53,25 @@ public class UserLastAlarmService extends ElasticConnectionService {
             );
 
             if(response.found())
-                return response.source();
+                return response.source().getDateTime();
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public UserLastAlarmDto getUserAlarmInfo(Long userId) {
+        try {
+            GetResponse<UserLastAlarm> response = esClient.get(g -> g
+                            .index("user_alarm_date")
+                            .id(Long.toString(userId)),
+                    UserLastAlarm.class
+            );
+
+            if(response.found()) {
+                return new UserLastAlarmDto(response.source().getId(), response.source().getDateTime());
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }

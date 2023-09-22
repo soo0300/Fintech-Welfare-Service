@@ -20,9 +20,9 @@ public class UserLastAlarmController {
     @GetMapping("/get/{user_id}")
     public UserLastAlarmDto getUserLastDateTime(@PathVariable("user_id") Long userId) {
         alarmService.setClient();
-        UserLastAlarm alarm = alarmService.getDateTime(userId);
+        UserLastAlarmDto alarm = alarmService.getUserAlarmInfo(userId);
         alarmService.closeAllClient();
-        return new UserLastAlarmDto(userId, alarm.getDateTime());
+        return alarm;
     }
 
     @PostMapping("/insert/{user_id}")

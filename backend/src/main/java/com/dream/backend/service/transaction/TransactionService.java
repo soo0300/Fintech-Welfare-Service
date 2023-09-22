@@ -9,6 +9,9 @@ import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.domain.transaction.repository.TransactionRepository;
 import com.dream.backend.domain.transaction_category.Repository.TransactionCategoryRepository;
 import com.dream.backend.domain.transaction_category.TransactionCategory;
+import com.dream.backend.domain.user.User;
+import com.dream.backend.domain.user.repository.UserRepository;
+import com.dream.backend.elasitc.service.UserLastAlarmService;
 import com.dream.backend.service.transaction.dto.GetTransactionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.swing.text.html.Option;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +33,8 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final AccountRepository accountRepository;
     private final InoutTypeRepository inoutTypeRepository;
-    private final TransactionCategoryRepository transactionCategoryRepository;
+    private final UserLastAlarmService alarmService;
+    private final UserRepository userRepository;
 
     public List<Transaction> getAllTransaction() {
         return transactionRepository.findAll();
@@ -57,6 +62,14 @@ public class TransactionService {
         }
 
         return filtered;
+    }
+
+    public List<Transaction> getTransactionFromLastTime(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        LocalDateTime startTime = new Timestamp(alarmService.getDateTime(userId)).toLocalDateTime();
+        LocalDateTime endTime = LocalDateTime.now();
+
+        return getTransactionByDateRange(startTime, endTime, user.get().getAccount());
     }
 
     public void insertTransaction(TransactionRequest request) {
