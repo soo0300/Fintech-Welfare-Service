@@ -22,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup/{type}")
-    public UserLoginResponse joinUser(@RequestBody JoinUserRequest request, @PathVariable int type) {
+    public UserLoginResponse joinUser(@RequestBody JoinUserRequest request, @PathVariable boolean type) {
         JoinUserDto dto = request.toDto();
         System.out.print("controller region key" + dto.getRegionKey());
         UserLoginResponse response = userService.joinUser(dto, type);
