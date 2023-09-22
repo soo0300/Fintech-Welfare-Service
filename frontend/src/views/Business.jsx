@@ -4,9 +4,6 @@ import { styled } from "styled-components";
 import Header from "../components/header/Header";
 import Card from "../components/card/Card";
 
-//API
-import { AllWelfare } from "../api/welfare/Welfare";
-
 // Icon
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import { ReactComponent as WhitePlusIcon } from "../assets/img/Vector.svg";

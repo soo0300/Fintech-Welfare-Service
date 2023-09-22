@@ -184,7 +184,7 @@ function Business({ userInput }) {
     setFilteredWelfares(searched);
   }, [userInput]);
 
-  // 상세보기 모듈
+  console.log(filteredWelfares);
 
   return (
     <BusinessContainer>
@@ -200,7 +200,7 @@ function Business({ userInput }) {
             // welfare props
             id={welfare.id}
             title={welfare.name}
-            region="전국"
+            region={welfare.region_key}
             support_period={welfare.start_date}
           />
         ))}
