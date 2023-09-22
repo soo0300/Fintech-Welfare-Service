@@ -110,7 +110,7 @@ const Login = () => {
       // API 응답 처리
       if (response.status === 200) {
         console.log("로그인 성공:", response.data);
-        sessionStorage.setItem("id", response.data.data);
+        sessionStorage.setItem("id", response.data.data.id);
         navigate("/business");
       } else {
         console.error("로그인 실패:", response.data);
