@@ -35,7 +35,7 @@ public class WelfareController {
         System.out.print("해당 지역의 복지 식별키: ");
         for (Welfare welfare : welfareList) {
             System.out.print(welfare.getId() + " ");
-            response.add(WelfareResponse.toResponse(welfare));
+            response.add(WelfareResponse.toResponse(welfare,1L));
         }
         return response;
     }
