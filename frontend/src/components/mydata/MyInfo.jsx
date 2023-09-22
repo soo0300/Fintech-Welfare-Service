@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Button, TextField } from "@mui/material";
 import { ChangePassword, GetUser } from "../../api/mypage/UserInformation";
 import { width } from "@mui/system";
+import ChangePwd from "./ChangePwd";
 
 //정보박스
 const InfoBox = styled.div`
@@ -31,12 +32,15 @@ const InfoTextBox = styled.p`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin: 10px;
 `;
 
 //정보변경 박스
-const ChangeBox = styled.div`
+const FormBox = styled.form`
   width: 100%;
-  height: 100px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
   border-radius: 20px;
   background-color: white;
 `;
@@ -50,21 +54,24 @@ function MyInfo() {
     regionKey: null,
     age: null,
   });
+
+  //영문,숫자,특수기호를 포함한 8자리 이상, 15자리 이하
+  const passwordRegEx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^+=-])(?=.*[0-9]).{8,15}$/;
+  const [isPasswordValid, setPasswordValid] = useState(false);
+
   const backMypage = () => {
     window.location.reload();
   };
 
   const userInfo = async () => {
-    const res = await GetUser(145);
+    const res = await GetUser(sessionStorage.getItem("id"));
     setInfo(res.data);
   };
 
   const changeMode = (props) => {
-    console.log(props);
     setMode(props);
   };
 
-  const changePassword = () => {};
   const changeRegion = () => {};
   const changeSafe = () => {};
 
@@ -80,52 +87,21 @@ function MyInfo() {
         </TextBox>
         <InfoTextBox>이메일 : {info.email}</InfoTextBox>
         <InfoTextBox>
-          비밀번호 : {info.password}{" "}
+          비밀번호 : {info.password}
           <Button onClick={() => changeMode(1)}>비밀번호변경</Button>
         </InfoTextBox>
         <InfoTextBox>
-          거주지 : {info.regionKey}{" "}
+          거주지 : {info.regionKey}
           <Button onClick={() => changeMode(2)}>거주지 변경</Button>
         </InfoTextBox>
         <InfoTextBox>생년월일 : {info.age}</InfoTextBox>
         <InfoTextBox>
-          보호종료일 : 보호종료일{" "}
+          보호종료일 : 보호종료일
           <Button onClick={() => changeMode(3)}>보호종료일 변경</Button>
         </InfoTextBox>
       </InfoBox>
       {mode === 0 && null}
-      {mode === 1 && (
-        <InfoBox>
-          <TextBox>
-            <p>비밀번호 변경</p>
-            <Button onClick={changePassword}>변경완료</Button>
-          </TextBox>
-          <InfoTextBox>
-            현재 비밀번호 :
-            <TextField
-              id="outlined-size-small"
-              size="small"
-              sx={{ width: "50%" }}
-            />
-          </InfoTextBox>
-          <InfoTextBox>
-            새로운 비밀번호 :{" "}
-            <TextField
-              id="outlined-size-small"
-              size="small"
-              sx={{ width: "50%" }}
-            />
-          </InfoTextBox>
-          <InfoTextBox>
-            비밀번호 확인 :{" "}
-            <TextField
-              id="outlined-size-small"
-              size="small"
-              sx={{ width: "50%" }}
-            />
-          </InfoTextBox>
-        </InfoBox>
-      )}
+      {mode === 1 && <ChangePwd />}
       {mode === 2 && (
         <InfoBox>
           <TextBox>
