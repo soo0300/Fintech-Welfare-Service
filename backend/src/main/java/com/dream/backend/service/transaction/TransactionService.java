@@ -65,11 +65,15 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionFromLastTime(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
+        Long accountNumber = userRepository.findById(userId).get().getAccount();
+//        Optional<Account> account = accountRepository.findById(accountNumber);
+        System.out.println(accountNumber);
+        alarmService.setClient();
         LocalDateTime startTime = new Timestamp(alarmService.getDateTime(userId)).toLocalDateTime();
+        alarmService.closeAllClient();
         LocalDateTime endTime = LocalDateTime.now();
 
-        return getTransactionByDateRange(startTime, endTime, user.get().getAccount());
+        return getTransactionByDateRange(startTime, endTime, accountNumber);
     }
 
     public void insertTransaction(TransactionRequest request) {

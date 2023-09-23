@@ -83,6 +83,7 @@ public class TransactionController {
 
         List<TransactionObject> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionFromLastTime(userId);
+        if(result.isEmpty()) return null;
         Account account = result.get(0).getAccount();
 
         for(Transaction t: result) {
