@@ -1,20 +1,13 @@
-import React, { useState } from "react";
-import Logo from "../components/Logo/Logo";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import MyData from "../components/mydata/MyData";
-import MyInfo from "../components/mydata/MyInfo";
+import { Button } from "@mui/material";
+import { GetUser } from "../api/mypage/UserInformation";
+import ChangePwd from "../components/mydata/ChangePwd";
+import ChangeRegion from "../components/mydata/ChangeRegion";
+import ChangeEnd from "../components/mydata/ChangeEnd";
+import jsonData from "../assets/data/region.json";
+import Logo from "../components/Logo/Logo";
 import Nav from "../components/Nav/Nav";
-import Avatar from "@mui/material/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import Settings from "@mui/icons-material/Settings";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Tooltip from "@mui/material/Tooltip";
-import Logout from "@mui/icons-material/Logout";
-import { ReactComponent as AvartarIcon } from "../assets/img/Avartar.svg";
-import { useNavigate } from "react-router-dom";
 
 const Header = styled.div`
   width: 90%;
@@ -22,107 +15,103 @@ const Header = styled.div`
   display: flex;
   align-items: center;
 `;
-const Content = styled.div`
+
+//정보박스
+const InfoBox = styled.div`
   width: 90%;
-  height: 100%;
-  overflow-y: scroll;
-  overflow-x: hidden;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+`;
+
+//박스안의 맨위 문구박스
+const TextBox = styled.div`
+  width: 90%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid lightgray;
+`;
+
+const InfoTextBox = styled.div`
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px;
 `;
 
 function MyPage() {
-  const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [showInfo, setShowInfo] = useState(false);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleInfo = () => {
-    setShowInfo(true);
+  const [mode, setMode] = useState(0);
+  const [info, setInfo] = useState({
+    name: null,
+    email: null,
+    password: null,
+    regionKey: null,
+    age: null,
+  });
+
+  const userInfo = async () => {
+    const res = await GetUser(localStorage.getItem("id"));
+    const secondRegion = jsonData.find(
+      (item) => item.region_key === res.data.regionKey
+    );
+    const firstRegion = jsonData.find(
+      (item) => item.region_key === secondRegion.parent_key
+    );
+    setInfo({
+      ...res.data,
+      regionKey: `${firstRegion.name}  ${secondRegion.name}`,
+    });
   };
 
-  //로그아웃
-  const handlelogout = () => {
-    localStorage.clear();
-    window.alert("로그아웃 되었습니다.");
-    navigate("/login");
+  const changeMode = (props) => {
+    setMode(props);
   };
+
+  useEffect(() => {
+    userInfo();
+  }, []);
   return (
     <>
       <Header>
         <Logo></Logo>
-        <Tooltip title="Account settings">
-          <IconButton
-            onClick={handleClick}
-            size="small"
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <AvartarIcon />
-          </IconButton>
-        </Tooltip>
-        <Menu
-          anchorEl={anchorEl}
-          id="account-menu"
-          open={open}
-          onClose={handleClose}
-          onClick={handleClose}
-          PaperProps={{
-            elevation: 0,
-            sx: {
-              overflow: "visible",
-              filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: 1.5,
-              "& .MuiAvatar-root": {
-                width: 32,
-                height: 32,
-                ml: -0.5,
-                mr: 1,
-              },
-              "&:before": {
-                content: '""',
-                display: "block",
-                position: "absolute",
-                top: 0,
-                right: 20,
-                width: 10,
-                height: 10,
-                bgcolor: "background.paper",
-                transform: "translateY(-50%) rotate(45deg)",
-                zIndex: 0,
-              },
-            },
-          }}
-          transformOrigin={{ horizontal: "right", vertical: "top" }}
-          anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-        >
-          <MenuItem>
-            <Avatar /> 신대혁님
-          </MenuItem>
-          <Divider />
-          <MenuItem onClick={handleInfo}>
-            <ListItemIcon>
-              <Settings fontSize="small" />
-            </ListItemIcon>
-            정보수정
-          </MenuItem>
-          <MenuItem onClick={handlelogout}>
-            <ListItemIcon>
-              <Logout fontSize="small" />
-            </ListItemIcon>
-            로그아웃
-          </MenuItem>
-        </Menu>
+        <Nav></Nav>
       </Header>
-      <Content>{showInfo ? <MyInfo /> : <MyData />}</Content>
-      <Nav></Nav>
+      <InfoBox>
+        <TextBox>
+          <p>{info.name}님의 정보</p>
+        </TextBox>
+        <InfoTextBox>
+          {info.email}
+          <Button onClick={() => changeMode(1)} sx={{ padding: 0 }}>
+            비밀번호변경
+          </Button>
+        </InfoTextBox>
+
+        <InfoTextBox>
+          거주지 : {info.regionKey}
+          <Button onClick={() => changeMode(2)} sx={{ padding: 0 }}>
+            거주지 변경
+          </Button>
+        </InfoTextBox>
+        <InfoTextBox>생년월일 : {info.age}</InfoTextBox>
+        <InfoTextBox>
+          보호종료일 : 보호종료일
+          <Button onClick={() => changeMode(3)} sx={{ padding: 0 }}>
+            보호종료일 변경
+          </Button>
+        </InfoTextBox>
+      </InfoBox>
+      {mode === 0 && null}
+      {mode === 1 && <ChangePwd curPwd={info.password} />}
+      {mode === 2 && <ChangeRegion />}
+      {mode === 3 && <ChangeEnd />}
     </>
   );
 }

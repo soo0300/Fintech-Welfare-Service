@@ -15,7 +15,7 @@ const InfoTextBox = styled.div`
 
 //정보변경 박스
 const FormBox = styled.form`
-  width: 100%;
+  width: 90%;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -56,8 +56,9 @@ function ChangePwd(props) {
 
   const submitPassword = async (e) => {
     e.preventDefault();
-    const res = await ChangePassword(newPwd);
-    console.log(res);
+    await ChangePassword(newPwd);
+    window.alert("비밀번호가 변경되었습니다.");
+    window.location.reload();
   };
 
   const changeCurPwd = (e) => {

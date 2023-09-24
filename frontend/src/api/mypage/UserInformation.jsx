@@ -48,3 +48,15 @@ export async function ChangePassword(props) {
     console.error(e);
   }
 }
+
+export async function ChangeRegionAxios(props) {
+  try {
+    const res = await baseAxios.patch(
+      `user/${localStorage.getItem("id")}/region/${props}`,
+      {}
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
