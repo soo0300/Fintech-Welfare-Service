@@ -76,6 +76,7 @@ public class BenefitService {
         return list;
     }
 
+
     public Long changeWelfareStatus(Long userId, Long welfareId, int status) {
         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(userId, welfareId);
         Optional<Welfare> welfare = welfareRepository.findById(welfareId);
@@ -85,6 +86,16 @@ public class BenefitService {
         benefit.get().changeStatusToNum(user.get(), status, support_fund);
         return benefit.get().getId();
 
+    }
+
+    //복지 사업 취소
+    public Long cancelWelfare(Long userId, Long welfareId, int status) {
+        Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(userId, welfareId);
+        Optional<Welfare> welfare = welfareRepository.findById(welfareId);
+        Optional<User> user = userRepository.findById(userId);
+        int suppot_fund = welfare.get().getSupport_fund();
+        benefit.get().cancelStatus(user.get(), status, suppot_fund);
+        return benefit.get().getId();
     }
 
     //- - - - - - - - - 비즈니스 로직 - - - - - - - - -
