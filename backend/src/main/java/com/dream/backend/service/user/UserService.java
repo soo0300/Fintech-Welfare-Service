@@ -91,7 +91,7 @@ public class UserService {
                         System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + saveduser.getId());
                         //user_id 와 welfare_key가 같으면 바꿔줘.,
                         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(saveduser.getId(), welfare_key);
-                        benefit.get().changeStatusTo1();
+                        benefit.get().changeStatusToNum(saveduser,1,welfare.get().getSupport_fund());
 
 
                     }
@@ -181,8 +181,7 @@ public class UserService {
                     System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + savedUser.get().getId());
                     //user_id 와 welfare_key가 같으면 바꿔줘.,
                     Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
-                    benefit.get().changeStatusTo1();
-
+                    benefit.get().changeStatusToNum(savedUser.get(),1,welfare.get().getSupport_fund());
 
                 }
             }

@@ -100,7 +100,25 @@ public class User {
     }
 
     public void addFund(int supportFund) {
-        this.total_fund = this.total_fund + supportFund;
+        this.total_fund += supportFund;
 
     }
+
+    public void addPreFund(int supportFund) {
+        this.pre_fund += supportFund;
+    }
+
+    public void subtractFund(int supportFund, int status) {
+
+        // status가 1이라면 totalFund - supportFund
+        if (status == 1) {
+            this.total_fund -= supportFund;
+        }
+        // status가 2라면   preFund - suportFund
+        if (status == 2) {
+            this.pre_fund -= supportFund;
+        }
+    }
+
+
 }
