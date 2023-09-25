@@ -108,5 +108,13 @@ public class User {
         this.pre_fund = this.pre_fund - supportFund;
     }
 
+    public void subFund(int supportFund, int status){
+
+        // status가 1이라면 totalFund - supportFund
+        // status가 2라면   preFund - suportFund
+    }
+
+
+
 
 }
