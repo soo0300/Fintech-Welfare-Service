@@ -42,82 +42,61 @@ public class WelfareInfoController {
 
     @GetMapping("/search/{expression}")
     public List<WelfareInfo> searchInfo(@PathVariable("expression") String expr) {
-        try {
-            welfareInfoService.setClient();
-            String query = welfareInfoService.tokenized(expr);
-            List<WelfareInfo> results = welfareInfoService.searchDocument(query);
-            welfareInfoService.closeAllClient();
-            if(!results.isEmpty())
-                return results;
+        welfareInfoService.setClient();
+        String query = welfareInfoService.tokenized(expr);
+        List<WelfareInfo> results = welfareInfoService.searchDocument(query);
+        welfareInfoService.closeAllClient();
+        if(!results.isEmpty())
+            return results;
 
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
     @GetMapping("/search/reliable/{expression}")
     public List<WelfareInfo> reliableSearchInfo(@PathVariable("expression") String expr) {
-        try {
-            welfareInfoService.setClient();
-            String query = welfareInfoService.tokenized(expr);
-            List<WelfareInfo> results = welfareInfoService.searchReliableDocument(query);
-            welfareInfoService.closeAllClient();
-            if(!results.isEmpty())
-                return results;
+        welfareInfoService.setClient();
+        String query = welfareInfoService.tokenized(expr);
+        List<WelfareInfo> results = welfareInfoService.searchReliableDocument(query);
+        welfareInfoService.closeAllClient();
+        if(!results.isEmpty())
+            return results;
 
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
         return null;
     }
 
     @GetMapping("/search/complex/{must}/{expression}")
     public List<WelfareInfo> complexSearchInfo(@PathVariable("must") String must, @PathVariable("expression") String expr) {
-        try {
-            welfareInfoService.setClient();
-            String query = welfareInfoService.tokenized(expr);
+        welfareInfoService.setClient();
+        String query = welfareInfoService.tokenized(expr);
 
-            List<WelfareInfo> results = welfareInfoService.complexSearchDocument(must, query);
-            welfareInfoService.closeAllClient();
+        List<WelfareInfo> results = welfareInfoService.complexSearchDocument(must, query);
+        welfareInfoService.closeAllClient();
 
-            if(!results.isEmpty())
-                return results;
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        if(!results.isEmpty())
+            return results;
 
         return null;
     }
 
     @PostMapping("/index")
     public String indexInfo(@RequestBody WelfareInfoRequestDto dto) {
-        try {
-            welfareInfoService.setClient();
-            welfareInfoService.insertDocument(dto.getWelfareId(), dto.getName(), dto.getDescription());
-            welfareInfoService.closeAllClient();
-        } catch(IOException e) {
-            e.printStackTrace();
-            return "Bad Request...";
-        }
+        welfareInfoService.setClient();
+        welfareInfoService.insertDocument(dto.getWelfareId(), dto.getName(), dto.getDescription());
+        welfareInfoService.closeAllClient();
 
         return "OK";
     }
 
     @GetMapping("/synchro")
     public String synchronize() {
-        try {
-            welfareInfoService.setClient();
-            List<Welfare> list = welfareRepository.findAll();
+        welfareInfoService.setClient();
+        List<Welfare> list = welfareRepository.findAll();
 
-            for(Welfare item: list) {
-                welfareInfoService.insertDocument(item.getId(), item.getName(), item.getDescription_origin());
-            }
-
-            welfareInfoService.closeAllClient();
-        } catch(IOException e) {
-            e.printStackTrace();
+        for(Welfare item: list) {
+            welfareInfoService.insertDocument(item.getId(), item.getName(), item.getDescription_origin());
         }
+
+        welfareInfoService.closeAllClient();
 
         return "OK";
     }

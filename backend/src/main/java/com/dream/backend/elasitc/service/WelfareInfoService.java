@@ -29,47 +29,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class WelfareInfoService {
-    private RestClient restClient;
-    private RestHighLevelClient client;
-    private ElasticsearchClient esClient;
-
-    public void setClient() {
-        String serverUrl = "http://j9c209.p.ssafy.io:9200";
-        String apiKey = "NFl3amtZb0JsSzJlT3lYcXhRcmc6WDBabGZhYlpUdmlfNHpLTE5RMjk4Zw==";
-
-        HttpHost httphost = new HttpHost("j9c209.p.ssafy.io", 9200, "http");
-        BasicHeader header = new BasicHeader("Authorization", "ApiKey " + apiKey);
-
-        restClient = RestClient
-                .builder(httphost)
-                .setDefaultHeaders(new Header[] {header})
-                .build();
-
-        client = new RestHighLevelClient(RestClient
-                .builder(httphost)
-                .setDefaultHeaders(new Header[] {header})
-        );
-
-        ElasticsearchTransport transport = new RestClientTransport(
-                restClient, new JacksonJsonpMapper()
-        );
-        esClient = new ElasticsearchClient(transport);
-
-//            esClient.indices().create(c -> c.index("welfare_info"));
-
-//            WelfareInfo welfareInfo = new WelfareInfo(2, "지원사업 B", "강남구청 가족 정책과에서 시행하는 강남구 거주 3개월 이상 경과 자v립 준비 청년을 대상으로 경제적 심리적 지원을 해주는 지원 사업입니다.", "");
-//
-//            String tokens = this.tokenized(welfareInfo.getDescription());
-//            System.out.println(tokens);
-//            welfareInfo.setKeywords(tokens);
-//
-//            IndexResponse response = esClient.index(i -> i
-//                    .index("welfare_info")
-//                    .id("2")
-//                    .document(welfareInfo)
-//            );
-    }
+public class WelfareInfoService extends ElasticConnectionService {
 
     public void insertDocument(Long id, String name, String desc) {
         WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, "");
@@ -212,11 +172,6 @@ public class WelfareInfoService {
         }
 
         return null;
-    }
-
-    public void closeAllClient() throws IOException {
-        restClient.close();
-        client.close();
     }
 
     public String tokenized(String text) {

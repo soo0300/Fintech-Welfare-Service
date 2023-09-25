@@ -6,6 +6,7 @@ import com.dream.backend.controller.transaction.response.TransactionResponse;
 import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.bank_client.BankClient;
 import com.dream.backend.domain.transaction.Transaction;
+import com.dream.backend.elasitc.service.UserLastAlarmService;
 import com.dream.backend.service.account.AccountService;
 import com.dream.backend.service.transaction.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,22 @@ public class TransactionController {
         List<TransactionObject> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionByAccountNumber(accountNumber);
 
+        Account account = result.get(0).getAccount();
+
+        for(Transaction t: result) {
+            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+        }
+
+        return new TransactionResponse(account, list);
+    }
+
+    @GetMapping("/fromLastTime/{user_id}")
+    public TransactionResponse getTransactionFromLastTime(
+            @PathVariable("user_id") Long userId) {
+
+        List<TransactionObject> list = new ArrayList<>();
+        List<Transaction> result = transactionService.getTransactionFromLastTime(userId);
+        if(result.isEmpty()) return null;
         Account account = result.get(0).getAccount();
 
         for(Transaction t: result) {
