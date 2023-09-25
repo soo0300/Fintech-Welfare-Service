@@ -47,8 +47,12 @@ public class Benefit {
 
 
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - - - -
-    public void changeStatus() {
+    public void changeStatusTo1() {
         this.status = 1;
+    }
+
+    public void changeStatusToNum(int num) {
+        this.status = num;
     }
 
     public void cancelStatus() {

@@ -77,7 +77,7 @@ public class BenefitService {
 
     public Long changeWelfareStatus(Long userId, Long welfareId, int status) {
         Optional<Benefit> benefit =  benefitRepository.findByUser_IdAndWelfare_Id(userId,welfareId);
-        benefit.get().cancelStatus();
+        benefit.get().changeStatusToNum(status);
         return benefit.get().getId();
 
     }

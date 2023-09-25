@@ -75,23 +75,29 @@ public class User {
         this.total_fund = total_fund;
         this.account = account;
         this.my_data = my_data;
-        this.refresh_time=refresh_time;
+        this.refresh_time = refresh_time;
     }
 
     // - - - - - - - - - -비즈니스 로직 - - - -- - - - -
 
-    public UserFundResponse toFundResponse(Optional<User> user){
+    public UserFundResponse toFundResponse(Optional<User> user) {
         return UserFundResponse.builder()
                 .pre_fund(user.get().pre_fund)
                 .total_fund(user.get().total_fund)
                 .build();
     }
+
     public void changeRegion(Region region) {
 
         this.region = region;
 
     }
-    public void changePwd(String pwd){
+
+    public void changePwd(String pwd) {
         this.password = pwd;
+    }
+
+    public void changeMyData() {
+        this.my_data = true;
     }
 }
