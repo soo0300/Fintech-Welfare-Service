@@ -78,7 +78,14 @@ public class BenefitService {
 
     public Long changeWelfareStatus(Long userId, Long welfareId, int status) {
         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(userId, welfareId);
-        benefit.get().changeStatusToNum(userId, status);
+        Optional<Welfare> welfare = welfareRepository.findById(welfareId);
+        int support_fund = welfare.get().getSupport_fund();
+        Optional<User> user = userRepository.findById(userId);
+
+//        if(status==0) benefit.get().cancelStatus(user.get(),status,support_fund);
+//        else{
+            benefit.get().changeStatusToNum(user.get(), status, support_fund);
+//        }
         return benefit.get().getId();
 
     }
