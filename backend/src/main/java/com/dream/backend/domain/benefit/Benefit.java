@@ -52,13 +52,20 @@ public class Benefit {
         //User 의 addFund() 호출해야 한다.
     }
 
-    public void changeStatusToNum(int num) {
-        //상황1: User 의 addFund() 호출해야 한다.
-        //상황2: User 의 addFund() 호출해야 한다.
+    public void changeStatusToNum(Long user_id, int num) {
+        //상황1: num이 1이라면, User 의 addFund() 호출해야 한다.
+        if(num==1){
+
+        }
+
+        //상황2: num이 2이라면  User 의 addPreFund() 호출해야 한다.
+        if(num==2){
+
+        }
         this.status = num;
     }
 
-    public void cancelStatus() {
+    public void cancelStatus(Long user_id, int num) {
         this.status = 0;
     }
 
