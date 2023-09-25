@@ -88,9 +88,7 @@ public class User {
     }
 
     public void changeRegion(Region region) {
-
         this.region = region;
-
     }
 
     public void changePwd(String pwd) {
@@ -102,7 +100,7 @@ public class User {
     }
 
     public void addFund(int supportFund) {
-        this.total_fund += supportFund;
+        this.total_fund = this.total_fund + supportFund;
 
     }
 }
