@@ -63,12 +63,12 @@ public class UserController {
         return ApiResponse.ok(response);
     }
 
-    @PostMapping("connection/{user_id}")
-    public ApiResponse<Long> connectionMyData(@PathVariable Long user_id){
-        Long id = userService.connectionMyData(user_id);
-        return ApiResponse.ok(id);
-
-    }
+//    @PostMapping("connection/{user_id}")
+//    public ApiResponse<Long> connectionMyData(@PathVariable Long user_id){
+//        Long id = userService.connectionMyData(user_id);
+//        return ApiResponse.ok(id);
+//
+//    }
 
 
 }
