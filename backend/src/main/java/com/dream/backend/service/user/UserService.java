@@ -166,8 +166,13 @@ public class UserService {
     }
 
     //마이데이터 연결하기
-    public Long connectionMyData(Long user_id) {
+    public Long connectionMyData(Long user_id, int my_data) {
         Optional<User> savedUser = userRepository.findById(user_id);
+
+        //마이데이터 미연결 회원은 연결상태로 바꿔준다.
+        if(my_data==0){ savedUser.get().changeMyData();}
+
+
         int age = getAge(savedUser.get().getResidence_info(), String.valueOf(savedUser.get().getCreated_date()));
         Long myRegion = savedUser.get().getRegion().getId();
 
