@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Logo from "../assets/img/logo.png";
 import Input from "../components/input/Input";
@@ -7,6 +7,7 @@ import BG1 from "../assets/img/login/Ellipse_476.svg";
 import BG2 from "../assets/img/login/Ellipse_477.svg";
 import BG3 from "../assets/img/login/Ellipse_478.svg";
 import { useNavigate } from "react-router-dom";
+import { Login as LoginRequest } from "../api/mypage/User";
 const LoginContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -85,9 +86,37 @@ const BackThird = styled.img`
 `;
 const Login = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const handleEmailValue = (e) => {
+    const curEmailValue = e.target.value;
+    setEmail(curEmailValue);
+  };
+  const handlePwdValue = (e) => {
+    const curPwdValue = e.target.value;
+    setPassword(curPwdValue);
+  };
+  const LoginAccess = async () => {
+    const requestData = {
+      email: email,
+      password: password,
+    };
+    try {
+      // API 요청
+      const response = await LoginRequest(requestData);
 
-  const LoginAccess = () => {
-    navigate("/business");
+      // API 응답 처리
+      if (response.status === 200) {
+        console.log("로그인 성공:", response.data);
+        localStorage.setItem("id", response.data.data.id);
+        localStorage.setItem("myData", response.data.data.myData);
+        navigate("/business");
+      } else {
+        console.error("로그인 실패:", response.data);
+      }
+    } catch (error) {
+      console.error("API 요청 오류:", error);
+    }
   };
   return (
     <LoginContainer className="LoginContainer">
@@ -112,6 +141,7 @@ const Login = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             fontFamily="surround"
+            onChange={handleEmailValue}
           />
           <Input
             width="270px"
@@ -123,6 +153,7 @@ const Login = () => {
             background="--bgColor"
             type="password"
             fontFamily="surround"
+            onChange={handlePwdValue}
           />
           <Button
             onClick={LoginAccess}

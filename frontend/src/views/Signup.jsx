@@ -75,7 +75,9 @@ const Signup = () => {
   };
   const handleNameChange = (e) => {
     const nameValue = e.target.value;
-    setName(nameValue);
+    if (nameValue.length <= 6) {
+      setName(nameValue);
+    }
   };
   const handlePasswordChange = (e) => {
     const passwordValue = e.target.value;
@@ -118,6 +120,7 @@ const Signup = () => {
           borderBottom="1px solid gray"
           background="--bgColor"
           id="name"
+          value={name}
           onChange={handleNameChange}
         />
         <Input
@@ -139,7 +142,7 @@ const Signup = () => {
         <Input
           width="270px"
           height="50px"
-          placeholder="비밀번호 입력"
+          placeholder="비밀번호 입력 ( 8자리 이상, 문자/숫자/기호 )"
           fontFamily="surround"
           border-radius="none"
           border="none"

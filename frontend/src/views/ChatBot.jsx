@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import "./ChatBot.css";
 
+import { ChatBotAxios } from "../api/chatbot/Chatbot";
+import Card from "../components/card/Card";
+import { DetailWelfare } from "../api/welfare/Welfare";
+
 // 전체 컨테이너
 const Container = styled.div`
   width: 100%;
@@ -48,8 +52,6 @@ const Footer = styled.div`
   align-items: center;
   width: 100%;
   height: 70px;
-  bottom: 0;
-  position: fixed;
 `;
 
 const ChatForm = styled.form`
@@ -59,7 +61,6 @@ const ChatForm = styled.form`
   background-color: white;
   width: 90%;
   height: auto;
-  position: fixed;
   border-radius: 30px;
   font-size: 18px;
   overflow: hidden;
@@ -110,11 +111,20 @@ function Today() {
   );
 }
 
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-left: 6%;
+`;
+
 function ChatBot() {
   const [message, setMessage] = useState([
-    ["안녕하세요! \n무엇을 도와드릴까요?", "bot"],
+    ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
   ]);
   const [myMessage, setMyMessage] = useState("");
+  const [item, setItem] = useState([]);
   const chatScrollRef = useRef(null);
 
   const navigate = useNavigate();
@@ -122,20 +132,46 @@ function ChatBot() {
     navigate("/business");
   };
 
-  const [isInputActive, setInputActive] = useState(false);
-  const [isButton, setisButton] = useState(false);
-
   const changeMessage = (e) => {
     if (e.target.value.length <= 100) {
       setMyMessage(e.target.value);
     }
   };
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
-    setMessage([...message, [myMessage, "notbot"]]);
+    const res = await ChatBotAxios(myMessage);
+    console.log(res);
+    if (res.data.length === 0) {
+      setMessage([
+        ...message,
+        [myMessage, "notbot"],
+        ["결과를 찾을 수 없습니다ㅠㅠ\n정확한 정보를 입력해주세요.", "bot"],
+      ]);
+    } else {
+      const detail = await DetailWelfare(res.data[0].welfareId);
+      console.log(detail);
+      setItem(detail.data);
+      setMessage([
+        ...message,
+        [myMessage, "notbot"],
+        [`지원사업을 추천해드릴게요!`, "bot"],
+        [`${res.data[0].name}`, "bot"],
+        [
+          <CardContainer>
+            <Card
+              key={detail.data.id}
+              id={detail.data.id}
+              title={detail.data.name}
+              region={detail.data.region_key}
+              support_period={detail.data.start_date}
+            />
+          </CardContainer>,
+          "bot",
+        ],
+      ]);
+    }
     setMyMessage("");
-    setInputActive(false);
   };
 
   useEffect(() => {
@@ -143,16 +179,6 @@ function ChatBot() {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
   }, [message]);
-
-  const handleInputFocus = () => {
-    setisButton(true);
-    setInputActive(true);
-  };
-
-  const handleInputBlur = () => {
-    setisButton(false);
-    setInputActive(false);
-  };
 
   return (
     <Container>
@@ -167,44 +193,39 @@ function ChatBot() {
         <h3>드림이</h3>
       </ChatHeader>
 
-      <ChatContent ref={chatScrollRef} isInputActive={isInputActive}>
+      <ChatContent ref={chatScrollRef}>
         <Today />
         {message.map((data, index) => (
           <div key={index}>
             {data[1] === "bot" ? (
               <>
-                <div class="yours messages">
+                <div className="yours messages">
                   <StyledEllipseIcon>
                     <BotIcon />
                   </StyledEllipseIcon>
-                  <div class="message last">{data[0]}</div>
+                  <div className="message last">{data[0]}</div>
                 </div>
               </>
             ) : (
-              <div class="mine messages">
-                <div class="message last">{data[0]}</div>
+              <div className="mine messages">
+                <div className="message last">{data[0]}</div>
               </div>
             )}
           </div>
         ))}
       </ChatContent>
 
-      <Footer isInputActive={isInputActive}>
+      <Footer>
         <ChatForm onSubmit={sendMessage}>
           <StyledTextarea
             required
             placeholder=""
             value={myMessage}
             onChange={changeMessage}
-            onFocus={handleInputFocus}
           />
-          {isButton ? (
-            <Button width="50px" height="50px" background="none" type="submit">
-              <SendIcon />
-            </Button>
-          ) : (
-            ""
-          )}
+          <Button width="50px" height="50px" background="none" type="submit">
+            <SendIcon />
+          </Button>
         </ChatForm>
       </Footer>
     </Container>

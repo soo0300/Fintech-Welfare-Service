@@ -5,6 +5,8 @@ import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
+import Nav from "../components/Nav/Nav";
+import RegionModal from "../components/modal/RegionModal";
 
 // API
 import { AllWelfare } from "../api/welfare/Welfare";
@@ -13,6 +15,7 @@ const RecommandPageBody = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   overflow-y: scroll;
   align-items: center;
 `;
@@ -41,11 +44,15 @@ const SearchInput = styled.input`
   padding-left: 5vh;
 `;
 
-function SearchBar() {
+function SearchBar({ userInput, setUserInput }) {
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
   return (
     <SearchBarContainer>
       <StyledSearchIcon />
-      <SearchInput />
+      <SearchInput value={userInput} onChange={handleInputChange} />
     </SearchBarContainer>
   );
 }
@@ -156,57 +163,78 @@ const CardContainer = styled.div`
   margin-left: 6%;
 `;
 
-function Business() {
-  const [welfares, setWalfares] = useState([]);
+function Business({ userInput }) {
+  // 카드 안에 내용
+  const [welfares, setWelfares] = useState([]);
+  const [filteredWelfares, setFilteredWelfares] = useState([]);
+
+  // RegionModal의 상태 관리
+  const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+  const [regionKey, setRegionKey] = useState("전국");
 
   useEffect(() => {
     const fetchWelfares = async () => {
       const data = await AllWelfare();
-      setWalfares(data);
+      setWelfares(data);
+      setFilteredWelfares(data);
     };
 
     fetchWelfares();
   }, []);
 
-  console.log(welfares);
+  // 이름 및 지역에 따른 필터링
+  useEffect(() => {
+    const searched = welfares.filter(
+      (welfare) =>
+        welfare.name.includes(userInput) &&
+        (regionKey === "전국" || welfare.region_key === regionKey)
+    );
+    setFilteredWelfares(searched);
+  }, [userInput, regionKey]);
+
+  console.log(filteredWelfares);
+
   return (
     <BusinessContainer>
       <BusinessHeader>
-        <p>전국 지원 / 복지 사업</p>
-        <PlusIcon width="7%" />
+        <p>{regionKey} 지원 / 복지 사업</p>
+        <PlusIcon onClick={() => setIsRegionModalOpen(true)} width="7%" />
       </BusinessHeader>
       <HR />
+      {isRegionModalOpen && (
+        <RegionModal
+          onClose={() => setIsRegionModalOpen(false)}
+          setRegionKeyInParent={setRegionKey}
+        />
+      )}
       <CardContainer>
-        {welfares &&
-          welfares.map((welfare) => (
-            <Card
-              key={welfare.id}
-              fontSize=" 2vw"
-              // Card
-              cardWidth="45%"
-              cardHeight="23vh"
-              // Poster
-              posterWidth="30rem"
-              // welfare props
-              title={welfare.name}
-              region="전국"
-              support_period={welfare.start_date}
-            />
-          ))}
+        {filteredWelfares.map((welfare) => (
+          <Card
+            key={welfare.id}
+            // welfare props
+            id={welfare.id}
+            title={welfare.name}
+            region={welfare.region_key}
+            support_period={welfare.start_date}
+          />
+        ))}
       </CardContainer>
     </BusinessContainer>
   );
 }
 
 function RecommendPage() {
+  const [userInput, setUserInput] = useState("");
+
   return (
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar />
+        <SearchBar userInput={userInput} setUserInput={setUserInput} />
         <Tag />
-        <Business />
+        <Business userInput={userInput} />
       </RecommandPageBody>
+      <Nav />
     </>
   );
 }

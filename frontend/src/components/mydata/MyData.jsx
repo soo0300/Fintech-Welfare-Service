@@ -57,6 +57,7 @@ const AlertLine = styled.div`
   border-bottom: 2px solid lightgray;
 `;
 
+//알림 점3개아이콘
 const ThreeDot = styled(ThreeDotIcon)`
   width: 30px;
   height: 30px;
@@ -138,6 +139,7 @@ function MyData() {
     { idx: 2, money: 10000000, org: "SSAFY" },
     { idx: 3, money: 500000, org: "돈줘요" },
   ]);
+  const [myData, setMyData] = useState(localStorage.getItem("myData"));
 
   const month = new Date().getMonth();
 

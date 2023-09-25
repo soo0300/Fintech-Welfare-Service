@@ -23,7 +23,7 @@ html {
   --sky: #50bcdf;
   --coolblue: #bddffa;
   --bgColor: #f2f5fe;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .App {
