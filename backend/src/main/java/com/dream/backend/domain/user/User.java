@@ -31,7 +31,7 @@ public class User {
     private int residence_info;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="region_key")
+    @JoinColumn(name = "region_key")
     private Region region;
 
     @Column(nullable = true)
@@ -88,9 +88,7 @@ public class User {
     }
 
     public void changeRegion(Region region) {
-
         this.region = region;
-
     }
 
     public void changePwd(String pwd) {
@@ -99,5 +97,10 @@ public class User {
 
     public void changeMyData() {
         this.my_data = true;
+    }
+
+    public void addFund(int supportFund) {
+        this.total_fund = this.total_fund + supportFund;
+
     }
 }

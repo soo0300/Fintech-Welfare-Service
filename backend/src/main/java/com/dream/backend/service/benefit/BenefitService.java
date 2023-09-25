@@ -36,6 +36,7 @@ public class BenefitService {
         Optional<User> savedUser = userRepository.findById(userId);
         for (int i = 0; i < list.size(); i++) {
             Optional<Welfare> savedWelfare = welfareRepository.findById(list.get(i));
+            savedUser.get().addFund(savedWelfare.get().getSupport_fund());
             Benefit benefit = Benefit.builder()
                     .user(savedUser.get())
                     .welfare(savedWelfare.get())

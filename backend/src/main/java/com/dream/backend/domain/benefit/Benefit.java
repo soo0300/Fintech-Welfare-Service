@@ -49,9 +49,12 @@ public class Benefit {
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - - - -
     public void changeStatusTo1() {
         this.status = 1;
+        //User 의 addFund() 호출해야 한다.
     }
 
     public void changeStatusToNum(int num) {
+        //상황1: User 의 addFund() 호출해야 한다.
+        //상황2: User 의 addFund() 호출해야 한다.
         this.status = num;
     }
 
