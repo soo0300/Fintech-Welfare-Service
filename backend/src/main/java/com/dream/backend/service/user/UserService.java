@@ -74,7 +74,6 @@ public class UserService {
             List<String> welfareCodeList = new ArrayList<>();
             for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
                 Long welfare_key = getUserWelfareKey.get(i);
-//                Welfare welfare = welfareRepository.findWelfareCodeById(welfare_key);
                 Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
                 String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
 
@@ -92,7 +91,7 @@ public class UserService {
                         System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + saveduser.getId());
                         //user_id 와 welfare_key가 같으면 바꿔줘.,
                         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(saveduser.getId(), welfare_key);
-                        benefit.get().changeStatus();
+                        benefit.get().changeStatusTo1();
 
 
                     }
@@ -109,6 +108,7 @@ public class UserService {
     }
 
     public Optional<User> getUserFund(Long userId) {
+
         return userRepository.findById(userId);
     }
 
@@ -135,35 +135,6 @@ public class UserService {
     }
 
 
-    //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
-    public UserResponse toUserResponse(Optional<User> user) {
-        return UserResponse.builder()
-                .name(user.get().getName())
-                .email(user.get().getEmail())
-                .regionKey(user.get().getRegion().getId())
-                .age(getAge(user.get().getResidence_info(), String.valueOf(user.get().getCreated_date())))
-                .password(user.get().getPassword())
-                .build();
-    }
-
-
-    //만 나이 계산 함수 작성
-    public int getAge(int residenceInfo, String now) {
-        //순서대로 : 사용자 생년/ 월,일
-        int userBirthY = residenceInfo / 100000 + 1900;
-        int userBirthMM = (residenceInfo % 100000) / 10;
-
-        //만 나이 계산을 위한 현재 시간 파싱, 순서대로 년도 / 월,일
-        int year = Integer.parseInt(now.substring(0, 4));
-        int birth = Integer.parseInt(now.substring(5, 7) + now.substring(8, 10));
-
-        //만 나이 계산 로직
-        int age = year - userBirthY;
-        if (userBirthMM >= birth) age -= 1;
-
-        return age;
-
-    }
 
     //마이데이터 연결하기
     public Long connectionMyData(Long user_id, int my_data) {
@@ -210,7 +181,7 @@ public class UserService {
                     System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + savedUser.get().getId());
                     //user_id 와 welfare_key가 같으면 바꿔줘.,
                     Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
-                    benefit.get().changeStatus();
+                    benefit.get().changeStatusTo1();
 
 
                 }
@@ -219,4 +190,37 @@ public class UserService {
 
         return savedUser.get().getId();
     }
+
+
+
+    //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
+    public UserResponse toUserResponse(Optional<User> user) {
+        return UserResponse.builder()
+                .name(user.get().getName())
+                .email(user.get().getEmail())
+                .regionKey(user.get().getRegion().getId())
+                .age(getAge(user.get().getResidence_info(), String.valueOf(user.get().getCreated_date())))
+                .password(user.get().getPassword())
+                .build();
+    }
+
+
+    //만 나이 계산 함수 작성
+    public int getAge(int residenceInfo, String now) {
+        //순서대로 : 사용자 생년/ 월,일
+        int userBirthY = residenceInfo / 100000 + 1900;
+        int userBirthMM = (residenceInfo % 100000) / 10;
+
+        //만 나이 계산을 위한 현재 시간 파싱, 순서대로 년도 / 월,일
+        int year = Integer.parseInt(now.substring(0, 4));
+        int birth = Integer.parseInt(now.substring(5, 7) + now.substring(8, 10));
+
+        //만 나이 계산 로직
+        int age = year - userBirthY;
+        if (userBirthMM >= birth) age -= 1;
+
+        return age;
+
+    }
+
 }
