@@ -65,8 +65,8 @@ public class Benefit {
         this.status = num;
     }
 
-    public void cancelStatus(User user, int support_fund) {
-//        user.cancel(support_fund);
+    public void cancelStatus(User user, int status, int support_fund) {
+        user.subtractFund(support_fund,status);
         this.status = 0;
     }
 
