@@ -9,6 +9,9 @@ import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import { ReactComponent as WhitePlusIcon } from "../assets/img/Vector.svg";
 import { ReactComponent as MinusIcon } from "../assets/img/minus.svg";
 
+// API
+import { GetMywelfare } from "../api/welfare/MyWelfare";
+
 // 사업을 넣는 박스를 갖는 컨테이너
 const BusinessContainer = styled.div`
   display: flex;
@@ -145,13 +148,41 @@ function BusinessBody(props) {
 
 // 맞춤 지원 사업
 function CustomBusinesss() {
+  const [welfareData, setWelfareData] = useState([]);
+
+  // 로컬 스토리지에서 id가져오기
+  useEffect(() => {
+    const fetchWelfareData = async () => {
+      const userId = localStorage.getItem("id");
+      if (userId) {
+        try {
+          const response = await GetMywelfare({ user_id: 195 });
+          setWelfareData(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchWelfareData();
+  }, []);
+
+  console.log(welfareData);
+
   return (
     <CustomContainer>
       <p>맞춤 지원 사업</p>
       <HR />
       <CustomCardBox>
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
-        <Card cardWidth="45%" cardHeight="23vh" posterWidth="3rem" />
+        {welfareData.map((item) => (
+          <Card
+            key={item.id} // Assuming each item has a unique id property
+            cardWidth="45%"
+            cardHeight="23vh"
+            posterWidth="3rem"
+            {...item} // Pass other item properties as props to Card component if needed
+          />
+        ))}
       </CustomCardBox>
     </CustomContainer>
   );
