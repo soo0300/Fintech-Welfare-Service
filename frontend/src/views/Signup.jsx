@@ -11,20 +11,21 @@ const SignupContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: left;
+  width: 80%;
   min-height: 100vh;
 `;
 
 const HeaderBox = styled.div`
-  width: 70vw;
-  height: 20vh;
+  width: 90%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 20px;
 `;
 const LineBox = styled.div`
-  width: 70vw;
-  height: 2vh;
+  width: 90%;
+  height: 2%;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -33,25 +34,25 @@ const LineBox = styled.div`
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
-  height: 50vh;
+  width: 90%;
+  height: 50%;
 `;
 
 const Line = styled.div`
-  width: 70vw;
+  width: 100%;
   height: 1px;
   background-color: gray;
 `;
 const LineStatus = styled.div`
-  width: 35vw;
+  width: 50%;
   height: 2px;
   background-color: black;
   position: absolute;
   top: 0;
 `;
 const FooterBox = styled.div`
-  width: 70vw;
-  height: 28vh;
+  width: 90%;
+  height: 28%;
   display: flex;
   bottom: 0px;
 `;
@@ -110,7 +111,7 @@ const Signup = () => {
       <MainBox>
         <h2>회원가입</h2>
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           color="gray"
           placeholder="이름"
@@ -124,7 +125,7 @@ const Signup = () => {
           onChange={handleNameChange}
         />
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           color="gray"
           placeholder="이메일 입력"
@@ -140,7 +141,7 @@ const Signup = () => {
           <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
         )}
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           placeholder="비밀번호 입력 ( 8자리 이상, 문자/숫자/기호 )"
           fontFamily="surround"
@@ -153,7 +154,7 @@ const Signup = () => {
           onChange={handlePasswordChange}
         />
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           placeholder="비밀번호 확인"
           fontFamily="surround"
@@ -167,14 +168,15 @@ const Signup = () => {
         />
         {!isPasswordValid && pwdcheck && (
           <p style={{ color: "red" }}>
-            비밀번호가 일치하지 않거나 유효하지 않습니다.
+            비밀번호가 일치하지 않거나 <br />
+            유효하지 않습니다.
           </p>
         )}
       </MainBox>
       <FooterBox>
         <Button
           onClick={nextPage}
-          width="270px"
+          width="100%"
           fontSize="15px"
           fontFamily="surround"
         >
