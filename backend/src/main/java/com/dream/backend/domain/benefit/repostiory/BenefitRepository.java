@@ -2,6 +2,7 @@ package com.dream.backend.domain.benefit.repostiory;
 
 import com.dream.backend.domain.benefit.Benefit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public interface BenefitRepository extends JpaRepository<Benefit, Long> {
 
     List<Benefit> findAllByUser_Id(Long userId);
 
-    Optional<Benefit> findByUserIdAndWelfareId(Long id, Long welfareKey);
+//    @Query("SELECT b FROM Benefit b WHERE b.user.id = :userId AND b.welfare.id = :welfareId")
+    Optional<Benefit> findByUser_IdAndWelfare_Id(Long id, Long welfareKey);
 }
