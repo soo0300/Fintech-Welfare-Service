@@ -75,6 +75,13 @@ public class BenefitService {
         return list;
     }
 
+    public Long changeWelfareStatus(Long userId, Long welfareId, int status) {
+        Optional<Benefit> benefit =  benefitRepository.findByUserIdAndWelfareId(userId,welfareId);
+        benefit.get().cancelStatus();
+        return benefit.get().getId();
+
+    }
+
     //- - - - - - - - - 비즈니스 로직 - - - - - - - - -
     private Benefit toEntity(Optional<Welfare> welfare, Optional<User> user, int status) {
         return Benefit.builder()
@@ -102,5 +109,6 @@ public class BenefitService {
                 .build();
 
     }
+
 
 }
