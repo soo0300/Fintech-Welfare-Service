@@ -11,7 +11,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const navIcons = [
-  { link: "business", name: "Home" },
+  { link: "business", name: "나의 지원사업" },
   { link: "chatbot", name: "지원사업 ChatBot" },
   { link: "recommend", name: "지원사업 조회" },
   { link: "myfund", name: "나의 지원금" },
@@ -24,6 +24,11 @@ export default function Nav() {
   const location = useLocation().pathname.slice(1);
   const movepage = (link) => {
     navigate(`/${link}`);
+  };
+  const logout = () => {
+    window.alert("로그아웃 되었습니다.");
+    window.localStorage.clear();
+    navigate("/login");
   };
 
   return (
@@ -87,6 +92,17 @@ export default function Nav() {
               {navIcon.name}
             </ListItemButton>
           ))}
+          <ListItemButton
+            background="none"
+            onClick={logout}
+            sx={{
+              fontFamily: "surround",
+              justifyContent: "center",
+              color: "red",
+            }}
+          >
+            로그아웃
+          </ListItemButton>
         </List>
       </Drawer>
     </>

@@ -100,7 +100,7 @@ function MyPage() {
             거주지 변경
           </Button>
         </InfoTextBox>
-        <InfoTextBox>생년월일 : {info.age}</InfoTextBox>
+        <InfoTextBox>나이 : 만 {info.age}세</InfoTextBox>
         <InfoTextBox>
           보호종료일 : 보호종료일
           <Button onClick={() => changeMode(3)} sx={{ padding: 0 }}>
