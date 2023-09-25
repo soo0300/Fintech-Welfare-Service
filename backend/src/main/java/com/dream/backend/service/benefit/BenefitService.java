@@ -105,7 +105,7 @@ public class BenefitService {
                 .img(welfare.get().getImg())
                 .support_period(welfare.get().getSupport_period())
                 .etc(welfare.get().getEtc())
-                .welfare_id(welfare.get().getId())
+                .id(welfare.get().getId())
                 .build();
 
     }
