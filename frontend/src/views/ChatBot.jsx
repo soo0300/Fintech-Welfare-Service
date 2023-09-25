@@ -9,6 +9,8 @@ import TextareaAutosize from "react-textarea-autosize";
 import "./ChatBot.css";
 
 import { ChatBotAxios } from "../api/chatbot/Chatbot";
+import Card from "../components/card/Card";
+import { DetailWelfare } from "../api/welfare/Welfare";
 
 // 전체 컨테이너
 const Container = styled.div`
@@ -109,11 +111,20 @@ function Today() {
   );
 }
 
+const CardContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-left: 6%;
+`;
+
 function ChatBot() {
   const [message, setMessage] = useState([
     ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
   ]);
   const [myMessage, setMyMessage] = useState("");
+  const [item, setItem] = useState([]);
   const chatScrollRef = useRef(null);
 
   const navigate = useNavigate();
@@ -130,6 +141,7 @@ function ChatBot() {
   const sendMessage = async (e) => {
     e.preventDefault();
     const res = await ChatBotAxios(myMessage);
+    console.log(res);
     if (res.data.length === 0) {
       setMessage([
         ...message,
@@ -137,11 +149,26 @@ function ChatBot() {
         ["결과를 찾을 수 없습니다ㅠㅠ\n정확한 정보를 입력해주세요.", "bot"],
       ]);
     } else {
+      const detail = await DetailWelfare(res.data[0].welfareId);
+      console.log(detail);
+      setItem(detail.data);
       setMessage([
         ...message,
         [myMessage, "notbot"],
         [`지원사업을 추천해드릴게요!`, "bot"],
         [`${res.data[0].name}`, "bot"],
+        [
+          <CardContainer>
+            <Card
+              key={detail.data.id}
+              id={detail.data.id}
+              title={detail.data.name}
+              region={detail.data.region_key}
+              support_period={detail.data.start_date}
+            />
+          </CardContainer>,
+          "bot",
+        ],
       ]);
     }
     setMyMessage("");
@@ -172,16 +199,16 @@ function ChatBot() {
           <div key={index}>
             {data[1] === "bot" ? (
               <>
-                <div class="yours messages">
+                <div className="yours messages">
                   <StyledEllipseIcon>
                     <BotIcon />
                   </StyledEllipseIcon>
-                  <div class="message last">{data[0]}</div>
+                  <div className="message last">{data[0]}</div>
                 </div>
               </>
             ) : (
-              <div class="mine messages">
-                <div class="message last">{data[0]}</div>
+              <div className="mine messages">
+                <div className="message last">{data[0]}</div>
               </div>
             )}
           </div>
