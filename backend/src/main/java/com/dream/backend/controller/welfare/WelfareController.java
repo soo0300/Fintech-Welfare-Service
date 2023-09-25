@@ -20,13 +20,13 @@ public class WelfareController {
     private final WelfareService welfareService;
     private final QualificationService qualificationService;
 
-    //전체 복지 정보 조회
+    //[전체 복지 정보 조회]
     @GetMapping("/all")
     public List<WelfareResponse> getAllWelfare() {
         return welfareService.getAllWelfare();
     }
 
-    //[사용자와 관계없 없이 지역 분류]
+    //[사용자와 관계없이 지역 분류]
     @GetMapping("/{regionKey}")
     public List<WelfareResponse> getRegionWelfare(@PathVariable Long regionKey) {
         List<WelfareResponse> response = new ArrayList<>();
