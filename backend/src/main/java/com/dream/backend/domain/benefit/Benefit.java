@@ -66,6 +66,7 @@ public class Benefit {
     }
 
     public void cancelStatus(User user, int support_fund) {
+        user.cancel(support_fund);
         this.status = 0;
     }
 
