@@ -12,23 +12,24 @@ import jsonData from "../assets/data/region.json";
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: left;
+  width: 80%;
   min-height: 100vh;
 `;
 
 const HeaderBox = styled.div`
-  width: 70vw;
-  height: 20vh;
+  width: 90%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 20px;
 `;
 const LineBox = styled.div`
-  width: 70vw;
-  height: 2vh;
+  width: 90%;
+  height: 2%;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -37,25 +38,25 @@ const LineBox = styled.div`
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
-  height: 60vh;
+  width: 90%;
+  height: 50%;
 `;
 
 const Line = styled.div`
-  width: 70vw;
+  width: 90%;
   height: 1px;
   background-color: gray;
 `;
 const LineStatus = styled(motion.div)`
-  width: 35vw;
+  width: 50%;
   height: 2px;
   background-color: black;
   position: absolute;
   left: 0;
 `;
 const FooterBox = styled.div`
-  width: 70vw;
-  height: 18vh;
+  width: 90%;
+  height: 5%;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -77,12 +78,12 @@ const RegionBox = styled.div`
 `;
 
 const FirstKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 const SecondKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -237,14 +238,14 @@ const Info = () => {
         />
       </LineBox>
       <MainBox className="MainBox">
-        <h2>
+        <h3>
           맞춤 정보를 제공하기 위해
           <br /> 입력해주세요 :)
-        </h2>
+        </h3>
         <BirthBox>
           <Input
             type="number"
-            width="135px"
+            width="50%"
             height="50px"
             color="gray"
             placeholder="생년월일"
@@ -259,7 +260,7 @@ const Info = () => {
           -
           <Input
             type="number"
-            width="20px"
+            width="10%"
             height="50px"
             color="gray"
             border-radius="none"
@@ -272,10 +273,11 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
+        <p style={{ fontSize: "10px" }}>보호종료일</p>
         <DateBox>
           <Input
             type="date"
-            width="270px"
+            width="100%"
             height="50px"
             border-radius="none"
             border="none"
@@ -294,7 +296,7 @@ const Info = () => {
               onClick={handleClickFirstDropdown}
               background="none"
               color="black"
-              width="35vw"
+              width="100%"
               fontFamily="surround"
             />
             {isFirstDropdownView && (
@@ -307,13 +309,14 @@ const Info = () => {
               onClick={handleClickSecondDropdown}
               background="none"
               color="black"
-              width="35vw"
+              width="100%"
               fontFamily="surround"
             />
             {isSecondDropdownView && (
               <Dropdown
                 items={subRegions}
                 onItemClick={handleSubRegionSelect}
+                height="14px"
               />
             )}
           </SecondKeyBox>
@@ -322,7 +325,8 @@ const Info = () => {
       <FooterBox>
         <Button
           onClick={() => movePage(true)}
-          width="270px"
+          width="100%"
+          height="100%"
           fontSize="15px"
           background="success"
           fontFamily="surround"
@@ -331,7 +335,8 @@ const Info = () => {
         </Button>
         <Button
           onClick={() => movePage(false)}
-          width="270px"
+          width="100%"
+          height="100%"
           fontSize="15px"
           fontFamily="surround"
         >
