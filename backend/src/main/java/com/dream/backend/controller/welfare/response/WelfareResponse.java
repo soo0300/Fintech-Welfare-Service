@@ -37,12 +37,13 @@ public class WelfareResponse {
 
     String etc;
 
-    private int welfare_type;
+    private String welfare_type;
 
     private Long region_key;
 
+
     @Builder
-    public WelfareResponse(Long id, String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, int welfare_type, Long region_key) {
+    public WelfareResponse(Long id, String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, String welfare_type, Long region_key) {
         this.id = id;
         this.name = name;
         this.organization = organization;
@@ -56,12 +57,12 @@ public class WelfareResponse {
         this.img = img;
         this.support_period = support_period;
         this.etc = etc;
-        this.welfare_type=welfare_type;
-        this.region_key=region_key;
+        this.welfare_type = welfare_type;
+        this.region_key = region_key;
 
     }
 
-//    - - -  비즈니스 로직 - - - - - -
+    //    - - -  비즈니스 로직 - - - - - -
     public static WelfareResponse toResponse(Welfare welfare, Long region_key) {
         return WelfareResponse.builder()
                 .id(welfare.getId())
