@@ -103,4 +103,10 @@ public class User {
         this.total_fund = this.total_fund + supportFund;
 
     }
+
+    public void addPreFund(int supportFund) {
+        this.pre_fund = this.pre_fund - supportFund;
+    }
+
+
 }
