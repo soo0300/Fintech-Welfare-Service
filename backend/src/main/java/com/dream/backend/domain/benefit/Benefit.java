@@ -47,25 +47,25 @@ public class Benefit {
 
 
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - - - -
-    public void changeStatusTo1() {
-        this.status = 1;
-        //User 의 addFund() 호출해야 한다.
-    }
 
-    public void changeStatusToNum(Long user_id, int num) {
+    public void changeStatusToNum(User user, int num, int support_fund) {
         //상황1: num이 1이라면, User 의 addFund() 호출해야 한다.
-        if(num==1){
-
+        if (num == 1) {
+            user.addFund(support_fund);
+            //benefit 의 status 1로 바꿔준다.
+            this.status = 1;
         }
 
         //상황2: num이 2이라면  User 의 addPreFund() 호출해야 한다.
-        if(num==2){
-
+        if (num == 2) {
+            user.addPreFund(support_fund);
+            //benefit 의 status 2로 바꿔준다.
+            this.status = 2;
         }
         this.status = num;
     }
 
-    public void cancelStatus(Long user_id, int num) {
+    public void cancelStatus(User user, int support_fund) {
         this.status = 0;
     }
 
