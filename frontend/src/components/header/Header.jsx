@@ -1,5 +1,6 @@
 import React from "react";
 import Logo from "../Logo/Logo";
+import Nav from "../Nav/Nav";
 import { ReactComponent as AlarmIcon } from "../../assets/img/Alarm_icon.svg";
 import { styled } from "styled-components";
 
@@ -15,8 +16,9 @@ const BusinessHead = styled.div`
 function Header() {
   return (
     <BusinessHead>
-      <Logo></Logo>
+      <Logo />
       <AlarmIcon />
+      <Nav />
     </BusinessHead>
   );
 }

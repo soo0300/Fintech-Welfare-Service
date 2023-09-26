@@ -12,7 +12,8 @@ const RegionModalContainer = styled.div`
   transform: translate(-50%, -50%);
   background-color: #fff;
   width: 80%;
-  height: 20%;
+  max-width: 400px;
+  height: 30%;
   border-radius: 10px;
   border: 1px solid #000;
   display: flex;
@@ -22,18 +23,19 @@ const RegionModalContainer = styled.div`
 `;
 
 const BoxContainer = styled.div`
+  width: 100%;
   height: 75%;
   display: flex;
   justify-content: space-around;
 `;
 
 const FirstKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 const SecondKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -41,24 +43,6 @@ const SecondKeyBox = styled.div`
 // 지역 모달
 function RegionModal({ setRegionKeyInParent, onClose }) {
   const [regionKey, setRegionKey] = useState();
-  const [residenceInfo, setResidenceInfo] = useState("");
-  const [residenceBack, setResidenceBack] = useState("");
-
-  console.log(regionKey);
-
-  const handleResidenceChange = (e) => {
-    const residenceValue = e.target.value;
-    if (residenceValue.length <= 6) {
-      setResidenceInfo(residenceValue);
-    }
-  };
-  const handleResidenceBackChange = (e) => {
-    const residenceValue = e.target.value;
-    if (residenceValue.length <= 1 && residenceValue <= 4) {
-      setResidenceBack(residenceValue);
-    }
-  };
-
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [subRegions, setSubRegions] = useState([]);
@@ -96,7 +80,7 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   useEffect(() => {
-    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    const filteredNames = jsonData.slice(0, 18).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
 
@@ -113,33 +97,37 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   const handleButtonClick = () => {
-    setRegionKeyInParent(regionKey);
+    if (regionKey) {
+      setRegionKeyInParent(regionKey);
+    } else if (regionKey === 0) {
+      setRegionKeyInParent("");
+    }
     onClose(); // 모달 닫기
   };
 
   return (
-    <RegionModalContainer>
-      <BoxContainer>
-        <FirstKeyBox>
+    <RegionModalContainer className="RegionModalContainer">
+      <BoxContainer className="BoxContainer">
+        <FirstKeyBox className="FirstKeyBox">
           <Button
             text={selectedRegionText}
             onClick={handleClickFirstDropdown}
             background="none"
             color="black"
-            width="35vw"
+            width="100%"
             fontFamily="surround"
           />
           {isFirstDropdownView && (
             <Dropdown items={regions} onItemClick={handleRegionSelect} />
           )}
         </FirstKeyBox>
-        <SecondKeyBox>
+        <SecondKeyBox className="SecondKeyBox">
           <Button
             text={selectedSubRegionText}
             onClick={handleClickSecondDropdown}
             background="none"
             color="black"
-            width="35vw"
+            width="100%"
             fontFamily="surround"
           />
           {isSecondDropdownView && (
@@ -152,7 +140,7 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
         background-color="#006ffd"
         color="white"
         border="10px"
-        height="20%"
+        height="18%"
         fontFamily="surround"
       >
         지역 변경 완료
