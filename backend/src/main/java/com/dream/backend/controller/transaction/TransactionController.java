@@ -25,6 +25,7 @@ import java.util.Optional;
 public class TransactionController {
 
     private final TransactionService transactionService;
+    private final UserLastAlarmService alarmService;
 
     @GetMapping("/all")
     public List<Transaction> getAllTransaction() {
@@ -81,14 +82,20 @@ public class TransactionController {
     public TransactionResponse getTransactionFromLastTime(
             @PathVariable("user_id") Long userId) {
 
+
         List<TransactionObject> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionFromLastTime(userId);
         if(result.isEmpty()) return null;
         Account account = result.get(0).getAccount();
+        if(account == null) return null;
 
         for(Transaction t: result) {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
         }
+
+        alarmService.setClient();
+        alarmService.insertDate(userId);
+        alarmService.closeAllClient();
 
         return new TransactionResponse(account, list);
     }
