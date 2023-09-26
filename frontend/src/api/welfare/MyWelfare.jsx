@@ -48,7 +48,7 @@ export async function PostReceive(props) {
 
 export async function GetMywelfare(props) {
   try {
-    const res = await baseAxios.post(`benefit/user_info/${props}`);
+    const res = await baseAxios.post(`benefit/${props.user_id}`);
     return res;
   } catch (e) {
     console.error(e);

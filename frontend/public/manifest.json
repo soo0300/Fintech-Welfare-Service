@@ -19,7 +19,7 @@
     }
   ],
   "start_url": "/business",
-  "display": "standalone",
+  "display": "fullscreen",
   "theme_color": "#F2F5FE",
   "background_color": "#F2F5FE"
 }
