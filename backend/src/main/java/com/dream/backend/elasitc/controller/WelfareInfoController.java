@@ -43,7 +43,7 @@ public class WelfareInfoController {
     @GetMapping("/search/{expression}")
     public List<WelfareInfo> searchInfo(@PathVariable("expression") String expr) {
         welfareInfoService.setClient();
-        String query = welfareInfoService.tokenized(expr);
+        String query = welfareInfoService.tokenizeOnlyProper(expr);
         List<WelfareInfo> results = welfareInfoService.searchDocument(query);
         welfareInfoService.closeAllClient();
         if(!results.isEmpty())
@@ -55,13 +55,22 @@ public class WelfareInfoController {
     @GetMapping("/search/reliable/{expression}")
     public List<WelfareInfo> reliableSearchInfo(@PathVariable("expression") String expr) {
         welfareInfoService.setClient();
-        String query = welfareInfoService.tokenized(expr);
+        String query = welfareInfoService.tokenizeOnlyProper(expr);
         List<WelfareInfo> results = welfareInfoService.searchReliableDocument(query);
         welfareInfoService.closeAllClient();
         if(!results.isEmpty())
             return results;
 
         return null;
+    }
+
+    @GetMapping("/search/must/{expression}")
+    public List<WelfareInfo> mustSearchInfo(@PathVariable("expression") String text) {
+        welfareInfoService.setClient();
+        List<WelfareInfo> results = welfareInfoService.mustSearchDocument(text);
+        welfareInfoService.closeAllClient();
+
+        return results;
     }
 
     @GetMapping("/search/complex/{must}/{expression}")
@@ -99,5 +108,14 @@ public class WelfareInfoController {
         welfareInfoService.closeAllClient();
 
         return "OK";
+    }
+
+    @GetMapping("/proper/{text}")
+    public String getProperNoun(@PathVariable("text") String text) {
+        welfareInfoService.setClient();
+        String result = welfareInfoService.tokenizeOnlyProper(text);
+        welfareInfoService.closeAllClient();
+
+        return result;
     }
 }
