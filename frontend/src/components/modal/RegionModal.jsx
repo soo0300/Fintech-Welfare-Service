@@ -97,9 +97,10 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   const handleButtonClick = () => {
-    console.log(regionKey);
     if (regionKey) {
       setRegionKeyInParent(regionKey);
+    } else if (regionKey === 0) {
+      setRegionKeyInParent("");
     }
     onClose(); // 모달 닫기
   };
