@@ -11,7 +11,7 @@ export async function Signup(props) {
       regionKey: props.regionKey,
       endDate: props.endDate,
       isEnded: props.isEnded,
-      myData: props.myData,
+      myData: curStatus,
       createdDate: props.createdDate,
     });
     return res;

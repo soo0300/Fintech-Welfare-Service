@@ -89,7 +89,6 @@ const SecondKeyBox = styled.div`
 `;
 const Info = () => {
   const [regionKey, setRegionKey] = useState();
-  const [myData, setMydata] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
@@ -116,9 +115,6 @@ const Info = () => {
       minutes +
       ":" +
       seconds;
-    if (isMydata) {
-      setMydata(true);
-    }
     const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
     const endDate = selectedDate + "T23:59:59";
@@ -130,7 +126,7 @@ const Info = () => {
       residenceInfo: Number(residenceInfo.concat(residenceBack)),
       endDate: endDate,
       isEnded: isEnded,
-      myData: myData,
+      myData: isMydata ? 1 : 0,
       createdDate: createdDate,
     };
     console.log(requestData);
@@ -202,7 +198,6 @@ const Info = () => {
     setRegions(filteredNames);
   }, []);
 
-  // 날짜를 저장할 상태 변수
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isFirstDropdownView, setIsFirstDropdownView] = useState(false);
   const [isSecondDropdownView, setIsSecondDropdownView] = useState(false);
@@ -222,7 +217,6 @@ const Info = () => {
     console.log(selectedRegion);
     setIsSecondDropdownView(!isSecondDropdownView);
   };
-
   return (
     <InfoContainer>
       <HeaderBox>
