@@ -12,7 +12,8 @@ const RegionModalContainer = styled.div`
   transform: translate(-50%, -50%);
   background-color: #fff;
   width: 80%;
-  height: 20%;
+  max-width: 400px;
+  height: 30%;
   border-radius: 10px;
   border: 1px solid #000;
   display: flex;
@@ -22,18 +23,19 @@ const RegionModalContainer = styled.div`
 `;
 
 const BoxContainer = styled.div`
+  width: 100%;
   height: 75%;
   display: flex;
   justify-content: space-around;
 `;
 
 const FirstKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 const SecondKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -118,28 +120,28 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   return (
-    <RegionModalContainer>
-      <BoxContainer>
-        <FirstKeyBox>
+    <RegionModalContainer className="RegionModalContainer">
+      <BoxContainer className="BoxContainer">
+        <FirstKeyBox className="FirstKeyBox">
           <Button
             text={selectedRegionText}
             onClick={handleClickFirstDropdown}
             background="none"
             color="black"
-            width="35vw"
+            width="100%"
             fontFamily="surround"
           />
           {isFirstDropdownView && (
             <Dropdown items={regions} onItemClick={handleRegionSelect} />
           )}
         </FirstKeyBox>
-        <SecondKeyBox>
+        <SecondKeyBox className="SecondKeyBox">
           <Button
             text={selectedSubRegionText}
             onClick={handleClickSecondDropdown}
             background="none"
             color="black"
-            width="35vw"
+            width="100%"
             fontFamily="surround"
           />
           {isSecondDropdownView && (
@@ -152,7 +154,7 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
         background-color="#006ffd"
         color="white"
         border="10px"
-        height="20%"
+        height="18%"
         fontFamily="surround"
       >
         지역 변경 완료

@@ -64,7 +64,7 @@ const Modal = () => {
   };
 
   return (
-    <ModalWrapper onClick={handleModalWrapperClick}>
+    <ModalWrapper onClick={handleModalWrapperClick} className="ModalWrapper">
       <ModalContainer className="ModalContainer" onClick={handleModalClick}>
         {findModal.component}
       </ModalContainer>
