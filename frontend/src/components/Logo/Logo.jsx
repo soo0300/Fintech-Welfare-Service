@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 
 const StyledLogo = styled.div`
   display: flex;
-  width: 100%;
+  width: 70%;
   height: 70px;
 `;
 
