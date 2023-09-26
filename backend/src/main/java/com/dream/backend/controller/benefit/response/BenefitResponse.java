@@ -37,8 +37,10 @@ public class BenefitResponse {
 
     String etc;
 
+    private int status;
+
     @Builder
-    public BenefitResponse(String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, Long id) {
+    public BenefitResponse(String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, Long id, int status) {
         this.name = name;
         this.organization = organization;
         this.start_date = start_date;
@@ -52,5 +54,6 @@ public class BenefitResponse {
         this.support_period = support_period;
         this.etc = etc;
         this.id = id;
+        this.status = status;
     }
 }
