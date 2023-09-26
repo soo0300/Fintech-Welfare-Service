@@ -198,7 +198,7 @@ const Info = () => {
   };
 
   useEffect(() => {
-    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    const filteredNames = jsonData.slice(1, 18).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
 
