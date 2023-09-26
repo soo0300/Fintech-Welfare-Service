@@ -9,6 +9,7 @@ const Header = styled.div`
   height: 70px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 const Content = styled.div`
   width: 90%;
