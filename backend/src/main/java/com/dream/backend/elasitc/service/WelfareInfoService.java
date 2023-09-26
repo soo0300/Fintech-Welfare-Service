@@ -32,8 +32,7 @@ import java.util.List;
 public class WelfareInfoService extends ElasticConnectionService {
 
     public void insertDocument(Long id, String name, String desc) {
-        WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, "");
-        welfareInfo.setKeywords(this.tokenized(desc));
+        WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, tokenized(desc));
         try {
             IndexResponse response = esClient.index(i -> i
                     .index("welfare_info")
@@ -99,6 +98,39 @@ public class WelfareInfoService extends ElasticConnectionService {
 
             return results;
         } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<WelfareInfo> mustSearchDocument(String text) {
+        List<WelfareInfo> results = new ArrayList<>();
+        SearchResponse<WelfareInfo> response;
+        String qur = tokenizeOnlyProper(text);
+
+        try {
+            response = esClient.search(s -> s
+                            .index("welfare_info")
+                            .query(q -> q
+                                    .bool(b -> b
+                                            .must(m -> m
+                                                    .match(t -> t
+                                                            .field("keywords")
+                                                            .query(qur))))),
+                    WelfareInfo.class
+            );
+
+            List<Hit<WelfareInfo>> hits = response.hits().hits();
+            for(Hit<WelfareInfo> hit: hits) {
+                WelfareInfo welfareInfo = hit.source();
+                welfareInfo.setScore(hit.score());
+                results.add(welfareInfo);
+            }
+
+            return results;
+
+        } catch(IOException e) {
             e.printStackTrace();
         }
 
@@ -188,7 +220,7 @@ public class WelfareInfoService extends ElasticConnectionService {
 //            ));
 
 //            필터 추가: 어미, 감탄사, 조사, 의존명사, 대명사, 일반부사, 접속부사, 동사, 동사 파생 접미사, 보조 용언
-            AnalyzeRequest request = AnalyzeRequest.withIndexAnalyzer("korean_analyzer", "nori_analyzer", text);
+            AnalyzeRequest request = AnalyzeRequest.withIndexAnalyzer("korean_analyzer_stopwords", "nori_analyzer", text);
             AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
 
             List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
@@ -198,6 +230,24 @@ public class WelfareInfoService extends ElasticConnectionService {
             }
 //            Response response = restClient.performRequest(request);
 //            System.out.println(EntityUtils.toString(response.getEntity()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    public String tokenizeOnlyProper(String text) {
+        String results = "";
+        try {
+            // 고유 명사만 추출하는 analyzer
+            AnalyzeRequest request = AnalyzeRequest.withIndexAnalyzer("korean_proper", "nori_analyzer", text);
+            AnalyzeResponse response = client.indices().analyze(request, RequestOptions.DEFAULT);
+
+            List<AnalyzeResponse.AnalyzeToken> tokens = response.getTokens();
+
+            for (AnalyzeResponse.AnalyzeToken token : tokens) {
+                results += token.getTerm() + " ";
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

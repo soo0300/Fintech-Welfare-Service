@@ -67,7 +67,6 @@ public class TransactionService {
     public List<Transaction> getTransactionFromLastTime(Long userId) {
         Long accountNumber = userRepository.findById(userId).get().getAccount();
 //        Optional<Account> account = accountRepository.findById(accountNumber);
-        System.out.println(accountNumber);
         alarmService.setClient();
         LocalDateTime startTime = new Timestamp(alarmService.getDateTime(userId)).toLocalDateTime();
         alarmService.closeAllClient();
