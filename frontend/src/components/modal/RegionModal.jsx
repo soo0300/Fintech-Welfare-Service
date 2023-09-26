@@ -43,24 +43,6 @@ const SecondKeyBox = styled.div`
 // 지역 모달
 function RegionModal({ setRegionKeyInParent, onClose }) {
   const [regionKey, setRegionKey] = useState();
-  const [residenceInfo, setResidenceInfo] = useState("");
-  const [residenceBack, setResidenceBack] = useState("");
-
-  console.log(regionKey);
-
-  const handleResidenceChange = (e) => {
-    const residenceValue = e.target.value;
-    if (residenceValue.length <= 6) {
-      setResidenceInfo(residenceValue);
-    }
-  };
-  const handleResidenceBackChange = (e) => {
-    const residenceValue = e.target.value;
-    if (residenceValue.length <= 1 && residenceValue <= 4) {
-      setResidenceBack(residenceValue);
-    }
-  };
-
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [subRegions, setSubRegions] = useState([]);
@@ -98,7 +80,7 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   useEffect(() => {
-    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    const filteredNames = jsonData.slice(0, 18).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
 
@@ -115,7 +97,11 @@ function RegionModal({ setRegionKeyInParent, onClose }) {
   };
 
   const handleButtonClick = () => {
-    setRegionKeyInParent(regionKey);
+    if (regionKey) {
+      setRegionKeyInParent(regionKey);
+    } else if (regionKey === 0) {
+      setRegionKeyInParent("");
+    }
     onClose(); // 모달 닫기
   };
 

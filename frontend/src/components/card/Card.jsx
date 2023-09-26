@@ -13,6 +13,7 @@ const StyledCard = styled.div`
   text-align: center;
   border-radius: 10px;
   background-color: ${(props) => props.backgroundColor || getRandomColor()};
+  margin-bottom: 2%;
 `;
 
 const Poster = styled.img`
@@ -133,7 +134,7 @@ function Modal({ data, onClose }) {
           <p>모집 기한 : {data.start_date}</p>
           <p>기관명 : {data.organization}</p>
           <p>
-            총 지원 금액 : {data.support_fund}원 / {data.support_period}달
+            총 지원 금액 : {data.support_fund}원 * {data.support_period}달
           </p>
           <p>제출 서류 : {data.submission}</p>
           <p>신청 방법 : {data.route}</p>

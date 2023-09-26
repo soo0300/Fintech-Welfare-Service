@@ -205,6 +205,8 @@ function Business({ userInput, selectedTags }) {
     if (regionKey) {
       const curRegion = jsonData.find((item) => item.region_key === regionKey);
       setSelectedRegion(curRegion.name);
+    } else {
+      setSelectedRegion("전국");
     }
     // 선택된 해시태그로 더 필터링
     if (selectedTags.length > 0) {
