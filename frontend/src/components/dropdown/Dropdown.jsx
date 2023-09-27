@@ -4,8 +4,8 @@ import styled from "styled-components";
 const DropdownContainer = styled.div`
   background-color: none;
   width: 100%;
-  height: 100px;
-  font-size: 12px;
+  height: 160px;
+  font-size: 18px;
   color: black;
   overflow-y: auto;
   scrollbar-width: thin;
@@ -16,6 +16,7 @@ const DropdownUl = styled.ul`
   list-style: none;
   height: auto;
   max-height: 100%;
+  padding-left: 0;
 `;
 
 const DropdownItem = styled.li`
