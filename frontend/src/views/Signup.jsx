@@ -35,7 +35,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: 50%;
+  height: 68%;
 `;
 
 const Line = styled.div`
@@ -52,7 +52,7 @@ const LineStatus = styled.div`
 `;
 const FooterBox = styled.div`
   width: 90%;
-  height: 28%;
+  height: 7%;
   display: flex;
   bottom: 0px;
 `;
@@ -140,10 +140,11 @@ const Signup = () => {
         {!isEmailValid && email && name && (
           <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
         )}
+        <p style={{ fontSize: "14px" }}>비밀번호</p>
         <Input
           width="100%"
           height="50px"
-          placeholder="비밀번호 입력 ( 8자리 이상, 문자/숫자/기호 )"
+          placeholder="영문,숫자,특수기호를 포함한 8~15자리"
           fontFamily="surround"
           border-radius="none"
           border="none"

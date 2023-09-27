@@ -6,21 +6,12 @@ import ChangePwd from "../components/mydata/ChangePwd";
 import ChangeRegion from "../components/mydata/ChangeRegion";
 import ChangeEnd from "../components/mydata/ChangeEnd";
 import jsonData from "../assets/data/region.json";
-import Logo from "../components/Logo/Logo";
-import Nav from "../components/Nav/Nav";
-
-const Header = styled.div`
-  width: 90%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+import Header from "../components/header/Header";
 
 //정보박스
 const InfoBox = styled.div`
   width: 90%;
-  margin-top: 20px;
+  margin-top: 70px;
   margin-bottom: 20px;
   border-radius: 20px;
   display: flex;
@@ -80,10 +71,7 @@ function MyPage() {
   }, []);
   return (
     <>
-      <Header>
-        <Logo></Logo>
-        <Nav></Nav>
-      </Header>
+      <Header />
       <InfoBox>
         <TextBox>
           <p>{info.name}님의 정보</p>

@@ -39,7 +39,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: 50%;
+  height: 90%;
 `;
 
 const Line = styled.div`
@@ -60,6 +60,7 @@ const FooterBox = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 `;
 const BirthBox = styled.div`
   display: flex;
@@ -89,7 +90,6 @@ const SecondKeyBox = styled.div`
 `;
 const Info = () => {
   const [regionKey, setRegionKey] = useState();
-  const [myData, setMydata] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
@@ -116,9 +116,6 @@ const Info = () => {
       minutes +
       ":" +
       seconds;
-    if (isMydata) {
-      setMydata(true);
-    }
     const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
     const endDate = selectedDate + "T23:59:59";
@@ -130,7 +127,7 @@ const Info = () => {
       residenceInfo: Number(residenceInfo.concat(residenceBack)),
       endDate: endDate,
       isEnded: isEnded,
-      myData: myData,
+      myData: isMydata ? 1 : 0,
       createdDate: createdDate,
     };
     console.log(requestData);
@@ -201,7 +198,6 @@ const Info = () => {
     setRegions(filteredNames);
   }, []);
 
-  // 날짜를 저장할 상태 변수
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isFirstDropdownView, setIsFirstDropdownView] = useState(false);
   const [isSecondDropdownView, setIsSecondDropdownView] = useState(false);
@@ -220,7 +216,6 @@ const Info = () => {
   const handleClickSecondDropdown = () => {
     setIsSecondDropdownView(!isSecondDropdownView);
   };
-
   return (
     <InfoContainer>
       <HeaderBox>
@@ -231,7 +226,7 @@ const Info = () => {
         <Line />
         <LineStatus
           initial={{ left: 0 }}
-          animate={{ left: "35vw" }}
+          animate={{ left: "50%" }}
           transition={{ duration: 0.5 }}
         />
       </LineBox>
@@ -240,6 +235,7 @@ const Info = () => {
           맞춤 정보를 제공하기 위해
           <br /> 입력해주세요 :)
         </h3>
+        <p style={{ fontSize: "18px" }}>생년월일</p>
         <BirthBox>
           <Input
             type="number"
@@ -271,7 +267,7 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
-        <p style={{ fontSize: "10px" }}>보호종료일</p>
+        <p style={{ fontSize: "18px" }}>보호종료일</p>
         <DateBox>
           <Input
             type="date"
@@ -287,6 +283,7 @@ const Info = () => {
             onChange={handleDateChange}
           />
         </DateBox>
+        <p style={{ fontSize: "18px" }}>거주지</p>
         <RegionBox>
           <FirstKeyBox>
             <Button
@@ -296,6 +293,7 @@ const Info = () => {
               color="black"
               width="100%"
               fontFamily="surround"
+              fontSize="18px"
             />
             {isFirstDropdownView && (
               <Dropdown items={regions} onItemClick={handleRegionSelect} />
@@ -309,12 +307,13 @@ const Info = () => {
               color="black"
               width="100%"
               fontFamily="surround"
+              fontSize="18px"
             />
             {isSecondDropdownView && (
               <Dropdown
                 items={subRegions}
                 onItemClick={handleSubRegionSelect}
-                height="14px"
+                height="20px"
               />
             )}
           </SecondKeyBox>
@@ -323,7 +322,7 @@ const Info = () => {
       <FooterBox>
         <Button
           onClick={() => movePage(true)}
-          width="100%"
+          width="45%"
           height="100%"
           fontSize="15px"
           background="success"
@@ -333,7 +332,7 @@ const Info = () => {
         </Button>
         <Button
           onClick={() => movePage(false)}
-          width="100%"
+          width="45%"
           height="100%"
           fontSize="15px"
           fontFamily="surround"

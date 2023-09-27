@@ -1,17 +1,10 @@
 import React from "react";
-import Logo from "../components/Logo/Logo";
 import styled from "styled-components";
 import MyData from "../components/mydata/MyData";
-import Nav from "../components/Nav/Nav";
+import Header from "../components/header/Header";
 
-const Header = styled.div`
-  width: 90%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
 const Content = styled.div`
+  margin-top: 70px;
   width: 90%;
   height: 100%;
   overflow-y: scroll;
@@ -24,10 +17,7 @@ const Content = styled.div`
 function MyPage() {
   return (
     <>
-      <Header>
-        <Logo></Logo>
-        <Nav></Nav>
-      </Header>
+      <Header />
       <Content>
         <MyData />
       </Content>

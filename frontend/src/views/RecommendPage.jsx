@@ -6,19 +6,12 @@ import Button from "../components/button/Button";
 import Card from "../components/card/Card";
 import Nav from "../components/Nav/Nav";
 import Logo from "../components/Logo/Logo";
+import Header from "../components/header/Header";
 import RegionModal from "../components/modal/RegionModal";
 import jsonData from "../assets/data/region.json";
 
 // API
 import { AllWelfare } from "../api/welfare/Welfare";
-
-const Header = styled.div`
-  width: 90%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
 
 const RecommandPageBody = styled.div`
   display: flex;
@@ -27,6 +20,7 @@ const RecommandPageBody = styled.div`
   height: 100%;
   overflow-y: scroll;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const SearchBarContainer = styled.div`
@@ -257,10 +251,7 @@ function RecommendPage() {
 
   return (
     <>
-      <Header>
-        <Logo />
-        <Nav />
-      </Header>
+      <Header />
       <RecommandPageBody>
         <SearchBar userInput={userInput} setUserInput={setUserInput} />
         <Tag selectedTags={selectedTags} setSelectedTags={setSelectedTags} />

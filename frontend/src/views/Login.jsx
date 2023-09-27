@@ -79,6 +79,10 @@ const Login = () => {
         console.log("로그인 성공:", response.data);
         localStorage.setItem("id", response.data.data.id);
         localStorage.setItem("myData", response.data.data.myData);
+        const message = [
+          ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
+        ];
+        localStorage.setItem("message", [JSON.stringify(message)]);
         navigate("/business");
       } else {
         console.error("로그인 실패:", response.data);
