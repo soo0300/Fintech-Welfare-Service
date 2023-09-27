@@ -10,7 +10,11 @@ const BusinessHead = styled.div`
   justify-content: space-evenly;
   height: 70px;
   width: 100%;
+  max-width: 500px;
   background-color: #f2f5fe;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
 `;
 
 function Header() {

@@ -23,8 +23,8 @@ const BusinessContainer = styled.div`
   flex-direction: column;
   width: 90%;
   height: calc(100%-154px);
-  /* padding-top: 30px; */
-  padding-bottom: 94px;
+  margin-top: 70px;
+  margin-bottom: 10px;
   overflow-y: scroll;
   overflow-x: hidden;
 `;
