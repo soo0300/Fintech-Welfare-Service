@@ -21,6 +21,7 @@ const Container = styled.div`
   align-items: center;
   overflow: hidden;
   white-space: pre-line;
+  max-width: 500px;
 `;
 
 // 챗봇 상단바
@@ -33,12 +34,18 @@ const ChatHeader = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  max-width: 500px;
 `;
 
 // 채팅창
 const ChatContent = styled.div`
   width: 100%;
-  height: calc(100% - 150px);
+  margin-top: 70px;
+  margin-bottom: 70px;
+  height: calc(100vh - 140px);
   display: flex;
   overflow-y: scroll;
   flex-direction: column;
@@ -52,6 +59,11 @@ const Footer = styled.div`
   align-items: center;
   width: 100%;
   height: 70px;
+  bottom: 0;
+  position: fixed;
+  z-index: 999;
+  background-color: #f2f5fe;
+  max-width: 500px;
 `;
 
 const ChatForm = styled.form`
@@ -124,7 +136,6 @@ function ChatBot() {
     ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
   ]);
   const [myMessage, setMyMessage] = useState("");
-  const [item, setItem] = useState([]);
   const chatScrollRef = useRef(null);
 
   const navigate = useNavigate();
@@ -150,8 +161,6 @@ function ChatBot() {
       ]);
     } else {
       const detail = await DetailWelfare(res.data[0].welfareId);
-      console.log(detail);
-      setItem(detail.data);
       setMessage([
         ...message,
         [myMessage, "notbot"],

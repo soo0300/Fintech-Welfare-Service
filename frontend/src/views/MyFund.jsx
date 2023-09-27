@@ -1,8 +1,6 @@
 import React from "react";
-import Logo from "../components/Logo/Logo";
 import styled from "styled-components";
 import MyData from "../components/mydata/MyData";
-import Nav from "../components/Nav/Nav";
 import Header from "../components/header/Header";
 
 const Content = styled.div`

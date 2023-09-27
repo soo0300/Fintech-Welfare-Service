@@ -6,8 +6,6 @@ import ChangePwd from "../components/mydata/ChangePwd";
 import ChangeRegion from "../components/mydata/ChangeRegion";
 import ChangeEnd from "../components/mydata/ChangeEnd";
 import jsonData from "../assets/data/region.json";
-import Logo from "../components/Logo/Logo";
-import Nav from "../components/Nav/Nav";
 import Header from "../components/header/Header";
 
 //정보박스
