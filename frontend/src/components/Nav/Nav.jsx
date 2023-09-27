@@ -44,7 +44,7 @@ export default function Nav() {
         size="sm"
         anchor={"right"}
         open={open}
-        sx={{ fontFamily: "surround" }}
+        sx={{ fontFamily: "surround", zIndex: "9999" }}
         onClose={() => setOpen(false)}
       >
         <Box

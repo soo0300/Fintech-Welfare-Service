@@ -20,6 +20,7 @@ const RecommandPageBody = styled.div`
   height: 100%;
   overflow-y: scroll;
   align-items: center;
+  margin-bottom: 10px;
 `;
 
 const SearchBarContainer = styled.div`

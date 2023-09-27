@@ -39,7 +39,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: 70%;
+  height: 90%;
 `;
 
 const Line = styled.div`
