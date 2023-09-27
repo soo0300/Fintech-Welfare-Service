@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 // import Button from "../button/Button";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { ReactComponent as RefreshIcon } from "../../assets/img/Refresh.svg";
 import { ReactComponent as ThreeDotIcon } from "../../assets/img/ThreeDot.svg";
 import { ReactComponent as MailIcon } from "../../assets/img/MailIcon.svg";
 import { Button } from "@mui/material";
+import { BankAll, RefreshUser } from "../../api/mydata/MydataAccount";
 
 //마이데이터 버튼박스
 const ButtonBox = styled.div`
@@ -133,36 +134,40 @@ const MoneyText = styled.p`
 function MyData() {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-  const [showChart, setShowChart] = useState(false);
-  const [message, setMessage] = useState([
-    { idx: 1, money: 5000, org: "광주" },
-    { idx: 2, money: 10000000, org: "SSAFY" },
-    { idx: 3, money: 500000, org: "돈줘요" },
-  ]);
+  const [message, setMessage] = useState([]);
   const [myData, setMyData] = useState(localStorage.getItem("myData"));
 
   const month = new Date().getMonth();
 
-  const dataConnect = () => {
+  const refreshHandler = async () => {
     setLoading(true);
+    const res = await RefreshUser();
+    localStorage.setItem("myData", true);
+    console.log(res);
     setTimeout(() => {
       setLoading(false);
-      setShowChart(true);
-    }, 3000);
-  };
-
-  const refreshHandler = () => {
-    setLoading(true);
-    // const res = await
-    setTimeout(() => {
-      setLoading(false);
-      setShowChart(true);
+      setMyData(localStorage.getItem("myData"));
     }, 3000);
   };
 
   const alertHandler = () => {
     setShowAlert(!showAlert);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (myData === "true") {
+        try {
+          const res = await BankAll();
+          setMessage(res.data.list);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+
+    fetchData();
+  }, [myData]);
 
   return (
     <>
@@ -171,7 +176,7 @@ function MyData() {
           <ButtonBox>
             <Loading />
           </ButtonBox>
-        ) : showChart ? (
+        ) : myData === "true" ? (
           <ChartBox>
             <TextBox>
               <p>월별 지원금 현황</p>
@@ -199,7 +204,7 @@ function MyData() {
           </ChartBox>
         ) : (
           <ButtonBox>
-            <Button variant="contained" size="large" onClick={dataConnect}>
+            <Button variant="contained" size="large" onClick={refreshHandler}>
               마이데이터 연결하기
             </Button>
             <span> *마이데이터를 연결하면 자동으로</span>
@@ -218,6 +223,7 @@ function MyData() {
           <Loading />
         </ButtonBox>
       ) : (
+        message.length > 0 &&
         message.map((alert) => (
           <AlertBox key={alert.idx}>
             <AlertMail>
@@ -226,10 +232,11 @@ function MyData() {
 
             <AlertTextBox>
               <AlertText>
-                <div>{alert.org}</div>
+                <div>{alert.tranDesc}</div>
               </AlertText>
               <AlertMoney>
-                <MoneyText>{alert.money}₩</MoneyText>이 입금 되었습니다.
+                <MoneyText>{alert.tranAmt}₩</MoneyText>이 {alert.type.desc}
+                되었습니다.
               </AlertMoney>
             </AlertTextBox>
           </AlertBox>
