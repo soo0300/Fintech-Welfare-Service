@@ -123,24 +123,26 @@ function Today() {
   );
 }
 
-const CardContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 10px;
-  margin-left: 6%;
-`;
-
 function ChatBot() {
-  const [message, setMessage] = useState([
-    ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
-  ]);
+  const [message, setMessage] = useState(
+    JSON.parse(localStorage.getItem("message"))
+  );
+  console.log(message);
   const [myMessage, setMyMessage] = useState("");
   const chatScrollRef = useRef(null);
 
   const navigate = useNavigate();
   const moveBack = () => {
     navigate("/business");
+  };
+
+  const resetData = () => {
+    localStorage.removeItem("message");
+    const message = [
+      ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
+    ];
+    localStorage.setItem("message", [JSON.stringify(message)]);
+    window.location.reload();
   };
 
   const changeMessage = (e) => {
@@ -167,16 +169,12 @@ function ChatBot() {
         [`지원사업을 추천해드릴게요!`, "bot"],
         [`${res.data[0].name}`, "bot"],
         [
-          <CardContainer>
-            <Card
-              key={detail.data.id}
-              id={detail.data.id}
-              title={detail.data.name}
-              region={detail.data.region_key}
-              support_period={detail.data.start_date}
-            />
-          </CardContainer>,
-          "bot",
+          `${detail.data.id}`,
+          `${detail.data.id}`,
+          `${detail.data.name}`,
+          `${detail.data.region_key}`,
+          `${detail.data.start_date}`,
+          "data",
         ],
       ]);
     }
@@ -187,6 +185,7 @@ function ChatBot() {
     if (chatScrollRef.current) {
       chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
     }
+    localStorage.setItem("message", JSON.stringify(message));
   }, [message]);
 
   return (
@@ -200,6 +199,15 @@ function ChatBot() {
           <BotIcon />
         </StyledEllipseIcon>
         <h3>드림이</h3>
+        <Button
+          width="150px"
+          color="black"
+          background="none"
+          onClick={resetData}
+          fontSize="12px"
+        >
+          채팅종료
+        </Button>
       </ChatHeader>
 
       <ChatContent ref={chatScrollRef}>
@@ -213,6 +221,21 @@ function ChatBot() {
                     <BotIcon />
                   </StyledEllipseIcon>
                   <div className="message last">{data[0]}</div>
+                </div>
+              </>
+            ) : data.length > 2 ? (
+              <>
+                <div className="yours messages">
+                  <StyledEllipseIcon>
+                    <BotIcon />
+                  </StyledEllipseIcon>
+                  <Card
+                    key={data[0]}
+                    id={data[1]}
+                    title={data[2]}
+                    region={data[3]}
+                    support_period={data[4]}
+                  />
                 </div>
               </>
             ) : (
