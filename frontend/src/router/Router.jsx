@@ -11,15 +11,21 @@ import Info from "../views/Info";
 import PrivateRoute from "./PrivateRoute";
 import PublicRoute from "./PublicRoute";
 import MyFund from "../views/MyFund";
+import Modal from "../components/card/Card";
 
 const Router = () => {
   return (
     <>
       <Routes>
         <Route Component={PrivateRoute}>
-          <Route path="/business" element={<Business />} />
+          <Route path="/business" element={<Business />}>
+            <Route path="/business/detail" element={<Modal />} />
+          </Route>
+
           <Route path="/mypage" element={<MyPage />} />
-          <Route path="/chatbot" element={<ChatBot />} />
+          <Route path="/chatbot" element={<ChatBot />}>
+            <Route path="/chatbot/detail" element={<Modal />} />
+          </Route>
           <Route path="/recommend" element={<RecommendPage />} />
           <Route path="/myfund" element={<MyFund />} />
         </Route>
