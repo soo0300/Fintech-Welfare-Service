@@ -7,30 +7,16 @@ import { ReactComponent as SendIcon } from "../assets/img/Send_icon.svg";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
 import "./ChatBot.css";
-
 import { ChatBotAxios } from "../api/chatbot/Chatbot";
 import Card from "../components/card/Card";
 import { DetailWelfare } from "../api/welfare/Welfare";
-
-// 전체 컨테이너
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-  white-space: pre-line;
-  max-width: 500px;
-`;
 
 // 챗봇 상단바
 const ChatHeader = styled.div`
   width: 100%;
   height: 70px;
-  border-color: black;
   background-color: white;
-  box-shadow: 0px 0px 10px 0px grey;
+  box-shadow: 0px 0px 15px 0px grey;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -45,11 +31,11 @@ const ChatContent = styled.div`
   width: 100%;
   margin-top: 70px;
   margin-bottom: 70px;
-  height: calc(100vh - 140px);
+  height: calc(100% - 140px);
   display: flex;
-  overflow-y: scroll;
   flex-direction: column;
   font-size: 14px;
+  white-space: pre-line;
 `;
 
 //채팅입력창
@@ -75,7 +61,7 @@ const ChatForm = styled.form`
   height: auto;
   border-radius: 30px;
   font-size: 18px;
-  overflow: hidden;
+  box-shadow: 0px 0px 5px 0px grey;
 `;
 
 const StyledTextarea = styled(TextareaAutosize)`
@@ -88,16 +74,22 @@ const StyledTextarea = styled(TextareaAutosize)`
   &:focus {
     outline: none;
   }
+  font-family: "surround";
 `;
 
 const StyledEllipseIcon = styled.div`
-  width: 50px;
-  height: 50px;
+  box-shadow: 0px 0px 5px 0px grey;
+  width: 40px;
+  height: 40px;
   background-color: whitesmoke;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+  z-index: 999;
+`;
+
+const BlankIcon = styled.div`
+  width: 40px;
+  height: 40px;
+  z-index: 999;
 `;
 
 const TodayBox = styled.div`
@@ -127,9 +119,8 @@ function ChatBot() {
   const [message, setMessage] = useState(
     JSON.parse(localStorage.getItem("message"))
   );
-  console.log(message);
   const [myMessage, setMyMessage] = useState("");
-  const chatScrollRef = useRef(null);
+  const messageEndRef = useRef(null);
 
   const navigate = useNavigate();
   const moveBack = () => {
@@ -154,12 +145,11 @@ function ChatBot() {
   const sendMessage = async (e) => {
     e.preventDefault();
     const res = await ChatBotAxios(myMessage);
-    console.log(res);
     if (res.data.length === 0) {
       setMessage([
         ...message,
         [myMessage, "notbot"],
-        ["결과를 찾을 수 없습니다ㅠㅠ\n정확한 정보를 입력해주세요.", "bot"],
+        ["결과를 찾을 수 없습니다ㅠㅠ\n정확한 키워드를 입력해주세요.", "bot"],
       ]);
     } else {
       const detail = await DetailWelfare(res.data[0].welfareId);
@@ -180,16 +170,19 @@ function ChatBot() {
     }
     setMyMessage("");
   };
+  const moveRef = () => {
+    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+  };
 
   useEffect(() => {
-    if (chatScrollRef.current) {
-      chatScrollRef.current.scrollTop = chatScrollRef.current.scrollHeight;
-    }
     localStorage.setItem("message", JSON.stringify(message));
+    setTimeout(() => {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }, 100);
   }, [message]);
 
   return (
-    <Container>
+    <>
       <ChatHeader>
         <div></div>
         <Button width="40px" height="40px" background="none" onClick={moveBack}>
@@ -204,13 +197,12 @@ function ChatBot() {
           color="black"
           background="none"
           onClick={resetData}
-          fontSize="12px"
+          fontSize="14px"
         >
           채팅종료
         </Button>
       </ChatHeader>
-
-      <ChatContent ref={chatScrollRef}>
+      <ChatContent>
         <Today />
         {message.map((data, index) => (
           <div key={index}>
@@ -226,9 +218,8 @@ function ChatBot() {
             ) : data.length > 2 ? (
               <>
                 <div className="yours messages">
-                  <StyledEllipseIcon>
-                    <BotIcon />
-                  </StyledEllipseIcon>
+                  <BlankIcon></BlankIcon>
+
                   <Card
                     key={data[0]}
                     id={data[1]}
@@ -245,6 +236,7 @@ function ChatBot() {
             )}
           </div>
         ))}
+        <div ref={messageEndRef}></div>
       </ChatContent>
 
       <Footer>
@@ -254,13 +246,14 @@ function ChatBot() {
             placeholder=""
             value={myMessage}
             onChange={changeMessage}
+            onFocus={moveRef}
           />
           <Button width="50px" height="50px" background="none" type="submit">
             <SendIcon />
           </Button>
         </ChatForm>
       </Footer>
-    </Container>
+    </>
   );
 }
 

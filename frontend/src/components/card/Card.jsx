@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // 카드
 const StyledCard = styled.div`
@@ -120,7 +120,6 @@ function Modal({ data, onClose }) {
     window.addEventListener("popstate", function (e) {
       e.preventDefault();
       closeModal();
-      console.log("뒤로가기 동작이 발생했습니다.");
     });
   });
 
@@ -179,11 +178,14 @@ const Card = (props) => {
         const res = await DetailWelfare(id);
         setWelfareData(res.data);
         setModalVisible(true);
-        navigate(`${location.pathname}/detail`);
+        if (!location.pathname.includes("detail")) {
+          navigate(`${location.pathname}/detail`);
+        }
       } catch (e) {
         console.error(e);
       }
     } else {
+      navigate(`${location.pathname.slice(0, -7)}`);
     }
   }
 
