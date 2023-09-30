@@ -1,7 +1,8 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 // 카드
 const StyledCard = styled.div`
@@ -115,6 +116,14 @@ function Modal({ data, onClose }) {
     setFullscreenVisible(true);
   };
 
+  useEffect(() => {
+    window.addEventListener("popstate", function (e) {
+      e.preventDefault();
+      closeModal();
+      console.log("뒤로가기 동작이 발생했습니다.");
+    });
+  });
+
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
@@ -151,6 +160,8 @@ function Modal({ data, onClose }) {
 }
 
 const Card = (props) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { id, cardWidth, cardHeight, fontSize, region, support_period, title } =
     props;
 
@@ -161,16 +172,18 @@ const Card = (props) => {
   const supportPeriodValue = support_period || "기간 없음";
 
   // 데이터 가져오기
-  async function handleCardClick() {
+  async function handleCardClick(e) {
     // 모달이 열려있지 않을 때만 데이터를 가져오고 모달을 엽니다.
     if (!modalVisible) {
       try {
         const res = await DetailWelfare(id);
         setWelfareData(res.data);
         setModalVisible(true);
+        navigate(`${location.pathname}/detail`);
       } catch (e) {
         console.error(e);
       }
+    } else {
     }
   }
 
