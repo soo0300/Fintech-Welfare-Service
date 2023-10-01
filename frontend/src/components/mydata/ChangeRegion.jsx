@@ -23,6 +23,7 @@ const FormBox = styled.form`
   flex-direction: column;
   border-radius: 20px;
   background-color: white;
+  box-shadow: 3px 3px 3px 3px lightgray;
 `;
 
 const TextBox = styled.div`
@@ -49,7 +50,7 @@ function ChangeRegion() {
   };
 
   useEffect(() => {
-    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    const filteredNames = jsonData.slice(1, 18).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
 
