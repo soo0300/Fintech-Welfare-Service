@@ -57,7 +57,7 @@ public class BenefitService {
             //welfareId 를 통해서 Welfare 객체를 가져온다.
             Optional<Welfare> welfare = welfareRepository.findById(welfareId);
             //Response 형태로 바꾼다.
-            list.add(toResponse(welfare,benefit.getStatus()));
+            list.add(toResponse(welfare));
         }
         return list;
     }
@@ -71,7 +71,7 @@ public class BenefitService {
             //welfareId 를 통해서 Welfare 객체를 가져온다.
             Optional<Welfare> welfare = welfareRepository.findById(welfareId);
             //Response 형태로 바꾼다.
-            list.add(toResponse(welfare, benefit.getStatus()));
+            list.add(toResponse(welfare));
         }
         return list;
     }
@@ -107,7 +107,7 @@ public class BenefitService {
                 .build();
     }
 
-    private BenefitResponse toResponse(Optional<Welfare> welfare, int status) {
+    private BenefitResponse toResponse(Optional<Welfare> welfare) {
         return BenefitResponse.builder()
                 .name(welfare.get().getName())
                 .organization(welfare.get().getOrganization())
@@ -122,7 +122,6 @@ public class BenefitService {
                 .support_period(welfare.get().getSupport_period())
                 .etc(welfare.get().getEtc())
                 .id(welfare.get().getId())
-                .status(status)
                 .build();
 
     }
