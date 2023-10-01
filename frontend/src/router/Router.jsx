@@ -26,7 +26,9 @@ const Router = () => {
           <Route path="/chatbot" element={<ChatBot />}>
             <Route path="/chatbot/detail" element={<Modal />} />
           </Route>
-          <Route path="/recommend" element={<RecommendPage />} />
+          <Route path="/recommend" element={<RecommendPage />}>
+            <Route path="/recommend/detail" element={<Modal />} />
+          </Route>
           <Route path="/myfund" element={<MyFund />} />
         </Route>
         <Route Component={PublicRoute}>

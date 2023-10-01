@@ -61,7 +61,7 @@ const ChatForm = styled.form`
   height: auto;
   border-radius: 30px;
   font-size: 18px;
-  box-shadow: 0px 0px 5px 0px grey;
+  box-shadow: 0px 5px 5px 0px lightgray;
 `;
 
 const StyledTextarea = styled(TextareaAutosize)`
@@ -100,6 +100,7 @@ const TodayBox = styled.div`
   background-color: rgba(255, 255, 255, 0.5);
   color: black;
   border-radius: 20px;
+  border: 1px solid lightgray;
 `;
 
 // 오늘날짜
@@ -171,7 +172,9 @@ function ChatBot() {
     setMyMessage("");
   };
   const moveRef = () => {
-    messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }, 300);
   };
 
   useEffect(() => {
@@ -243,10 +246,9 @@ function ChatBot() {
         <ChatForm onSubmit={sendMessage}>
           <StyledTextarea
             required
-            placeholder=""
             value={myMessage}
             onChange={changeMessage}
-            onFocus={moveRef}
+            onClick={moveRef}
           />
           <Button width="50px" height="50px" background="none" type="submit">
             <SendIcon />
