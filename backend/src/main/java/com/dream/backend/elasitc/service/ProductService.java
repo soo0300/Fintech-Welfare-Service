@@ -1,33 +1,20 @@
 package com.dream.backend.elasitc.service;
 
-import ch.qos.logback.core.joran.conditional.ElseAction;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.GetResponse;
-import co.elastic.clients.elasticsearch.core.IndexResponse;
-import co.elastic.clients.elasticsearch.indices.analyze.AnalyzeToken;
 import co.elastic.clients.json.jackson.JacksonJsonpMapper;
 import co.elastic.clients.transport.ElasticsearchTransport;
 import co.elastic.clients.transport.rest_client.RestClientTransport;
-import com.dream.backend.elasitc.entity.Broccolisearch;
-import com.dream.backend.elasitc.entity.Product;
-import com.dream.backend.elasitc.entity.WelfareInfo;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.Header;
 import org.apache.http.HttpHost;
-import org.apache.http.entity.ContentType;
 import org.apache.http.message.BasicHeader;
-import org.apache.http.nio.entity.NStringEntity;
-import org.apache.http.util.EntityUtils;
-import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.client.*;
 import org.elasticsearch.client.indices.AnalyzeRequest;
 import org.elasticsearch.client.indices.AnalyzeResponse;
-import org.jboss.jandex.Index;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
