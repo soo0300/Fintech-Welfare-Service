@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +37,10 @@ public class TransactionController {
 
     @GetMapping("/range/{account_number}/{start_date}/{end_date}")
     public TransactionResponse getRangedTransaction(
+            @PathVariable("account_number") Long account,
             @PathVariable("start_date") String start,
-            @PathVariable("end_date") String end,
-            @PathVariable("account_number") Long account) {
+            @PathVariable("end_date") String end) {
+        System.out.println(end);
         List<TransactionObject> list = new ArrayList<>();
 
         int year = Integer.parseInt(start.substring(0, 4));
@@ -47,13 +49,15 @@ public class TransactionController {
 
         LocalDate sDate = LocalDate.of(year, month, day);
 
-        year = Integer.parseInt(end.substring(0, 4));
-        month = Integer.parseInt(end.substring(5, 7));
-        day = Integer.parseInt(end.substring(8, 10));
+        int eYear = Integer.parseInt(end.substring(0, 4));
+        int eMonth = Integer.parseInt(end.substring(5, 7));
+        int eDay = Integer.parseInt(end.substring(8, 10));
 
-        LocalDate eDate = LocalDate.of(year, month, day + 1);
+        LocalDate eDate = LocalDate.of(eYear, eMonth, eDay);
 
         List<Transaction> result =  transactionService.getTransactionByDateRange(sDate.atStartOfDay(), eDate.atStartOfDay(), account);
+       if(result.isEmpty()) return null;
+
         Account acc = result.get(0).getAccount();
         for(Transaction t: result) {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
@@ -96,6 +100,26 @@ public class TransactionController {
         alarmService.setClient();
         alarmService.insertDate(userId);
         alarmService.closeAllClient();
+
+        return new TransactionResponse(account, list);
+    }
+
+    @GetMapping("/monthly/{user_id}")
+    public TransactionResponse getTransactionFromLast30days(@PathVariable("user_id") Long userId) {
+
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime thirtyDaysAgo = today.minusDays(30);
+
+        List<TransactionObject> list = new ArrayList<>();
+        List<Transaction> result = transactionService.getTransactionByDateRange(thirtyDaysAgo, today, userId);
+
+        if(result.isEmpty()) return null;
+        Account account = result.get(0).getAccount();
+        if(account == null) return null;
+
+        for(Transaction t: result) {
+            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+        }
 
         return new TransactionResponse(account, list);
     }
