@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,6 +100,26 @@ public class TransactionController {
         alarmService.setClient();
         alarmService.insertDate(userId);
         alarmService.closeAllClient();
+
+        return new TransactionResponse(account, list);
+    }
+
+    @GetMapping("/monthly/{user_id}")
+    public TransactionResponse getTransactionFromLast30days(@PathVariable("user_id") Long userId) {
+
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime thirtyDaysAgo = today.minusDays(30);
+
+        List<TransactionObject> list = new ArrayList<>();
+        List<Transaction> result = transactionService.getTransactionByDateRange(thirtyDaysAgo, today, userId);
+
+        if(result.isEmpty()) return null;
+        Account account = result.get(0).getAccount();
+        if(account == null) return null;
+
+        for(Transaction t: result) {
+            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+        }
 
         return new TransactionResponse(account, list);
     }
