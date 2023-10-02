@@ -45,9 +45,16 @@ public class UserService {
         User saveduser = userRepository.save(user);
         System.out.println("after Repo" + saveduser.getId());
 
+        int my_data = 1;
+        if (!type) my_data = 0;
         // - - 비즈니스 로직 [사용자 거주 지역 코드]
         Long myRegion = dto.getRegionKey();
+        connectionMyData(user.getId(), my_data);
 
+        //되돌리기
+
+
+/*
         // - - 비즈니스 로직 [만 나이 계산기]
         //user 주민번호 필요, user createdDate 필요
         int my = saveduser.getResidence_info();
@@ -91,15 +98,15 @@ public class UserService {
                         System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + saveduser.getId());
                         //user_id 와 welfare_key가 같으면 바꿔줘.,
                         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(saveduser.getId(), welfare_key);
-                        benefit.get().changeStatusToNum(saveduser,1,welfare.get().getSupport_fund());
+                        benefit.get().changeStatusToNum(saveduser, 1, welfare.get().getSupport_fund());
 
 
                     }
                 }
             }
-
-
         }
+        */
+
         UserLoginResponse response = UserLoginResponse.builder()
                 .id(saveduser.getId())
                 .myData(saveduser.isMy_data())
@@ -108,7 +115,6 @@ public class UserService {
     }
 
     public Optional<User> getUserFund(Long userId) {
-
         return userRepository.findById(userId);
     }
 
@@ -135,13 +141,14 @@ public class UserService {
     }
 
 
-
     //마이데이터 연결하기
     public Long connectionMyData(Long user_id, int my_data) {
         Optional<User> savedUser = userRepository.findById(user_id);
 
         //마이데이터 미연결 회원은 연결상태로 바꿔준다.
-        if(my_data==0){ savedUser.get().changeMyData();}
+        if (my_data == 0) {
+            savedUser.get().changeMyData();
+        }
 
 
         int age = getAge(savedUser.get().getResidence_info(), String.valueOf(savedUser.get().getCreated_date()));
@@ -156,40 +163,44 @@ public class UserService {
             System.out.print(getUserWelfareKey.get(i) + " ");
         }
 
-        //addUserBenefit을 제외시켜준다.
+        benefitService.addUserBenefit(savedUser.get().getId(), getUserWelfareKey, 0);
 
+        //여기서 마이데이터 불러오기 유무
         //마이데이터 불러오기를 한 경우,
         //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
-        for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
-            Long welfare_key = getUserWelfareKey.get(i);
-            Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
-            String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
 
-            System.out.println("거래 내역코드 : " + welfare_code);
+        if (my_data == 0) {
 
-            if (welfare_code != null) {
+            for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
+                Long welfare_key = getUserWelfareKey.get(i);
+                Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
+                String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
+
                 System.out.println("거래 내역코드 : " + welfare_code);
-                Optional<Transaction> transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서 ABC를 찾는다
-                if (transaction.isPresent()) {
-                    System.out.println("거래내역과 복지 코드 매칭: " + transaction.get().getTranDesc());
 
-                    //같은 것이 존재한다면
-                    //+ 기간 설정 필요
-                    //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
+                if (welfare_code != null) {
+                    System.out.println("거래 내역코드 : " + welfare_code);
+                    Optional<Transaction> transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서 ABC를 찾는다
+                    if (transaction.isPresent()) {
+                        System.out.println("거래내역과 복지 코드 매칭: " + transaction.get().getTranDesc());
 
-                    //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
-                    System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + savedUser.get().getId());
-                    //user_id 와 welfare_key가 같으면 바꿔줘.,
-                    Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
-                    benefit.get().changeStatusToNum(savedUser.get(),1,welfare.get().getSupport_fund());
+                        //같은 것이 존재한다면
+                        //+ 기간 설정 필요
+                        //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
 
+                        //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
+                        System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + savedUser.get().getId());
+                        //user_id 와 welfare_key가 같으면 바꿔줘.
+                        Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
+                        benefit.get().changeStatusToNum(savedUser.get(), 1, welfare.get().getSupport_fund());
+
+                    }
                 }
             }
         }
 
         return savedUser.get().getId();
     }
-
 
 
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
