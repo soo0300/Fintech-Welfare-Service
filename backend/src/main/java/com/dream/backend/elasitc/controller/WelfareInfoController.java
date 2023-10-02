@@ -21,6 +21,15 @@ public class WelfareInfoController {
     private final WelfareInfoService welfareInfoService;
     private final WelfareRepository welfareRepository;
 
+    @GetMapping("/create")
+    public String createIndex() {
+        welfareInfoService.setClient();
+        welfareInfoService.createIndex();
+        welfareInfoService.closeAllClient();
+
+        return "OK";
+    }
+
     @GetMapping("/get/{id}")
     public WelfareInfo getInfo(@PathVariable("id") int id) throws IOException {
 
