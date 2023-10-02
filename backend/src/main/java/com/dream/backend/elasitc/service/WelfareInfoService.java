@@ -19,6 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WelfareInfoService extends ElasticConnectionService {
 
+    public void createIndex() {
+        try {
+            esClient.indices().create(c -> c.index("welfare_info"));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void insertDocument(Long id, String name, String desc) {
         WelfareInfo welfareInfo = new WelfareInfo(id, name, desc, tokenized(desc));
         try {
