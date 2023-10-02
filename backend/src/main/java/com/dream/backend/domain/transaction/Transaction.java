@@ -2,21 +2,15 @@ package com.dream.backend.domain.transaction;
 
 import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.domain.account.Account;
-import com.dream.backend.domain.bank.Bank;
-import com.dream.backend.domain.bank_client.BankClient;
 import com.dream.backend.domain.inout_type.InoutType;
 import com.dream.backend.domain.transaction_category.TransactionCategory;
-import jdk.jfr.Category;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.naming.Name;
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter

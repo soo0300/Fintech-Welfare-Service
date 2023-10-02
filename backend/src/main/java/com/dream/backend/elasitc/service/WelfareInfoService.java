@@ -1,27 +1,15 @@
 package com.dream.backend.elasitc.service;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.*;
 import co.elastic.clients.elasticsearch.core.search.Hit;
-import co.elastic.clients.elasticsearch.core.search.TotalHits;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.dream.backend.elasitc.entity.WelfareInfo;
-import com.dream.backend.elasitc.repo.WelfareInfoRepo;
 import lombok.RequiredArgsConstructor;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.message.BasicHeader;
 import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.AnalyzeRequest;
 import org.elasticsearch.client.indices.AnalyzeResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;

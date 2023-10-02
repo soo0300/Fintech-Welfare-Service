@@ -1,20 +1,16 @@
 package com.dream.backend.elasitc.controller;
 
-import com.dream.backend.controller.welfare.response.WelfareResponse;
 import com.dream.backend.domain.welfare.Welfare;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.elasitc.entity.WelfareInfo;
 import com.dream.backend.elasitc.entity.WelfareInfoRequestDto;
 import com.dream.backend.elasitc.service.WelfareInfoService;
-import com.dream.backend.service.welfare.WelfareService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
