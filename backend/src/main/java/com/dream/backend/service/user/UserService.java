@@ -51,8 +51,6 @@ public class UserService {
         Long myRegion = dto.getRegionKey();
         connectionMyData(user.getId(), my_data);
 
-        //되돌리기
-
 
 /*
         // - - 비즈니스 로직 [만 나이 계산기]
@@ -145,10 +143,12 @@ public class UserService {
     public Long connectionMyData(Long user_id, int my_data) {
         Optional<User> savedUser = userRepository.findById(user_id);
 
+
+        //회원가입이 아니라 , 리프레시 기능으로 작동할 때에는 아래 주석이 통해야한다.
         //마이데이터 미연결 회원은 연결상태로 바꿔준다.
-        if (my_data == 0) {
-            savedUser.get().changeMyData();
-        }
+//        if (my_data == 0) {
+//            savedUser.get().changeMyData();
+//        }
 
 
         int age = getAge(savedUser.get().getResidence_info(), String.valueOf(savedUser.get().getCreated_date()));
@@ -169,7 +169,7 @@ public class UserService {
         //마이데이터 불러오기를 한 경우,
         //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
 
-        if (my_data == 0) {
+        if (my_data == 1) {
 
             for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
                 Long welfare_key = getUserWelfareKey.get(i);
