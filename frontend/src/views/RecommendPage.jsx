@@ -4,8 +4,6 @@ import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
-import Nav from "../components/Nav/Nav";
-import Logo from "../components/Logo/Logo";
 import Header from "../components/header/Header";
 import RegionModal from "../components/modal/RegionModal";
 import jsonData from "../assets/data/region.json";
@@ -18,9 +16,9 @@ const RecommandPageBody = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: 70px;
 `;
 
 const SearchBarContainer = styled.div`
@@ -172,8 +170,6 @@ function Business({ userInput, selectedTags }) {
   // 카드 안에 내용
   const [welfares, setWelfares] = useState([]);
   const [filteredWelfares, setFilteredWelfares] = useState([]);
-  const [remainingTime, setRemainingTime] = useState(null);
-
   // RegionModal의 상태 관리
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
   const [regionKey, setRegionKey] = useState("");
@@ -181,45 +177,39 @@ function Business({ userInput, selectedTags }) {
 
   useEffect(() => {
     const fetchWelfares = async () => {
-      try {
-        const welfareData = await AllWelfare();
-        console.log("데이터 :", welfareData);
-        setWelfares(welfareData);
-        setFilteredWelfares(welfareData);
-        // 모든 복지 프로젝트의 남은 시간을 저장할 배열 생성
-        const remainingTimes = [];
+      let fetchedData = await AllWelfare();
+      const updateData = fetchedData.map((item) => {
+        const curRegion = item.region_key;
+        const regionName = jsonData.find((item) => curRegion === item.region_key);
+        const parentRegion = jsonData.find((item) => {
+          if (regionName.parent_key !== null) {
+            return regionName.parent_key === item.region_key;
+          } else {
+            return false;
+          }}) || "";
+        const totalRegion = (parentRegion ? parentRegion.name + " " : "") + regionName.name
+        const endDate = new Date(item.end_date).getTime();
+        const now = new Date().getTime();
+        const remainingTime = endDate - now;
+        let d_day;
+        if (remainingTime <= 0) {
+          d_day = "마감";
+        } else {
+          const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          d_day = `${days}일 ${hours}시간`;
+        }
+        return {
+          ...item,
+          d_day: d_day,
+          totalRegion: totalRegion,
+        };
+      });
+  
 
-        welfareData.forEach((data) => {
-          // 이 부분에서 data.end_date가 실제로 복지 프로젝트의 종료 날짜를 나타내는지 확인해주세요.
-          const endDate = new Date(data.end_date).getTime();
-
-          const interval = setInterval(() => {
-            const now = new Date().getTime();
-            const timeRemaining = endDate - now;
-
-            if (timeRemaining <= 0) {
-              clearInterval(interval);
-              remainingTimes.push("마감");
-            } else {
-              const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
-              remainingTimes.push(`D-${days}일 남았습니다`);
-            }
-          }, 1000);
-
-          // interval을 clear하는 함수를 반환하는 대신, 각 프로젝트의 남은 시간을 업데이트합니다.
-          // 이때, useState를 이용해 해당 프로젝트의 남은 시간을 저장하도록 상태를 업데이트합니다.
-          setRemainingTime((prevRemainingTimes) => [
-            ...prevRemainingTimes,
-            ...remainingTimes,
-          ]);
-
-          // 다음 복지 프로젝트를 계산하기 위해 interval 배열 초기화
-          remainingTimes.length = 0;
-        });
-      } catch (error) {
-        console.error("Error fetching welfare data:", error);
-        // 오류 발생 시 에러 처리를 원하는 대로 수행하세요.
-      }
+      console.log(updateData);
+      setWelfares(updateData);
+      setFilteredWelfares(updateData);
     };
 
     fetchWelfares();
@@ -229,8 +219,8 @@ function Business({ userInput, selectedTags }) {
     // 이름 및 지역에 따른 필터링
     let searched = welfares.filter(
       (welfare) =>
-        welfare.name.includes(userInput) &&
-        (regionKey === "" || welfare.region_key === regionKey)
+        (welfare.name.includes(userInput) || welfare.description_origin.includes(userInput)) &&
+        (regionKey === "" || welfare.region_key === regionKey || welfare.region_key === 0)
     );
 
     // 지역이 있을 때, 지역이름 p태그 안에 띄우기
@@ -274,8 +264,10 @@ function Business({ userInput, selectedTags }) {
             id={welfare.id}
             title={welfare.name}
             region={welfare.region_key}
+            totalRegion={welfare.totalRegion}
             support_period={welfare.start_date}
-            remainingTime={remainingTime}
+            support_fund={welfare.support_fund}
+            remainTime={welfare.d_day}
           />
         ))}
       </CardContainer>
@@ -291,7 +283,7 @@ function RecommendPage() {
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar userInput={userInput} setUserInput={setUserInput} />
+        <SearchBar userInput={userInput} setUserInput={setUserInput} className="InputBox"/>
         <Tag selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         <Business userInput={userInput} selectedTags={selectedTags} />
       </RecommandPageBody>
