@@ -49,7 +49,8 @@ public class WelfareService {
 
     public WelfareResponse getWelfare(Long welfare_id) {
         Optional<Welfare> welfare = welfareRepository.findById(welfare_id);
-        WelfareResponse response = toResponse(welfare,1L);
+        Optional<Qualification> qualification = qualificationRepository.findById(welfare_id);
+        WelfareResponse response = toResponse(welfare,qualification.get().getRegion().getId());
         return response;
     }
 
