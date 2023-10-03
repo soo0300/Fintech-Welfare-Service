@@ -19,8 +19,13 @@ public class LoginService {
 
     public UserLoginResponse loginUser(String email, String pwd) {
         Optional<User> user = Optional.ofNullable(userRepository.findByEmailAndPassword(email, pwd));
+        UserLoginResponse userLoginResponse = null;
+        if (user.get().getExited() == 1) {
+            //탈퇴한 회원입니다
+            throw new NoSuchElementException("탈퇴한 회원입니다.");
+        }
         if (user.isPresent()) {
-            UserLoginResponse userLoginResponse = UserLoginResponse.builder()
+            userLoginResponse = UserLoginResponse.builder()
                     .id(user.get().getId())
                     .myData(user.get().isMy_data())
                     .build();
@@ -29,5 +34,11 @@ public class LoginService {
             // 예외 처리: 유저를 찾을 수 없는 경우
             throw new NoSuchElementException("아이디와 비밀번호를 확인하세요");
         }
+    }
+
+    public Long exit(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        user.get().exitService(); //회원탈퇴
+        return user.get().getId();
     }
 }
