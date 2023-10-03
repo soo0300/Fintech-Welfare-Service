@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-// import Button from "../button/Button";
 import { useState } from "react";
 import Loading from "../loading/Loading";
 import { BarChart } from "@mui/x-charts/BarChart";
@@ -12,7 +11,7 @@ import { BankAll, RefreshUser } from "../../api/mydata/MydataAccount";
 
 //마이데이터 버튼박스
 const ButtonBox = styled.div`
-  width: 100%;
+  width: 90%;
   height: 200px;
   border-radius: 20px;
   margin-top: 20px;
@@ -23,6 +22,7 @@ const ButtonBox = styled.div`
   align-items: center;
   background-color: white;
   gap: 20px;
+  box-shadow: 3px 3px 3px 3px lightgray;
 `;
 
 //지원금현황 문구박스
@@ -37,7 +37,7 @@ const TextBox = styled.div`
 
 //차트박스
 const ChartBox = styled.div`
-  width: 100%;
+  width: 90%;
   margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 20px;
@@ -45,6 +45,13 @@ const ChartBox = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: white;
+  box-shadow: 3px 3px 3px 3px lightgray;
+`;
+
+//지원금현황 리프레시버튼
+const Refresh = styled(RefreshIcon)`
+  width: 30px;
+  height: 30px;
 `;
 
 //알림 문구박스
@@ -66,43 +73,28 @@ const ThreeDot = styled(ThreeDotIcon)`
 
 //알림메세지 한개 박스
 const AlertBox = styled.div`
-  width: 100%;
-  height: 100px;
+  width: 90%;
+  height: auto;
   background-color: white;
   border-radius: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
-`;
-
-//지원금현황 리프레시버튼
-const Refresh = styled(RefreshIcon)`
-  width: 30px;
-  height: 30px;
+  box-shadow: 3px 3px 3px 3px lightgray;
 `;
 
 //기관,입금 전체박스
 const AlertTextBox = styled.div`
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-//입금액 박스
-const AlertMoney = styled.div`
-  width: 90%;
-  height: 50px;
-  border-top: 2px solid lightgray;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  font-size: 2vh;
-`;
-
 //메일아이콘 박스
 const AlertMail = styled.div`
   width: 10%;
-  height: 50%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,22 +104,43 @@ const AlertMail = styled.div`
 //메일아이콘 크기
 const Mail = styled(MailIcon)`
   width: 30px;
-  height: 30px;
 `;
 
 //기관명 관리
 const AlertText = styled.div`
   width: 90%;
-  height: 50px;
+  height: 40px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
   color: #f66262;
+`;
+//현재잔액 관리
+const CurrentText = styled.div`
+  width: 90%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  font-size: 1.5vh;
 `;
 
 //입금액 관리
 const MoneyText = styled.p`
   color: #006ffd;
+  margin-right: 10px;
+`;
+
+//출금액 관리
+const MinusText = styled.p`
+  color: gray;
+  margin-right: 10px;
+`;
+
+//현재잔액 관리
+const CurrentMoney = styled.p`
+  color: black;
   margin-right: 10px;
 `;
 
@@ -159,6 +172,7 @@ function MyData() {
       if (myData === "true") {
         try {
           const res = await BankAll();
+          console.log(res);
           setMessage(res.data.list);
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -213,7 +227,7 @@ function MyData() {
           </ButtonBox>
         ))}
       <AlertLine>
-        <p>입금 내역</p>
+        <h3>입금 내역</h3>
         <Button onClick={alertHandler}>
           <ThreeDot />
         </Button>
@@ -232,12 +246,23 @@ function MyData() {
 
             <AlertTextBox>
               <AlertText>
-                <div>{alert.tranDesc}</div>
+                {alert.tranDesc}
+                {alert.type.desc === "입금" ? (
+                  <MoneyText>
+                    {alert.tranAmt.toLocaleString("en-US")}원
+                  </MoneyText>
+                ) : (
+                  <MinusText>
+                    -{alert.tranAmt.toLocaleString("en-US")}원
+                  </MinusText>
+                )}
               </AlertText>
-              <AlertMoney>
-                <MoneyText>{alert.tranAmt}₩</MoneyText>이 {alert.type.desc}
-                되었습니다.
-              </AlertMoney>
+              <CurrentText>
+                {alert.dateTime.slice(0, 10)}
+                <CurrentMoney>
+                  {alert.afterAmt.toLocaleString("en-US")}원
+                </CurrentMoney>
+              </CurrentText>
             </AlertTextBox>
           </AlertBox>
         ))

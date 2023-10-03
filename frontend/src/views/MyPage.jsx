@@ -4,7 +4,6 @@ import { Button } from "@mui/material";
 import { GetUser } from "../api/mypage/UserInformation";
 import ChangePwd from "../components/mydata/ChangePwd";
 import ChangeRegion from "../components/mydata/ChangeRegion";
-import ChangeEnd from "../components/mydata/ChangeEnd";
 import jsonData from "../assets/data/region.json";
 import Header from "../components/header/Header";
 
@@ -95,12 +94,6 @@ function MyPage() {
         <InfoTextBox>
           나이{"\u00A0\u00A0\u00A0"} : 만 {info.age}세
         </InfoTextBox>
-        <InfoTextBox>
-          보호종료일 : 보호종료일
-          <Button onClick={() => changeMode(3)} sx={{ padding: 0 }}>
-            보호종료일 변경
-          </Button>
-        </InfoTextBox>
         <div
           style={{
             width: "90%",
@@ -117,7 +110,6 @@ function MyPage() {
       {mode === 0 && null}
       {mode === 1 && <ChangePwd curPwd={info.password} />}
       {mode === 2 && <ChangeRegion />}
-      {mode === 3 && <ChangeEnd />}
     </>
   );
 }
