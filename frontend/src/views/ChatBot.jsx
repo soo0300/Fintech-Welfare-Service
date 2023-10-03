@@ -194,9 +194,9 @@ function ChatBot() {
         <StyledEllipseIcon>
           <BotIcon />
         </StyledEllipseIcon>
-        <h3>드림이</h3>
+        <h2>드림이</h2>
         <Button
-          width="150px"
+          width="100px"
           color="black"
           background="none"
           onClick={resetData}
