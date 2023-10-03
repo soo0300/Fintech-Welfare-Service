@@ -1,5 +1,6 @@
 package com.dream.backend.service.user;
 
+import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.benefit.Benefit;
@@ -16,6 +17,9 @@ import com.dream.backend.service.benefit.BenefitService;
 import com.dream.backend.service.qualification.QualificationService;
 import com.dream.backend.service.user.dto.JoinUserDto;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.protocol.HTTP;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +41,12 @@ public class UserService {
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
 
-    public UserLoginResponse joinUser(JoinUserDto dto, boolean type) {
+    public ApiResponse<UserLoginResponse> joinUser(JoinUserDto dto, boolean type) {
+        //이메일 중복 검사
+        if(userRepository.existsByEmail(dto.getEmail())){
+            return ApiResponse.of(HttpStatus.BAD_REQUEST,"중복된 이메일입니다.", null);
+        }
+
         System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion, type);
@@ -50,7 +59,6 @@ public class UserService {
         // - - 비즈니스 로직 [사용자 거주 지역 코드]
         Long myRegion = dto.getRegionKey();
         connectionMyData(user.getId(), my_data);
-
 
 /*
         // - - 비즈니스 로직 [만 나이 계산기]
@@ -109,7 +117,7 @@ public class UserService {
                 .id(saveduser.getId())
                 .myData(saveduser.isMy_data())
                 .build();
-        return response;
+        return ApiResponse.ok(response);
     }
 
     public Optional<User> getUserFund(Long userId) {
