@@ -139,17 +139,23 @@ public class TransactionController {
 
         for(Transaction t: result) {
             String code = t.getTranDesc();
-            if(code.length() != 4 || code.charAt(0) != 'A') continue;
-            System.out.println(code);
-            WelfareRepository.WelfareNativeVo response = welfareService.getWelfareByCode(code);
-            list.add(WelfareAndTransactionResponse.builder()
+
+            WelfareAndTransactionResponse transactionResponse = WelfareAndTransactionResponse.builder()
                     .dateTime(t.getTranDate())
                     .type(t.getInoutType())
                     .category(null)
-                    .welfare(response)
+                    .welfare(null)
+                    .tranDesc(t.getTranDesc())
                     .tranAmt(t.getTranAmt())
                     .afterAmt(t.getBalance())
-                    .build());
+                    .build();
+
+            if(code.length() == 4 && code.charAt(0) == 'A') {
+                WelfareRepository.WelfareNativeVo response = welfareService.getWelfareByCode(code);
+                transactionResponse.setWelfare(response);
+            }
+
+            list.add(transactionResponse);
         }
 
         return WelfareListResponse.builder()

@@ -15,6 +15,8 @@ public interface WelfareRepository extends JpaRepository<Welfare, Long> {
     List<Welfare> findAll();
     Welfare findWelfareCodeById(Long welfareId);
 
+    // ---- 비지니스 로직 ---- //
+
     @Query(value = "SELECT name, organization FROM welfare WHERE welfare_code = :code", nativeQuery = true)
     Optional<WelfareNativeVo> findByWelfareCode(@Param(value = "code") String welfareCode);
 
