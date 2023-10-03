@@ -64,7 +64,7 @@ public class UserController {
 
     @PatchMapping("connection/{user_id}/{my_data}")
     public ApiResponse<Long> connectionMyData(@PathVariable Long user_id , @PathVariable int my_data){
-        Long id = userService.connectionMyData(user_id,my_data);
+        Long id = userService.connectionMyData(user_id,my_data, 1);
         return ApiResponse.ok(id);
 
     }
