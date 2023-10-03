@@ -40,8 +40,8 @@ public class UserService {
 
     public ApiResponse<UserLoginResponse> joinUser(JoinUserDto dto, boolean type) {
         //이메일 중복 검사
-        if(userRepository.existsByEmail(dto.getEmail())){
-            return ApiResponse.of(HttpStatus.BAD_REQUEST,"중복된 이메일입니다.", null);
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            return ApiResponse.of(HttpStatus.BAD_REQUEST, "중복된 이메일입니다.", null);
         }
 
         System.out.println("dto region key: " + dto.getRegionKey());
@@ -55,7 +55,7 @@ public class UserService {
         if (!type) my_data = 0;
         // - - 비즈니스 로직 [사용자 거주 지역 코드]
         Long myRegion = dto.getRegionKey();
-        connectionMyData(user.getId(), my_data);
+        connectionMyData(user.getId(), my_data, 0);
 
 /*
         // - - 비즈니스 로직 [만 나이 계산기]
@@ -132,7 +132,7 @@ public class UserService {
         Optional<Region> savedRegion = regionRepository.findById(regionKey);
         user.get().changeRegion(savedRegion.get());
         // 맞춤형 지역 사업만 보여주기
-        connectionMyData(user.get().getId(),0);
+        connectionMyData(user.get().getId(), 0, 0);
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
     }
@@ -147,7 +147,7 @@ public class UserService {
 
 
     //마이데이터 연결하기
-    public Long connectionMyData(Long user_id, int my_data) {
+    public Long connectionMyData(Long user_id, int my_data, int isOnlyConnection) {
         Optional<User> savedUser = userRepository.findById(user_id);
 
 
@@ -165,12 +165,14 @@ public class UserService {
 
         //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
         //순회하면서 현재 사용자 id와 리스트이 key와 status[null]로 사용자복지정보 등록
-        System.out.print("size: " + getUserWelfareKey.size() + "\n 사용자 맞춤형 복지 PK:\n");
-        for (int i = 0; i < getUserWelfareKey.size(); i++) {
-            System.out.print(getUserWelfareKey.get(i) + " ");
-        }
+        if (isOnlyConnection == 0) {
+            System.out.print("size: " + getUserWelfareKey.size() + "\n 사용자 맞춤형 복지 PK:\n");
+            for (int i = 0; i < getUserWelfareKey.size(); i++) {
+                System.out.print(getUserWelfareKey.get(i) + " ");
+            }
 
-        benefitService.addUserBenefit(savedUser.get().getId(), getUserWelfareKey, 0);
+            benefitService.addUserBenefit(savedUser.get().getId(), getUserWelfareKey, 0);
+        }
 
         //여기서 마이데이터 불러오기 유무
         //마이데이터 불러오기를 한 경우,
