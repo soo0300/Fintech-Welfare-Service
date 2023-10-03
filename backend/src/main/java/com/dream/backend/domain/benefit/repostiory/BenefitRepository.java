@@ -16,4 +16,6 @@ public interface BenefitRepository extends JpaRepository<Benefit, Long> {
 
 //    @Query("SELECT b FROM Benefit b WHERE b.user.id = :userId AND b.welfare.id = :welfareId")
     Optional<Benefit> findByUser_IdAndWelfare_Id(Long id, Long welfareKey);
+
+    void deleteAllByIdAndStatus(Long id, int status);
 }
