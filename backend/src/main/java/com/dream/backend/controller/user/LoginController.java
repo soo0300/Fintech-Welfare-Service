@@ -24,4 +24,10 @@ public class LoginController {
         return ApiResponse.ok(response);
     }
 
+    @PatchMapping("/exit/{user_id}")
+    public ApiResponse<Long> exit(@PathVariable Long user_id){
+        Long userId = loginService.exit(user_id);
+        return ApiResponse.ok(user_id);
+    }
+
 }
