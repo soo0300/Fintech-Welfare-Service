@@ -31,7 +31,7 @@ public class User {
     private int residence_info;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="region_key")
+    @JoinColumn(name = "region_key")
     private Region region;
 
     @Column(nullable = true)
@@ -75,23 +75,50 @@ public class User {
         this.total_fund = total_fund;
         this.account = account;
         this.my_data = my_data;
-        this.refresh_time=refresh_time;
+        this.refresh_time = refresh_time;
     }
 
     // - - - - - - - - - -비즈니스 로직 - - - -- - - - -
 
-    public UserFundResponse toFundResponse(Optional<User> user){
+    public UserFundResponse toFundResponse(Optional<User> user) {
         return UserFundResponse.builder()
                 .pre_fund(user.get().pre_fund)
                 .total_fund(user.get().total_fund)
                 .build();
     }
+
     public void changeRegion(Region region) {
-
         this.region = region;
-
     }
-    public void changePwd(String pwd){
+
+    public void changePwd(String pwd) {
         this.password = pwd;
     }
+
+    public void changeMyData() {
+        this.my_data = true;
+    }
+
+    public void addFund(int supportFund) {
+        this.total_fund += supportFund;
+
+    }
+
+    public void addPreFund(int supportFund) {
+        this.pre_fund += supportFund;
+    }
+
+    public void subtractFund(int supportFund, int status) {
+
+        // status가 1이라면 totalFund - supportFund
+        if (status == 1) {
+            this.total_fund -= supportFund;
+        }
+        // status가 2라면   preFund - suportFund
+        if (status == 2) {
+            this.pre_fund -= supportFund;
+        }
+    }
+
+
 }

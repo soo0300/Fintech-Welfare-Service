@@ -23,11 +23,10 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup/{type}")
-    public UserLoginResponse joinUser(@RequestBody JoinUserRequest request, @PathVariable boolean type) {
+    public ApiResponse<UserLoginResponse> joinUser(@RequestBody JoinUserRequest request, @PathVariable boolean type) {
         JoinUserDto dto = request.toDto();
         System.out.print("controller region key" + dto.getRegionKey());
-        UserLoginResponse response = userService.joinUser(dto, type);
-        return response;
+        return ApiResponse.ok(userService.joinUser(dto,type).getData());
     }
 
     @GetMapping("/fund/{user_id}")
@@ -61,6 +60,13 @@ public class UserController {
         String pwd = request.getPwd();
         UserResponse response = userService.changeUserPwd(user_id, pwd);
         return ApiResponse.ok(response);
+    }
+
+    @PatchMapping("connection/{user_id}/{my_data}")
+    public ApiResponse<Long> connectionMyData(@PathVariable Long user_id , @PathVariable int my_data){
+        Long id = userService.connectionMyData(user_id,my_data, 1);
+        return ApiResponse.ok(id);
+
     }
 
 

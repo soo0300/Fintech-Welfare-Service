@@ -1,5 +1,6 @@
 package com.dream.backend.service.user;
 
+import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.user.response.UserLoginResponse;
 import com.dream.backend.controller.user.response.UserResponse;
 import com.dream.backend.domain.benefit.Benefit;
@@ -16,10 +17,10 @@ import com.dream.backend.service.benefit.BenefitService;
 import com.dream.backend.service.qualification.QualificationService;
 import com.dream.backend.service.user.dto.JoinUserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,12 @@ public class UserService {
     private final QualificationService qualificationService;
     private final BenefitService benefitService;
 
-    public UserLoginResponse joinUser(JoinUserDto dto, boolean type) {
+    public ApiResponse<UserLoginResponse> joinUser(JoinUserDto dto, boolean type) {
+        //이메일 중복 검사
+        if (userRepository.existsByEmail(dto.getEmail())) {
+            return ApiResponse.of(HttpStatus.BAD_REQUEST, "중복된 이메일입니다.", null);
+        }
+
         System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
         User user = dto.toEntity(savedRegion, type);
@@ -45,9 +51,13 @@ public class UserService {
         User saveduser = userRepository.save(user);
         System.out.println("after Repo" + saveduser.getId());
 
+        int my_data = 1;
+        if (!type) my_data = 0;
         // - - 비즈니스 로직 [사용자 거주 지역 코드]
         Long myRegion = dto.getRegionKey();
+        connectionMyData(user.getId(), my_data, 0);
 
+/*
         // - - 비즈니스 로직 [만 나이 계산기]
         //user 주민번호 필요, user createdDate 필요
         int my = saveduser.getResidence_info();
@@ -74,8 +84,8 @@ public class UserService {
             List<String> welfareCodeList = new ArrayList<>();
             for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
                 Long welfare_key = getUserWelfareKey.get(i);
-                Welfare welfare = welfareRepository.findWelfareCodeById(welfare_key);
-                String welfare_code = welfare.getWelfare_code(); //BVE ABC ABC
+                Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
+                String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
 
                 if (welfare_code != null) {
                     System.out.println("거래 내역코드 : " + welfare_code);
@@ -90,21 +100,21 @@ public class UserService {
                         //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
                         System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + saveduser.getId());
                         //user_id 와 welfare_key가 같으면 바꿔줘.,
-                        Optional<Benefit> benefit = benefitRepository.findByUserIdAndWelfareId(saveduser.getId(), welfare_key);
-                        benefit.get().changeStatus();
+                        Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(saveduser.getId(), welfare_key);
+                        benefit.get().changeStatusToNum(saveduser, 1, welfare.get().getSupport_fund());
 
 
                     }
                 }
             }
-
-
         }
+        */
+
         UserLoginResponse response = UserLoginResponse.builder()
                 .id(saveduser.getId())
                 .myData(saveduser.isMy_data())
                 .build();
-        return response;
+        return ApiResponse.ok(response);
     }
 
     public Optional<User> getUserFund(Long userId) {
@@ -121,6 +131,10 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         Optional<Region> savedRegion = regionRepository.findById(regionKey);
         user.get().changeRegion(savedRegion.get());
+        //수혜, 심사중인 것 건들지 말고, 추천 목록만 삭제
+        benefitRepository.deleteAllByIdAndStatus(user.get().getId(), 0);
+        // 맞춤형 지역 사업만 보여주기
+        connectionMyData(user.get().getId(), 0, 0);
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
     }
@@ -131,6 +145,73 @@ public class UserService {
         user.get().changePwd(pwd);
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
+    }
+
+
+    //마이데이터 연결하기
+    public Long connectionMyData(Long user_id, int my_data, int isOnlyConnection) {
+        Optional<User> savedUser = userRepository.findById(user_id);
+
+
+        //회원가입이 아니라 , 리프레시 기능으로 작동할 때에는 아래 주석이 통해야한다.
+        //마이데이터 미연결 회원은 연결상태로 바꿔준다.
+        if (isOnlyConnection==1 && my_data == 0) {
+            my_data=1;
+            savedUser.get().changeMyData();
+        }
+
+
+        int age = getAge(savedUser.get().getResidence_info(), String.valueOf(savedUser.get().getCreated_date()));
+        Long myRegion = savedUser.get().getRegion().getId();
+
+        List<Long> getUserWelfareKey = qualificationService.getUserWelfareKey(age, myRegion);
+
+        //자격 조건 테이블에서 사용자 만 나이, 지역 키 , 나이로 복지식별키 구분
+        //순회하면서 현재 사용자 id와 리스트이 key와 status[null]로 사용자복지정보 등록
+        if (isOnlyConnection == 0) {
+            System.out.print("size: " + getUserWelfareKey.size() + "\n 사용자 맞춤형 복지 PK:\n");
+            for (int i = 0; i < getUserWelfareKey.size(); i++) {
+                System.out.print(getUserWelfareKey.get(i) + " ");
+            }
+
+            benefitService.addUserBenefit(savedUser.get().getId(), getUserWelfareKey, 0);
+        }
+
+        //여기서 마이데이터 불러오기 유무
+        //마이데이터 불러오기를 한 경우,
+        //마이데이터 연결해야하면, getUserWelfareKey 에 해당하는 복지입금코드가죠오기
+
+        if (my_data == 1) {
+
+            for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
+                Long welfare_key = getUserWelfareKey.get(i);
+                Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
+                String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
+
+                System.out.println("거래 내역코드 : " + welfare_code);
+
+                if (welfare_code != null) {
+                    System.out.println("거래 내역코드 : " + welfare_code);
+                    Optional<Transaction> transaction = transactionRepository.findByTranDesc(welfare_code); //사용자 거래 내역에서 ABC를 찾는다
+                    if (transaction.isPresent()) {
+                        System.out.println("거래내역과 복지 코드 매칭: " + transaction.get().getTranDesc());
+
+                        //같은 것이 존재한다면
+                        //+ 기간 설정 필요
+                        //+ 거래내역 테이블에서 거래명(ABC자립복지)에 입금거래코드(ABC) 가 포함된 것을 찾아서 비교하여 같다면 welfare_id를 가져온다.
+
+                        //해당 getUserWelfareKey.get(i)를 welfare_id로 가진 자격정보의 status 변경한다.
+                        System.out.println("필터된 복지 카드 식별키: " + welfare_key + " " + savedUser.get().getId());
+                        //user_id 와 welfare_key가 같으면 바꿔줘.
+                        Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
+                        benefit.get().changeStatusToNum(savedUser.get(), 1, welfare.get().getSupport_fund());
+
+                    }
+                }
+            }
+        }
+
+        return savedUser.get().getId();
     }
 
 
@@ -165,4 +246,3 @@ public class UserService {
     }
 
 }
-

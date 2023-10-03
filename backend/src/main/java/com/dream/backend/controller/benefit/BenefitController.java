@@ -44,11 +44,19 @@ public class BenefitController {
         return benefitService.getUserAllBenefit(user_id);
     }
 
-    @PatchMapping("/{user_id}/{welfare_id}/{status}")
+    //맞춤형 복지 사업 이동, 함수명 직관적으로 변경할 것
+    @PatchMapping("/change/{user_id}/{welfare_id}/{status}")
     public ApiResponse<Long> changeWelfareStatus(@PathVariable Long user_id, @PathVariable Long welfare_id, @PathVariable int status) {
         Long id = benefitService.changeWelfareStatus(user_id, welfare_id, status);
         return ApiResponse.ok(id);
 
+    }
+
+    //수혜 중 또는 심사 중 복지 사업 취소
+    @PatchMapping("/cancel/{user_id}/{welfare_id}/{status}")
+    public ApiResponse<Long> cancelWelfare(@PathVariable Long user_id, @PathVariable Long welfare_id, @PathVariable int status){
+        Long id = benefitService.cancelWelfare(user_id, welfare_id, status);
+        return ApiResponse.ok(id);
     }
 
 
