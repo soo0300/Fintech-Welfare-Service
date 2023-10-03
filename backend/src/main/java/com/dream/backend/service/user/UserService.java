@@ -156,6 +156,7 @@ public class UserService {
         //회원가입이 아니라 , 리프레시 기능으로 작동할 때에는 아래 주석이 통해야한다.
         //마이데이터 미연결 회원은 연결상태로 바꿔준다.
         if (isOnlyConnection==1 && my_data == 0) {
+            my_data=1;
             savedUser.get().changeMyData();
         }
 
