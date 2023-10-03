@@ -59,6 +59,9 @@ public class User {
     @Column(nullable = true)
     private LocalDateTime refresh_time;
 
+    @Column(nullable = true)
+    private int exited;
+
 
     @Builder
     public User(Long id, String name, String email, String password, int residence_info, Region region, LocalDateTime end_date, boolean is_ended, LocalDateTime created_date, int pre_fund, int total_fund, Long account, boolean my_data, LocalDateTime refresh_time) {
@@ -118,6 +121,10 @@ public class User {
         if (status == 2) {
             this.pre_fund -= supportFund;
         }
+    }
+
+    public void exitService(){
+        this.exited = 1;
     }
 
 
