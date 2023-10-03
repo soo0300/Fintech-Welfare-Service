@@ -22,7 +22,8 @@ public class LoginService {
         UserLoginResponse userLoginResponse = null;
         if (user.get().getExited() == 1) {
             //탈퇴한 회원입니다
-            throw new NoSuchElementException("탈퇴한 회원입니다.");
+//            throw new NoSuchElementException("탈퇴한 회원입니다.");
+            return userLoginResponse;
         }
         if (user.isPresent()) {
             userLoginResponse = UserLoginResponse.builder()
