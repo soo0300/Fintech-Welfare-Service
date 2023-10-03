@@ -131,6 +131,8 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         Optional<Region> savedRegion = regionRepository.findById(regionKey);
         user.get().changeRegion(savedRegion.get());
+        //수혜, 심사중인 것 건들지 말고, 추천 목록만 삭제
+        benefitRepository.deleteAllByIdAndStatus(user.get().getId(), 0);
         // 맞춤형 지역 사업만 보여주기
         connectionMyData(user.get().getId(), 0, 0);
         UserResponse userResponse = toUserResponse(user);
