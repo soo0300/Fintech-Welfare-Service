@@ -199,6 +199,7 @@ const Card = (props) => {
       title={title}
       region={regionValue}
       support_period={supportPeriodValue}
+      remainingTime={props.remainingTime}
     >
       <Poster src={Testimg} />
 
@@ -208,6 +209,8 @@ const Card = (props) => {
           모집 지역 : {region}
           <br />
           모집 기간 : {support_period}
+          <br />
+          남은 시간 : {props.remainingTime}
         </p>
         {modalVisible && (
           <Modal

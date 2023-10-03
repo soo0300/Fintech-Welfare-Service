@@ -172,6 +172,7 @@ function Business({ userInput, selectedTags }) {
   // 카드 안에 내용
   const [welfares, setWelfares] = useState([]);
   const [filteredWelfares, setFilteredWelfares] = useState([]);
+  const [remainingTime, setRemainingTime] = useState(null);
 
   // RegionModal의 상태 관리
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
@@ -180,9 +181,45 @@ function Business({ userInput, selectedTags }) {
 
   useEffect(() => {
     const fetchWelfares = async () => {
-      const data = await AllWelfare();
-      setWelfares(data);
-      setFilteredWelfares(data);
+      try {
+        const welfareData = await AllWelfare();
+        console.log("데이터 :", welfareData);
+        setWelfares(welfareData);
+        setFilteredWelfares(welfareData);
+        // 모든 복지 프로젝트의 남은 시간을 저장할 배열 생성
+        const remainingTimes = [];
+
+        welfareData.forEach((data) => {
+          // 이 부분에서 data.end_date가 실제로 복지 프로젝트의 종료 날짜를 나타내는지 확인해주세요.
+          const endDate = new Date(data.end_date).getTime();
+
+          const interval = setInterval(() => {
+            const now = new Date().getTime();
+            const timeRemaining = endDate - now;
+
+            if (timeRemaining <= 0) {
+              clearInterval(interval);
+              remainingTimes.push("마감");
+            } else {
+              const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+              remainingTimes.push(`D-${days}일 남았습니다`);
+            }
+          }, 1000);
+
+          // interval을 clear하는 함수를 반환하는 대신, 각 프로젝트의 남은 시간을 업데이트합니다.
+          // 이때, useState를 이용해 해당 프로젝트의 남은 시간을 저장하도록 상태를 업데이트합니다.
+          setRemainingTime((prevRemainingTimes) => [
+            ...prevRemainingTimes,
+            ...remainingTimes,
+          ]);
+
+          // 다음 복지 프로젝트를 계산하기 위해 interval 배열 초기화
+          remainingTimes.length = 0;
+        });
+      } catch (error) {
+        console.error("Error fetching welfare data:", error);
+        // 오류 발생 시 에러 처리를 원하는 대로 수행하세요.
+      }
     };
 
     fetchWelfares();
@@ -238,6 +275,7 @@ function Business({ userInput, selectedTags }) {
             title={welfare.name}
             region={welfare.region_key}
             support_period={welfare.start_date}
+            remainingTime={remainingTime}
           />
         ))}
       </CardContainer>
