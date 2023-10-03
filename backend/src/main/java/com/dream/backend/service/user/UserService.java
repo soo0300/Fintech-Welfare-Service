@@ -131,6 +131,8 @@ public class UserService {
         Optional<User> user = userRepository.findById(userId);
         Optional<Region> savedRegion = regionRepository.findById(regionKey);
         user.get().changeRegion(savedRegion.get());
+        // 맞춤형 지역 사업만 보여주기
+        connectionMyData(user.get().getId(),0);
         UserResponse userResponse = toUserResponse(user);
         return userResponse;
     }
