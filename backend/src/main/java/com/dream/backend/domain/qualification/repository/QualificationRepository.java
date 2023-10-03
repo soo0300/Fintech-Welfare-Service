@@ -12,4 +12,5 @@ import java.util.List;
 public interface QualificationRepository extends JpaRepository<Qualification, Long> {
     @Query("SELECT q FROM Qualification q WHERE q.region.id = :regionKey AND q.age > :age")
     List<Qualification> findQualificationsByRegionKeyAndAge(@Param("regionKey") Long regionKey, @Param("age") int age);
+    List<Qualification> findByRegionKey(Long regionKey);
 }
