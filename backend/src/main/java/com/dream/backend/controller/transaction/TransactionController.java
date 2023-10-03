@@ -66,7 +66,10 @@ public class TransactionController {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
         }
 
-        return new TransactionResponse(acc, list);
+        return TransactionResponse.builder()
+                .account(acc)
+                .list(list)
+                .build();
     }
 
     @GetMapping("/{account_number}")
@@ -82,7 +85,10 @@ public class TransactionController {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
         }
 
-        return new TransactionResponse(account, list);
+        return TransactionResponse.builder()
+                .account(account)
+                .list(list)
+                .build();
     }
 
     @GetMapping("/fromLastTime/{user_id}")
@@ -104,7 +110,10 @@ public class TransactionController {
         alarmService.insertDate(userId);
         alarmService.closeAllClient();
 
-        return new TransactionResponse(account, list);
+        return TransactionResponse.builder()
+                .account(account)
+                .list(list)
+                .build();
     }
 
     @GetMapping("/monthly/{user_id}")
@@ -124,7 +133,10 @@ public class TransactionController {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
         }
 
-        return new TransactionResponse(account, list);
+        return TransactionResponse.builder()
+                .account(account)
+                .list(list)
+                .build();
     }
 
     @GetMapping("/withWelfare/{account_number}")
