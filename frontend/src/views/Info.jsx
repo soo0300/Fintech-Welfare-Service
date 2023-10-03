@@ -138,7 +138,7 @@ const Info = () => {
       // API 응답 처리
       if (response.status === 200) {
         console.log("회원가입 성공:", response.data);
-        localStorage.setItem("id", response.data.id);
+        localStorage.setItem("id", response.data.data.id);
         localStorage.setItem("myData", requestData.myData);
         const message = [
           ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
