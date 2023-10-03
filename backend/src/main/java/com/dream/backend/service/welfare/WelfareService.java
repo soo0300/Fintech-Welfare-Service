@@ -54,6 +54,11 @@ public class WelfareService {
         return response;
     }
 
+    public WelfareRepository.WelfareNativeVo getWelfareByCode(String code) {
+        Optional<WelfareRepository.WelfareNativeVo> dto = welfareRepository.findByWelfareCode(code);
+        return dto.get();
+    }
+
 //    - - - - - - - 비즈니스 로직 - - - - - - -- -
 
 

@@ -3,12 +3,14 @@ package com.dream.backend.controller.transaction;
 import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.controller.transaction.response.TransactionObject;
 import com.dream.backend.controller.transaction.response.TransactionResponse;
+import com.dream.backend.controller.transaction.response.WelfareAndTransactionResponse;
+import com.dream.backend.controller.transaction.response.WelfareListResponse;
 import com.dream.backend.domain.account.Account;
-import com.dream.backend.domain.bank_client.BankClient;
 import com.dream.backend.domain.transaction.Transaction;
+import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.elasitc.service.UserLastAlarmService;
-import com.dream.backend.service.account.AccountService;
 import com.dream.backend.service.transaction.TransactionService;
+import com.dream.backend.service.welfare.WelfareService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,7 @@ public class TransactionController {
 
     private final TransactionService transactionService;
     private final UserLastAlarmService alarmService;
+    private final WelfareService welfareService;
 
     @GetMapping("/all")
     public List<Transaction> getAllTransaction() {
@@ -122,6 +125,37 @@ public class TransactionController {
         }
 
         return new TransactionResponse(account, list);
+    }
+
+    @GetMapping("/withWelfare/{account_number}")
+    public WelfareListResponse getWelfareAndTransaction(@PathVariable("account_number") Long accountNumber) {
+
+        List<WelfareAndTransactionResponse> list = new ArrayList<>();
+        List<Transaction> result = transactionService.getTransactionByAccountNumber(accountNumber);
+
+        if(result.isEmpty()) return null;
+        Account account = result.get(0).getAccount();
+        if(account == null) return null;
+
+        for(Transaction t: result) {
+            String code = t.getTranDesc();
+            if(code.length() != 4 || code.charAt(0) != 'A') continue;
+            System.out.println(code);
+            WelfareRepository.WelfareNativeVo response = welfareService.getWelfareByCode(code);
+            list.add(WelfareAndTransactionResponse.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .welfare(response)
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
+        }
+
+        return WelfareListResponse.builder()
+                .account(account)
+                .response(list)
+                .build();
     }
 
     @PostMapping("/deposit")
