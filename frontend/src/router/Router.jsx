@@ -17,11 +17,11 @@ const Router = () => {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Intro />} />
         <Route Component={PrivateRoute}>
           <Route path="/business" element={<Business />}>
             <Route path="/business/detail" element={<Modal />} />
           </Route>
-
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/chatbot" element={<ChatBot />}>
             <Route path="/chatbot/detail" element={<Modal />} />
@@ -32,7 +32,6 @@ const Router = () => {
           <Route path="/myfund" element={<MyFund />} />
         </Route>
         <Route Component={PublicRoute}>
-          <Route path="/" element={<Intro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/info" element={<Info />} />
