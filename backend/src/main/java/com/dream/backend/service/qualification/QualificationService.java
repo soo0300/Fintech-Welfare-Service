@@ -24,6 +24,12 @@ public class QualificationService {
         for(Qualification q : qualificationList) {
             list.add(q.getId());
         }
+
+        //전국 복지 키 찾기
+        qualificationList = qualificationRepository.findByRegionKey(0L);
+        for(Qualification q : qualificationList) {
+            list.add(q.getId());
+        }
         return list;
     }
 
