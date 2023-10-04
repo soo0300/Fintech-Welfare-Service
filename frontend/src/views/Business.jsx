@@ -2,6 +2,7 @@ import { React, useState, useEffect } from "react"; // useState import
 import { styled } from "styled-components";
 import Header from "../components/header/Header";
 import Card from "../components/card/Card";
+import jsonData from "../assets/data/region.json";
 
 // Drag & Drop
 import { useDrop } from "react-dnd";
@@ -304,7 +305,41 @@ function CustomBusinesss() {
         // 가져왔다면, id를 이용해서 API보내기
         try {
           const response = await GetMywelfare({ user_id: userId });
-          setWelfareData(response.data);
+          const updateData = response.data.map((item) => {
+            const curRegion = item.regionKey;
+            const regionName = jsonData.find(
+              (item) => curRegion === item.region_key
+            );
+            const parentRegion =
+              jsonData.find((item) => {
+                if (regionName.parent_key !== null) {
+                  return regionName.parent_key === item.region_key;
+                } else {
+                  return false;
+                }
+              }) || "";
+            const totalRegion =
+              (parentRegion ? parentRegion.name + " " : "") + regionName.name;
+            const endDate = new Date(item.end_date).getTime();
+            const now = new Date().getTime();
+            const remainingTime = endDate - now;
+            let d_day;
+            if (remainingTime <= 0) {
+              d_day = "마감";
+            } else {
+              const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+              const hours = Math.floor(
+                (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+              );
+              d_day = `${days}일 ${hours}시간`;
+            }
+            return {
+              ...item,
+              d_day: d_day,
+              totalRegion: totalRegion,
+            };
+          });
+          setWelfareData(updateData);
         } catch (error) {
           console.error(error);
         }
@@ -336,7 +371,10 @@ function CustomBusinesss() {
             id={welfare.id}
             title={welfare.name}
             region={welfare.region_key}
+            totalRegion={welfare.totalRegion}
             support_period={welfare.start_date}
+            support_fund={welfare.support_fund}
+            remainTime={welfare.d_day}
           />
         ))}
       </CustomCardBox>
