@@ -1,8 +1,9 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useRef } from "react";
 import { styled } from "styled-components";
 import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useDrag } from "react-dnd";
 
 // 카드
 const StyledCard = styled.div`
@@ -13,7 +14,11 @@ const StyledCard = styled.div`
   align-items: center;
   text-align: center;
   border-radius: 10px;
-  background-color: ${(props) => props.backgroundColor || getRandomColor()};
+  background-color: ${(props) =>
+    props.isDragging
+      ? "rgba(0,0,0,0.5)"
+      : props.backgroundColor || getRandomColor()};
+
   margin-bottom: 2%;
 `;
 
@@ -45,7 +50,7 @@ const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 2;
 `;
 
 const ModalContainer = styled.div`
@@ -60,6 +65,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   font-size: 2vh;
   border-radius: 10px;
+  z-index: 2;
 `;
 
 const ModalContant = styled.div`
@@ -70,17 +76,19 @@ const ModalContant = styled.div`
 `;
 
 // 포스터 모달
-const FullscreenModalBackground = styled.div``;
-
-const FullscreenImage = styled.img`
+const FullscreenModalBackground = styled.div`
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* object-fit: fill; */
-  overflow-y: auto;
+  overflow-y: scroll;
+`;
+
+const FullscreenImage = styled.img`
+  width: 100vw;
+  height: auto;
 `;
 
 // 포스터 모달
@@ -159,6 +167,15 @@ function Modal({ data, onClose }) {
 }
 
 const Card = (props) => {
+  // Drag & Drop
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "card",
+    item: { id: props.id, origin: props.origin },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   const navigate = useNavigate();
   const location = useLocation();
   const { id, cardWidth, cardHeight, fontSize, region, support_period, title } =
@@ -190,34 +207,38 @@ const Card = (props) => {
   }
 
   return (
-    <StyledCard
-      onClick={handleCardClick}
-      backgroundColor={getRandomColor()}
-      cardWidth={cardWidth}
-      cardHeight={cardHeight}
-      fontSize={fontSize}
-      title={title}
-      region={regionValue}
-      support_period={supportPeriodValue}
-    >
-      <Poster src={Testimg} />
+    <>
+      <StyledCard
+        ref={drag}
+        onClick={handleCardClick}
+        backgroundColor={getRandomColor()}
+        cardWidth={cardWidth}
+        cardHeight={cardHeight}
+        fontSize={fontSize}
+        title={title}
+        region={regionValue}
+        support_period={supportPeriodValue}
+        isDragging={isDragging}
+      >
+        <Poster src={Testimg} />
 
-      <ContentBox>
-        <h2>{title}</h2>
-        <p>
-          모집 지역 : {region}
-          <br />
-          모집 기간 : {support_period}
-        </p>
-        {modalVisible && (
-          <Modal
-            data={welfareData}
-            onClose={() => setModalVisible(false)}
-            backgroundColor={props.backgroundColor}
-          />
-        )}
-      </ContentBox>
-    </StyledCard>
+        <ContentBox>
+          <h2>{title}</h2>
+          <p>
+            모집 지역 : {region}
+            <br />
+            모집 기간 : {support_period}
+          </p>
+          {modalVisible && (
+            <Modal
+              data={welfareData}
+              onClose={() => setModalVisible(false)}
+              backgroundColor={props.backgroundColor}
+            />
+          )}
+        </ContentBox>
+      </StyledCard>
+    </>
   );
 };
 
