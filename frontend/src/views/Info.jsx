@@ -132,21 +132,25 @@ const Info = () => {
     };
     console.log(requestData);
     try {
-      // API 요청
-      const response = await Signup(requestData);
+      if (regionKey === 8 || regionKey > 17) {
+        // API 요청
+        const response = await Signup(requestData);
 
-      // API 응답 처리
-      if (response.status === 200) {
-        console.log("회원가입 성공:", response.data);
-        localStorage.setItem("id", response.data.data.id);
-        localStorage.setItem("myData", requestData.myData);
-        const message = [
-          ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
-        ];
-        localStorage.setItem("message", [JSON.stringify(message)]);
-        navigate("/business");
+        // API 응답 처리
+        if (response.status === 200) {
+          console.log("회원가입 성공:", response.data);
+          localStorage.setItem("id", response.data.data.id);
+          localStorage.setItem("myData", requestData.myData);
+          const message = [
+            ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
+          ];
+          localStorage.setItem("message", [JSON.stringify(message)]);
+          navigate("/business");
+        } else {
+          console.error("회원가입 실패:", response.data);
+        }
       } else {
-        console.error("회원가입 실패:", response.data);
+        alert("거주지를 정확히 입력해주세요");
       }
     } catch (error) {
       console.error("API 요청 오류:", error);

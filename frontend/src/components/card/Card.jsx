@@ -1,9 +1,10 @@
-import { React, useEffect, useState, useRef } from "react";
+import { React, useEffect, useState } from "react";
 import { styled } from "styled-components";
 import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDrag } from "react-dnd";
+import jsonData from "../../assets/data/region.json";
 
 // 카드
 const StyledCard = styled.div`
@@ -116,7 +117,17 @@ function Modal({ data, onClose }) {
   const closeModal = () => {
     onClose();
   };
-
+  const regionName = jsonData.find(
+    (item) => data.region_key === item.region_key
+  );
+  const parentRegion =
+    jsonData.find((item) => {
+      if (regionName.parent_key !== null) {
+        return regionName.parent_key === item.region_key;
+      } else {
+        return false;
+      }
+    }) || "";
   // 포스터 모달 열기
   const [fullscreenVisible, setFullscreenVisible] = useState(false);
   const [d_day, setD_day] = useState("");
@@ -131,6 +142,20 @@ function Modal({ data, onClose }) {
     });
   });
 
+  useEffect(() => {
+    const endDate = new Date(data.end_date).getTime();
+    const now = new Date().getTime();
+    const remainingTime = endDate - now;
+    if (remainingTime <= 0) {
+      setD_day("마감");
+    } else {
+      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+      const hours = Math.floor(
+        (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      setD_day(`${days}일 ${hours}시간`);
+    }
+  }, [data]);
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
@@ -146,11 +171,27 @@ function Modal({ data, onClose }) {
         <ModalContant onClick={stopPropagation}>
           <h2>{data.name}</h2>
           <p>{data.description_origin}</p>
-          <p>모집 지역 : 전국</p>
-          <p>모집 기한 : {data.start_date}</p>
+          <p>
+            모집 지역 : {parentRegion ? parentRegion.name : ""}{" "}
+            {regionName.name}
+          </p>
+          <p>
+            모집 기한 : {data.start_date.slice(0, -9)} ~{" "}
+            {data.end_date.slice(0, -9)}
+          </p>
+          <p style={{ color: "red" }}>
+            {d_day !== "마감" ? `${d_day}이 남았습니다` : "마감"}
+          </p>
           <p>기관명 : {data.organization}</p>
           <p>
-            총 지원 금액 : {data.support_fund}원 * {data.support_period}달
+            총 지원 금액 :{" "}
+            {data.support_fund !== 0
+              ? `${
+                  data.support_fund.toString().length > 4
+                    ? `${data.support_fund.toString().slice(0, -4)}만원`
+                    : `${data.support_fund}원`
+                } / ${data.support_period}달`
+              : "없음"}
           </p>
           <p>제출 서류 : {data.submission}</p>
           <p>신청 방법 : {data.route}</p>
@@ -178,13 +219,23 @@ const Card = (props) => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, cardWidth, cardHeight, fontSize, region, support_period, title } =
-    props;
+  const {
+    id,
+    cardWidth,
+    cardHeight,
+    fontSize,
+    region,
+    support_period,
+    support_fund,
+    title,
+    remainTime,
+    totalRegion,
+  } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [welfareData, setWelfareData] = useState(null);
 
-  const regionValue = region || "전국";
+  const regionValue = region !== "0" ? region : "전국";
   const supportPeriodValue = support_period || "기간 없음";
 
   // 데이터 가져오기
@@ -217,6 +268,9 @@ const Card = (props) => {
         title={title}
         region={regionValue}
         support_period={supportPeriodValue}
+        support_fund={support_fund}
+        remainTime={remainTime}
+        totalRegion={totalRegion}
         isDragging={isDragging}
       >
         <Poster src={Testimg} />
@@ -224,9 +278,18 @@ const Card = (props) => {
         <ContentBox>
           <h2>{title}</h2>
           <p>
-            모집 지역 : {region}
+            모집 지역 : {totalRegion}
             <br />
-            모집 기간 : {support_period}
+            지원 금액 :{" "}
+            {support_fund.toString().length >= 5
+              ? `${support_fund.toString().slice(0, -4)}만원`
+              : support_fund === 0
+              ? "없음"
+              : `${support_fund}원`}
+            <br />
+            <span style={{ color: "red" }}>
+              {remainTime !== "마감" ? `${remainTime}이 남았습니다` : "마감"}
+            </span>
           </p>
           {modalVisible && (
             <Modal
