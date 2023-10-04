@@ -198,7 +198,7 @@ function ExamineBody(props) {
                 key={welfare.id}
                 id={welfare.id}
                 title={welfare.name}
-                region={welfare.region_key}
+                region={welfare.regionKey}
                 support_period={welfare.start_date}
                 origin="examine"
               />
@@ -253,7 +253,7 @@ function ReceiveBody(props) {
                 key={welfare.id}
                 id={welfare.id}
                 title={welfare.name}
-                region={welfare.region_key}
+                region={welfare.regionKey}
                 support_period={welfare.start_date}
                 origin="receive"
               />

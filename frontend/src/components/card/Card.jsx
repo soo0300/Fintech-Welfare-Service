@@ -118,7 +118,7 @@ function Modal({ data, onClose }) {
     onClose();
   };
   const regionName = jsonData.find(
-    (item) => data.region_key === item.region_key
+    (item) => data.regionKey === item.region_key
   );
   const parentRegion =
     jsonData.find((item) => {
@@ -281,11 +281,11 @@ const Card = (props) => {
             모집 지역 : {totalRegion}
             <br />
             지원 금액 :{" "}
-            {support_fund.toString().length >= 5
-              ? `${support_fund.toString().slice(0, -4)}만원`
-              : support_fund === 0
-              ? "없음"
-              : `${support_fund}원`}
+            {support_fund
+              ? support_fund.toString().length >= 5
+                ? `${support_fund.toString().slice(0, -4)}만원`
+                : `${support_fund}원`
+              : "없음"}
             <br />
             <span style={{ color: "red" }}>
               {remainTime !== "마감" ? `${remainTime}이 남았습니다` : "마감"}
