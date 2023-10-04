@@ -205,6 +205,7 @@ function ExamineBody(props) {
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
                 support_fund={welfare.support_fund}
+                welfare_type={welfare.welfare_type}
                 origin="examine"
               />
             ))}{" "}
@@ -262,6 +263,7 @@ function ReceiveBody(props) {
                 start_date={welfare.start_date}
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
+                welfare_type={welfare.welfare_type}
                 origin="receive"
               />
             ))}{" "}
@@ -341,6 +343,7 @@ function CustomBusinesss() {
             end_date={welfare.end_date}
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
+            welfare_type={welfare.welfare_type}
           />
         ))}
       </CustomCardBox>
