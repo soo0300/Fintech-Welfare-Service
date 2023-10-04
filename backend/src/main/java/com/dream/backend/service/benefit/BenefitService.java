@@ -3,6 +3,8 @@ package com.dream.backend.service.benefit;
 import com.dream.backend.controller.benefit.response.BenefitResponse;
 import com.dream.backend.domain.benefit.Benefit;
 import com.dream.backend.domain.benefit.repostiory.BenefitRepository;
+import com.dream.backend.domain.qualification.Qualification;
+import com.dream.backend.domain.qualification.repository.QualificationRepository;
 import com.dream.backend.domain.user.User;
 import com.dream.backend.domain.user.repository.UserRepository;
 import com.dream.backend.domain.welfare.Welfare;
@@ -22,6 +24,7 @@ public class BenefitService {
     private final BenefitRepository benefitRepository;
     private final WelfareRepository welfareRepository;
     private final UserRepository userRepository;
+    private final QualificationRepository qualificationRepository;
 
     public Long addExamine(Long userId, Long welfareId, int status) {
         Optional<Welfare> welfare = welfareRepository.findById(welfareId);
@@ -56,8 +59,8 @@ public class BenefitService {
             System.out.println("사용자 등록한 복지(2가지 종류, staus에 따라 결정)" + welfareId);
             //welfareId 를 통해서 Welfare 객체를 가져온다.
             Optional<Welfare> welfare = welfareRepository.findById(welfareId);
-            //Response 형태로 바꾼다.
-            list.add(toResponse(welfare));
+            Optional<Qualification> qualification = qualificationRepository.findById(welfareId);
+            list.add(toResponse(welfare, qualification.get().getRegion().getId()));
         }
         return list;
     }
@@ -70,8 +73,8 @@ public class BenefitService {
             System.out.println("사용자 등록한 복지(2가지 종류, status에 따라 결정)" + welfareId);
             //welfareId 를 통해서 Welfare 객체를 가져온다.
             Optional<Welfare> welfare = welfareRepository.findById(welfareId);
-            //Response 형태로 바꾼다.
-            list.add(toResponse(welfare));
+            Optional<Qualification> qualification = qualificationRepository.findById(welfareId);
+            list.add(toResponse(welfare, qualification.get().getRegion().getId()));
         }
         return list;
     }
@@ -107,7 +110,7 @@ public class BenefitService {
                 .build();
     }
 
-    private BenefitResponse toResponse(Optional<Welfare> welfare) {
+    private BenefitResponse toResponse(Optional<Welfare> welfare, Long region_key) {
         return BenefitResponse.builder()
                 .name(welfare.get().getName())
                 .organization(welfare.get().getOrganization())
@@ -122,6 +125,7 @@ public class BenefitService {
                 .support_period(welfare.get().getSupport_period())
                 .etc(welfare.get().getEtc())
                 .id(welfare.get().getId())
+                .regionKey(region_key)
                 .build();
 
     }
