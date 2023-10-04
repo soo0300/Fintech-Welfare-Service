@@ -200,8 +200,11 @@ function ExamineBody(props) {
                 key={welfare.id}
                 id={welfare.id}
                 title={welfare.name}
-                region={welfare.regionKey}
+                regionKey={welfare.regionKey}
+                start_date={welfare.start_date}
+                end_date={welfare.end_date}
                 support_period={welfare.start_date}
+                support_fund={welfare.support_fund}
                 origin="examine"
               />
             ))}{" "}
@@ -255,7 +258,9 @@ function ReceiveBody(props) {
                 key={welfare.id}
                 id={welfare.id}
                 title={welfare.name}
-                region={welfare.regionKey}
+                regionKey={welfare.regionKey}
+                start_date={welfare.start_date}
+                end_date={welfare.end_date}
                 support_period={welfare.start_date}
                 origin="receive"
               />
@@ -299,41 +304,8 @@ function CustomBusinesss() {
         // 가져왔다면, id를 이용해서 API보내기
         try {
           const response = await GetMywelfare({ user_id: userId });
-          const updateData = response.data.map((item) => {
-            const curRegion = item.regionKey;
-            const regionName = jsonData.find(
-              (item) => curRegion === item.region_key
-            );
-            const parentRegion =
-              jsonData.find((item) => {
-                if (regionName.parent_key !== null) {
-                  return regionName.parent_key === item.region_key;
-                } else {
-                  return false;
-                }
-              }) || "";
-            const totalRegion =
-              (parentRegion ? parentRegion.name + " " : "") + regionName.name;
-            const endDate = new Date(item.end_date).getTime();
-            const now = new Date().getTime();
-            const remainingTime = endDate - now;
-            let d_day;
-            if (remainingTime <= 0) {
-              d_day = "마감";
-            } else {
-              const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-              const hours = Math.floor(
-                (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-              );
-              d_day = `${days}일 ${hours}시간`;
-            }
-            return {
-              ...item,
-              d_day: d_day,
-              totalRegion: totalRegion,
-            };
-          });
-          setWelfareData(updateData);
+
+          setWelfareData(response.data);
         } catch (error) {
           console.error(error);
         }
@@ -364,11 +336,11 @@ function CustomBusinesss() {
             key={welfare.id}
             id={welfare.id}
             title={welfare.name}
-            region={welfare.region_key}
-            totalRegion={welfare.totalRegion}
+            regionKey={welfare.regionKey}
+            start_date={welfare.start_date}
+            end_date={welfare.end_date}
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
-            remainTime={welfare.d_day}
           />
         ))}
       </CustomCardBox>
