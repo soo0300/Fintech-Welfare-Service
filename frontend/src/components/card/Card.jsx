@@ -8,10 +8,9 @@ import jsonData from "../../assets/data/region.json";
 
 // 카드
 const StyledCard = styled.div`
-  width: 45%;
-  height: 40vh;
+  width: 85%;
+  height: 20vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   text-align: center;
   border-radius: 10px;
@@ -22,12 +21,11 @@ const StyledCard = styled.div`
 
   margin-bottom: 2%;
 `;
-
 const Poster = styled.img`
-  width: 90%;
-  height: 50%;
+  width: 50%;
+  height: 95%;
   object-fit: fill;
-  margin: 5% 5% 0% 5%;
+  margin: 5% 0% 5% 2%;
 `;
 
 const ContentBox = styled.div`
@@ -51,7 +49,7 @@ const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 3;
 `;
 
 const ModalContainer = styled.div`
@@ -66,7 +64,14 @@ const ModalContainer = styled.div`
   flex-direction: column;
   font-size: 2vh;
   border-radius: 10px;
-  z-index: 2;
+  z-index: 3;
+`;
+
+const ModalPoster = styled.img`
+  width: 100%;
+  height: 50%;
+  object-fit: fill;
+  margin: 3% 0% 3% 0%;
 `;
 
 const ModalContant = styled.div`
@@ -159,7 +164,7 @@ function Modal({ data, onClose }) {
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
-        <Poster src={Testimg} onClick={handlePosterClick} />
+        <ModalPoster src={Testimg} onClick={handlePosterClick} />
 
         {fullscreenVisible && (
           <FullscreenImageModal

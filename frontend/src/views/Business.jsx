@@ -75,7 +75,7 @@ const CustomContainer = styled.div`
 const CustomCardBox = styled.div`
   display: flex;
   width: 100%;
-  height: 35vh;
+  height: 41vh;
   justify-content: flex-start;
   gap: 10px;
   margin-left: 6%;
@@ -93,9 +93,11 @@ const Money = styled.div`
 const CardContainer = styled.div`
   display: flex;
   width: 100%;
+  height: 23vh;
   justify-content: flex-start;
   gap: 10px;
   margin-left: 6%;
+  overflow-y: scroll;
   flex-wrap: wrap;
 `;
 
@@ -277,10 +279,6 @@ function CustomBusinesss() {
       status: 1,
     });
     console.log(response);
-    if (response.status === 200) {
-      // Check if the request was successful
-      setWelfareData(welfareData.filter((w) => w.id !== id)); // Remove the card from state
-    }
   };
 
   const cancelExamine = async (id) => {
@@ -291,10 +289,6 @@ function CustomBusinesss() {
       status: 2,
     });
     console.log(response);
-    if (response.status === 200) {
-      // Check if the request was successful
-      setWelfareData(welfareData.filter((w) => w.id !== id)); // Remove the card from state
-    }
   };
 
   // 로컬 스토리지에서 id가져오기
