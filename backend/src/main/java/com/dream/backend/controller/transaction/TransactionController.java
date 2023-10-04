@@ -1,5 +1,6 @@
 package com.dream.backend.controller.transaction;
 
+import com.dream.backend.controller.Status.StatusObject;
 import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.controller.transaction.response.TransactionObject;
 import com.dream.backend.controller.transaction.response.TransactionResponse;
@@ -177,9 +178,21 @@ public class TransactionController {
     }
 
     @PostMapping("/deposit")
-    public String depositToAccount(@RequestBody TransactionRequest request) {
-        transactionService.insertTransaction(request);
+    public StatusObject depositToAccount(@RequestBody TransactionRequest request) {
 
-        return "OK";
+        if(!transactionService.isAccountValid(request.getAccount_number())) {
+            return StatusObject.returnFailed(400, "Bad Request", "Unknown Account Number");
+        }
+
+        if(request.getInout_type() != 1 && request.getInout_type() != 0) {
+            return StatusObject.returnFailed(400, "Bad Request", "Not Supported Inout Type");
+        }
+
+        if(request.getTran_amt() <= 0) {
+            return StatusObject.returnFailed(400, "Bad Request", "TranAmt Must Be Greater Than 0");
+        }
+
+        transactionService.insertTransaction(request);
+        return StatusObject.returnSuccessful(request);
     }
 }
