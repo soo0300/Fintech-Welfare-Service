@@ -163,7 +163,7 @@ public class TransactionController {
                     .afterAmt(t.getBalance())
                     .build();
 
-            if(code.length() == 4 && code.charAt(0) == 'A') {
+            if(welfareService.isWelfareCodeValid(t.getTranDesc())) {
                 WelfareRepository.WelfareNativeVo response = welfareService.getWelfareByCode(code);
                 transactionResponse.setWelfare(response);
             }
