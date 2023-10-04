@@ -1,6 +1,9 @@
 package com.dream.backend.elasitc.service;
 
-import co.elastic.clients.elasticsearch.core.*;
+import co.elastic.clients.elasticsearch.core.DeleteResponse;
+import co.elastic.clients.elasticsearch.core.GetResponse;
+import co.elastic.clients.elasticsearch.core.IndexResponse;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
 import co.elastic.clients.elasticsearch.core.search.Hit;
 import com.dream.backend.elasitc.entity.WelfareInfo;
 import lombok.RequiredArgsConstructor;
