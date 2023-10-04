@@ -206,6 +206,7 @@ public class UserService {
                         //user_id 와 welfare_key가 같으면 바꿔줘.
                         Optional<Benefit> benefit = benefitRepository.findByUser_IdAndWelfare_Id(savedUser.get().getId(), welfare_key);
                         benefit.get().changeStatusToNum(savedUser.get(), 1, welfare.get().getSupport_fund());
+                        System.out.println("복지금액: "+welfare.get().getSupport_fund()+" 사용자 총 금액"+savedUser.get().getTotal_fund());
 
                     }
                 }
