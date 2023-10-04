@@ -184,7 +184,7 @@ public class TransactionController {
             return ApiResponse.badRequest("Unknown Account Number");
         }
 
-        if(request.getInout_type() != 1 && request.getInout_type() != 0) {
+        if(!transactionService.isInoutTypeValid(request.getInout_type())) {
             return ApiResponse.badRequest("Not Supported Inout Type");
         }
 
