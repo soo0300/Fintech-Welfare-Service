@@ -31,3 +31,13 @@ export async function Login(props) {
     console.error(e);
   }
 }
+
+export async function Exit() {
+  const id = localStorage.getItem("id");
+  try {
+    const res = await baseAxios.patch(`exit/${id}`, {});
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
