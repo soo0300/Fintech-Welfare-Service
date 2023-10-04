@@ -1,8 +1,10 @@
 import { React, useState, useEffect } from "react"; // useState import
-import Nav from "../components/Nav/Nav";
 import { styled } from "styled-components";
 import Header from "../components/header/Header";
 import Card from "../components/card/Card";
+
+// Drag & Drop
+import { useDrop } from "react-dnd";
 
 // Icon
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
@@ -15,6 +17,8 @@ import {
   GetReceive,
   GetExamine,
   GetFund,
+  PlusWelfare,
+  CancelWelfare,
 } from "../api/welfare/MyWelfare";
 
 // 사업을 넣는 박스를 갖는 컨테이너
@@ -25,8 +29,6 @@ const BusinessContainer = styled.div`
   height: calc(100%-154px);
   margin-top: 70px;
   margin-bottom: 10px;
-  overflow-y: scroll;
-  overflow-x: hidden;
 `;
 
 // 카드를 넣었을 때와 안넣었을 때 박스 공통 설정
@@ -72,10 +74,13 @@ const CustomContainer = styled.div`
 const CustomCardBox = styled.div`
   display: flex;
   width: 100%;
+  height: 35vh;
   justify-content: flex-start;
   gap: 10px;
   margin-left: 6%;
   flex-wrap: wrap;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const Money = styled.div`
@@ -104,29 +109,47 @@ const HR = styled.hr`
 
 // 넣은 심사사업이 없을 때
 function ExamineNothing(props) {
+  // drag & drop
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item) => props.addExamine(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <>
+    <div ref={drop}>
       <BusinessNothingBox>
         <Text>
           <p style={{ color: props.titleColor }}>{props.title}</p>을 넣어주세요
         </Text>
         <WhitePlusIcon width="10%" />
       </BusinessNothingBox>
-    </>
+    </div>
   );
 }
 
 // 넣은 지원사업이 없을 때
 function ReceiveNothing(props) {
+  // drag & drop
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item) => props.addReceive(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <>
-      <BusinessNothingBox>
+    <div ref={drop}>
+      <BusinessNothingBox ref={props.ref}>
         <Text>
           <p style={{ color: props.titleColor }}>{props.title}</p>을 넣어주세요
         </Text>
         <WhitePlusIcon width="10%" />
       </BusinessNothingBox>
-    </>
+    </div>
   );
 }
 
@@ -135,39 +158,54 @@ function ExamineBody(props) {
   // 플러스 마이너스 버튼을 통해 보여지고 안보여지고
   const [isCardVisible, setCardVisible] = useState(false); // State for Card visibility
 
+  // drag & drop
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item) => props.addExamine(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
+
   return (
-    <BusinessBox>
-      <BusinessBoxTop>
-        <p style={{ color: props.titleColor }}>{props.title}</p>
-        {isCardVisible ? (
-          <MinusIcon
-            width="6%"
-            onClick={() => setCardVisible(!isCardVisible)}
-          />
-        ) : (
-          <PlusIcon width="6%" onClick={() => setCardVisible(!isCardVisible)} />
-        )}{" "}
-      </BusinessBoxTop>
-      <HR />
-      <Money>
-        <p>매 달</p>
-        <p style={{ color: props.moneyColor }}>{props.money}₩</p>
-        <p>{props.comment}</p>
-      </Money>
-      {isCardVisible && (
-        <CardContainer>
-          {props.examine.map((welfare) => (
-            <Card
-              key={welfare.id}
-              id={welfare.id}
-              title={welfare.name}
-              region={welfare.region_key}
-              support_period={welfare.start_date}
+    <div ref={drop}>
+      <BusinessBox>
+        <BusinessBoxTop>
+          <p style={{ color: props.titleColor }}>{props.title}</p>
+          {isCardVisible ? (
+            <MinusIcon
+              width="6%"
+              onClick={() => setCardVisible(!isCardVisible)}
             />
-          ))}{" "}
-        </CardContainer>
-      )}
-    </BusinessBox>
+          ) : (
+            <PlusIcon
+              width="6%"
+              onClick={() => setCardVisible(!isCardVisible)}
+            />
+          )}{" "}
+        </BusinessBoxTop>
+        <HR />
+        <Money>
+          <p>매 달</p>
+          <p style={{ color: props.moneyColor }}>{props.money}₩</p>
+          <p>{props.comment}</p>
+        </Money>
+        {isCardVisible && (
+          <CardContainer>
+            {props.examine.map((welfare) => (
+              <Card
+                key={welfare.id}
+                id={welfare.id}
+                title={welfare.name}
+                region={welfare.region_key}
+                support_period={welfare.start_date}
+                origin="examine"
+              />
+            ))}{" "}
+          </CardContainer>
+        )}
+      </BusinessBox>
+    </div>
   );
 }
 
@@ -176,45 +214,87 @@ function ReceiveBody(props) {
   // 플러스 마이너스 버튼을 통해 보여지고 안보여지고
   const [isCardVisible, setCardVisible] = useState(false); // State for Card visibility
 
+  // drag & drop
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item) => props.addReceive(item.id),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  }));
   return (
-    <BusinessBox>
-      <BusinessBoxTop>
-        <p style={{ color: props.titleColor }}>{props.title}</p>
-        {isCardVisible ? (
-          <MinusIcon
-            width="6%"
-            onClick={() => setCardVisible(!isCardVisible)}
-          />
-        ) : (
-          <PlusIcon width="6%" onClick={() => setCardVisible(!isCardVisible)} />
-        )}{" "}
-      </BusinessBoxTop>
-      <HR />
-      <Money>
-        <p>매 달</p>
-        <p style={{ color: props.moneyColor }}>{props.money}₩</p>
-        <p>{props.comment}</p>
-      </Money>
-      {isCardVisible && (
-        <CardContainer>
-          {props.receiveWelfares.map((welfare) => (
-            <Card
-              key={welfare.id}
-              id={welfare.id}
-              title={welfare.name}
-              region={welfare.region_key}
-              support_period={welfare.start_date}
+    <div ref={drop}>
+      <BusinessBox ref={props.ref}>
+        <BusinessBoxTop>
+          <p style={{ color: props.titleColor }}>{props.title}</p>
+          {isCardVisible ? (
+            <MinusIcon
+              width="6%"
+              onClick={() => setCardVisible(!isCardVisible)}
             />
-          ))}{" "}
-        </CardContainer>
-      )}
-    </BusinessBox>
+          ) : (
+            <PlusIcon
+              width="6%"
+              onClick={() => setCardVisible(!isCardVisible)}
+            />
+          )}{" "}
+        </BusinessBoxTop>
+        <HR />
+        <Money>
+          <p>매 달</p>
+          <p style={{ color: props.moneyColor }}>{props.money}₩</p>
+          <p>{props.comment}</p>
+        </Money>
+        {isCardVisible && (
+          <CardContainer>
+            {props.receiveWelfares.map((welfare) => (
+              <Card
+                key={welfare.id}
+                id={welfare.id}
+                title={welfare.name}
+                region={welfare.region_key}
+                support_period={welfare.start_date}
+                origin="receive"
+              />
+            ))}{" "}
+          </CardContainer>
+        )}
+      </BusinessBox>
+    </div>
   );
 }
 
 // 맞춤 지원 사업
 function CustomBusinesss() {
   const [welfareData, setWelfareData] = useState([]);
+
+  const cancelReceive = async (id) => {
+    const userId = localStorage.getItem("id");
+    const response = await CancelWelfare({
+      user_id: userId,
+      welfare_id: id,
+      status: 1,
+    });
+    console.log(response);
+    if (response.status === 200) {
+      // Check if the request was successful
+      setWelfareData(welfareData.filter((w) => w.id !== id)); // Remove the card from state
+    }
+  };
+
+  const cancelExamine = async (id) => {
+    const userId = localStorage.getItem("id");
+    const response = await CancelWelfare({
+      user_id: userId,
+      welfare_id: id,
+      status: 2,
+    });
+    console.log(response);
+    if (response.status === 200) {
+      // Check if the request was successful
+      setWelfareData(welfareData.filter((w) => w.id !== id)); // Remove the card from state
+    }
+  };
 
   // 로컬 스토리지에서 id가져오기
   useEffect(() => {
@@ -234,8 +314,19 @@ function CustomBusinesss() {
     fetchWelfareData();
   }, []);
 
+  const [, drop] = useDrop(() => ({
+    accept: "card",
+    drop: (item) => {
+      if (item.origin === "examine") {
+        cancelExamine(item.id);
+      } else if (item.origin === "receive") {
+        cancelReceive(item.id);
+      }
+    },
+  }));
+
   return (
-    <CustomContainer>
+    <CustomContainer ref={drop}>
       <p>맞춤 지원 사업</p>
       <HR />
       <CustomCardBox>
@@ -278,7 +369,31 @@ function Business() {
     fetchData(GetFund, setMoney); // Money fetch
   }, []);
 
-  console.log(money);
+  const addReceive = async (id) => {
+    const userId = localStorage.getItem("id");
+    const response = await PlusWelfare({
+      user_id: userId,
+      welfare_id: id,
+      status: 1,
+    });
+    console.log(response);
+    if (response.status === 200) {
+      setReceive([...receive, response.data]);
+    }
+  };
+
+  const addExamine = async (id) => {
+    const userId = localStorage.getItem("id");
+    const response = await PlusWelfare({
+      user_id: userId,
+      welfare_id: id,
+      status: 2,
+    });
+    console.log(response);
+    if (response.status === 200) {
+      setExamine([...examine, response.data]);
+    }
+  };
 
   return (
     <>
@@ -286,6 +401,7 @@ function Business() {
       <BusinessContainer>
         {examine.length > 0 ? (
           <ExamineBody
+            addExamine={addExamine}
             examine={examine}
             title="심사 중인 지원 사업"
             titleColor="#F66262"
@@ -294,11 +410,16 @@ function Business() {
             comment="더 받을 수 있습니다."
           />
         ) : (
-          <ExamineNothing title="심사 중인 지원 사업" titleColor="#F66262" />
+          <ExamineNothing
+            addExamine={addExamine}
+            title="심사 중인 지원 사업"
+            titleColor="#F66262"
+          />
         )}
 
         {receive.length > 0 ? (
           <ReceiveBody
+            addReceive={addReceive}
             receiveWelfares={receive}
             title="지원 받고 있는 사업"
             titleColor="#006FFD"
@@ -307,7 +428,11 @@ function Business() {
             comment="지원 받고 있습니다."
           />
         ) : (
-          <ReceiveNothing title="지원 받고 있는 사업" titleColor="#006FFD" />
+          <ReceiveNothing
+            addReceive={addReceive}
+            title="지원 받고 있는 사업"
+            titleColor="#006FFD"
+          />
         )}
 
         <CustomBusinesss />

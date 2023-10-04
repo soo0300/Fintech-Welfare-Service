@@ -1,9 +1,9 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, useRef } from "react";
 import { styled } from "styled-components";
 import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
-import jsonData from "../../assets/data/region.json"
+import { useDrag } from "react-dnd";
 
 // 카드
 const StyledCard = styled.div`
@@ -14,7 +14,11 @@ const StyledCard = styled.div`
   align-items: center;
   text-align: center;
   border-radius: 10px;
-  background-color: ${(props) => props.backgroundColor || getRandomColor()};
+  background-color: ${(props) =>
+    props.isDragging
+      ? "rgba(0,0,0,0.5)"
+      : props.backgroundColor || getRandomColor()};
+
   margin-bottom: 2%;
 `;
 
@@ -46,7 +50,7 @@ const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 2;
 `;
 
 const ModalContainer = styled.div`
@@ -61,6 +65,7 @@ const ModalContainer = styled.div`
   flex-direction: column;
   font-size: 2vh;
   border-radius: 10px;
+  z-index: 2;
 `;
 
 const ModalContant = styled.div`
@@ -71,17 +76,19 @@ const ModalContant = styled.div`
 `;
 
 // 포스터 모달
-const FullscreenModalBackground = styled.div``;
-
-const FullscreenImage = styled.img`
+const FullscreenModalBackground = styled.div`
   width: 100vw;
   height: 100vh;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* object-fit: fill; */
-  overflow-y: auto;
+  overflow-y: scroll;
+`;
+
+const FullscreenImage = styled.img`
+  width: 100vw;
+  height: auto;
 `;
 
 // 포스터 모달
@@ -102,7 +109,6 @@ function getRandomColor() {
 
 // 모달
 function Modal({ data, onClose }) {
-  console.log("데이터확인 :", data)
   const stopPropagation = (e) => {
     e.stopPropagation();
   };
@@ -110,16 +116,6 @@ function Modal({ data, onClose }) {
   const closeModal = () => {
     onClose();
   };
-  const regionName = jsonData.find((item) => 
-    data.region_key === item.region_key
-  )
-  const parentRegion = jsonData.find((item) => {
-    if (regionName.parent_key !== null) {
-      return regionName.parent_key === item.region_key;
-    } else {
-      return false;
-    }
-  }) || "";
 
   // 포스터 모달 열기
   const [fullscreenVisible, setFullscreenVisible] = useState(false);
@@ -134,19 +130,7 @@ function Modal({ data, onClose }) {
       closeModal();
     });
   });
-  useEffect(()=> {
-    const endDate = new Date(data.end_date).getTime();
-    const now = new Date().getTime();
-    const remainingTime = endDate - now;
-    if (remainingTime <= 0) {
-      setD_day("마감");
-    } else {
-      const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      setD_day(`${days}일 ${hours}시간`)
-    }
-  }, [data]);
-  
+
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
@@ -162,19 +146,11 @@ function Modal({ data, onClose }) {
         <ModalContant onClick={stopPropagation}>
           <h2>{data.name}</h2>
           <p>{data.description_origin}</p>
-          <p>모집 지역 : {parentRegion ? parentRegion.name : ""} {regionName.name}</p>
-          <p>모집 기한 : {data.start_date.slice(0, -9)} ~ {data.end_date.slice(0, -9)}</p>
-          <p style={ {color: "red"}}>{d_day !== "마감" ? `${d_day}이 남았습니다` : "마감"}</p>
+          <p>모집 지역 : 전국</p>
+          <p>모집 기한 : {data.start_date}</p>
           <p>기관명 : {data.organization}</p>
           <p>
-            총 지원 금액 : {
-  data.support_fund !== 0
-    ? `${data.support_fund.toString().length > 4
-        ? `${data.support_fund.toString().slice(0, -4)}만원`
-        : `${data.support_fund}원`} / ${data.support_period}달`
-    : "없음"
-}
-
+            총 지원 금액 : {data.support_fund}원 * {data.support_period}달
           </p>
           <p>제출 서류 : {data.submission}</p>
           <p>신청 방법 : {data.route}</p>
@@ -191,16 +167,26 @@ function Modal({ data, onClose }) {
 }
 
 const Card = (props) => {
+  // Drag & Drop
+  const [{ isDragging }, drag] = useDrag(() => ({
+    type: "card",
+    item: { id: props.id, origin: props.origin },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  }));
+
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, cardWidth, cardHeight, fontSize, region, support_period, support_fund,  title, remainTime, totalRegion } =
+  const { id, cardWidth, cardHeight, fontSize, region, support_period, title } =
     props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [welfareData, setWelfareData] = useState(null);
-  const regionValue = region !== "0" ? region :  "전국";
+
+  const regionValue = region || "전국";
   const supportPeriodValue = support_period || "기간 없음";
-  
+
   // 데이터 가져오기
   async function handleCardClick(e) {
     if (!modalVisible) {
@@ -218,43 +204,40 @@ const Card = (props) => {
       navigate(`${location.pathname.slice(0, -7)}`);
     }
   }
-  
-
 
   return (
-    <StyledCard
-      onClick={handleCardClick}
-      backgroundColor={getRandomColor()}
-      cardWidth={cardWidth}
-      cardHeight={cardHeight}
-      fontSize={fontSize}
-      title={title}
-      region={regionValue}
-      support_period={supportPeriodValue}
-      support_fund={support_fund}
-      remainTime={remainTime}
-      totalRegion={totalRegion}
-    >
-      <Poster src={Testimg} />
+    <>
+      <StyledCard
+        ref={drag}
+        onClick={handleCardClick}
+        backgroundColor={getRandomColor()}
+        cardWidth={cardWidth}
+        cardHeight={cardHeight}
+        fontSize={fontSize}
+        title={title}
+        region={regionValue}
+        support_period={supportPeriodValue}
+        isDragging={isDragging}
+      >
+        <Poster src={Testimg} />
 
-      <ContentBox>
-        <h2>{title}</h2>
-        <p>
-          모집 지역 : {totalRegion}
-          <br />
-          지원 금액 : {support_fund.toString().length >= 5 ? `${support_fund.toString().slice(0, -4)}만원` : (support_fund === 0 ? "없음" : `${support_fund}원` )}
-          <br />
-          <span style={{color: "red"}}>{remainTime !== "마감" ? `${remainTime}이 남았습니다` : "마감"}</span> 
-        </p>
-        {modalVisible && (
-          <Modal
-            data={welfareData}
-            onClose={() => setModalVisible(false)}
-            backgroundColor={props.backgroundColor}
-          />
-        )}
-      </ContentBox>
-    </StyledCard>
+        <ContentBox>
+          <h2>{title}</h2>
+          <p>
+            모집 지역 : {region}
+            <br />
+            모집 기간 : {support_period}
+          </p>
+          {modalVisible && (
+            <Modal
+              data={welfareData}
+              onClose={() => setModalVisible(false)}
+              backgroundColor={props.backgroundColor}
+            />
+          )}
+        </ContentBox>
+      </StyledCard>
+    </>
   );
 };
 
