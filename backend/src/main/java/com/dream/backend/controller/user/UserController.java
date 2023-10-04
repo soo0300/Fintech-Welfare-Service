@@ -29,6 +29,11 @@ public class UserController {
         return ApiResponse.ok(userService.joinUser(dto,type).getData());
     }
 
+    @GetMapping("/check/{email}")
+    public Boolean checkEmail(@PathVariable String email){
+        return userService.checkEmail(email);
+    }
+
     @GetMapping("/fund/{user_id}")
     public UserFundResponse getUserFund(@PathVariable Long user_id) {
         Optional<User> user = userService.getUserFund(user_id);

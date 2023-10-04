@@ -216,6 +216,10 @@ public class UserService {
         return savedUser.get().getId();
     }
 
+    public Boolean checkEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
 
     //    - - - - - - - - - 비즈니스 로직 - - - - - - - - -
     public UserResponse toUserResponse(Optional<User> user) {
@@ -246,5 +250,6 @@ public class UserService {
         return age;
 
     }
+
 
 }
