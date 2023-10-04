@@ -59,6 +59,10 @@ public class WelfareService {
         return dto.get();
     }
 
+    public boolean isWelfareCodeValid(String code) {
+        return welfareRepository.existsByWelfareCode(code);
+    }
+
 //    - - - - - - - 비즈니스 로직 - - - - - - -- -
 
 

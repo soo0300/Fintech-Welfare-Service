@@ -34,6 +34,10 @@ public class TransactionService {
         return accountRepository.existsById(accountNumber);
     }
 
+    public boolean isInoutTypeValid(int type) {
+        return inoutTypeRepository.existsById(type);
+    }
+
     public List<Transaction> getAllTransaction() {
         return transactionRepository.findAll();
     }

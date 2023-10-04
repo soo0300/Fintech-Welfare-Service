@@ -1,8 +1,8 @@
 package com.dream.backend.elasitc.controller;
 
+import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.domain.welfare.Welfare;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
-import com.dream.backend.controller.Status.StatusObject;
 import com.dream.backend.elasitc.entity.WelfareInfo;
 import com.dream.backend.elasitc.entity.WelfareInfoRequestDto;
 import com.dream.backend.elasitc.service.WelfareInfoService;
@@ -23,12 +23,12 @@ public class WelfareInfoController {
     private final WelfareRepository welfareRepository;
 
     @GetMapping("/create")
-    public StatusObject createIndex() {
+    public ApiResponse<Object> createIndex() {
         welfareInfoService.setClient();
         welfareInfoService.createIndex();
         welfareInfoService.closeAllClient();
 
-        return StatusObject.returnSuccessful(null);
+        return ApiResponse.ok(null);
     }
 
     @GetMapping("/get/{id}")
@@ -42,8 +42,8 @@ public class WelfareInfoController {
     }
 
     @GetMapping("/search")
-    public StatusObject searchException() {
-        return StatusObject.returnFailed(400, "Bad Request", "No Expression");
+    public ApiResponse searchException() {
+        return ApiResponse.badRequest("No Expression");
     }
 
     @GetMapping("/search/{expression}")
@@ -94,12 +94,12 @@ public class WelfareInfoController {
     }
 
     @PostMapping("/index")
-    public StatusObject indexInfo(@RequestBody WelfareInfoRequestDto dto) {
+    public ApiResponse<Object> indexInfo(@RequestBody WelfareInfoRequestDto dto) {
         welfareInfoService.setClient();
         welfareInfoService.insertDocument(dto.getWelfareId(), dto.getName(), dto.getDescription());
         welfareInfoService.closeAllClient();
 
-        return StatusObject.returnSuccessful(null);
+        return ApiResponse.ok(null);
     }
 
     @GetMapping("/synchro")

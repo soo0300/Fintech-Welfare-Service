@@ -134,7 +134,7 @@ public class UserService {
             for (int i = 0; i < getUserWelfareKey.size(); i++) { //2 3 6
                 Long welfare_key = getUserWelfareKey.get(i);
                 Optional<Welfare> welfare = welfareRepository.findById(welfare_key);
-                String welfare_code = welfare.get().getWelfare_code(); //BVE ABC ABC
+                String welfare_code = welfare.get().getWelfareCode(); //BVE ABC ABC
 
                 System.out.println("거래 내역코드 : " + welfare_code);
 

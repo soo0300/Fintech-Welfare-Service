@@ -1,6 +1,6 @@
 package com.dream.backend.controller.transaction;
 
-import com.dream.backend.controller.Status.StatusObject;
+import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.controller.transaction.request.TransactionRequest;
 import com.dream.backend.controller.transaction.response.TransactionObject;
 import com.dream.backend.controller.transaction.response.TransactionResponse;
@@ -64,7 +64,14 @@ public class TransactionController {
 
         Account acc = result.get(0).getAccount();
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         return TransactionResponse.builder()
@@ -83,7 +90,14 @@ public class TransactionController {
         Account account = result.get(0).getAccount();
 
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         return TransactionResponse.builder()
@@ -104,7 +118,14 @@ public class TransactionController {
         if(account == null) return null;
 
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         alarmService.setClient();
@@ -163,7 +184,7 @@ public class TransactionController {
                     .afterAmt(t.getBalance())
                     .build();
 
-            if(code.length() == 4 && code.charAt(0) == 'A') {
+            if(welfareService.isWelfareCodeValid(t.getTranDesc())) {
                 WelfareRepository.WelfareNativeVo response = welfareService.getWelfareByCode(code);
                 transactionResponse.setWelfare(response);
             }
@@ -178,21 +199,21 @@ public class TransactionController {
     }
 
     @PostMapping("/deposit")
-    public StatusObject depositToAccount(@RequestBody TransactionRequest request) {
+    public ApiResponse<TransactionRequest> depositToAccount(@RequestBody TransactionRequest request) {
 
         if(!transactionService.isAccountValid(request.getAccount_number())) {
-            return StatusObject.returnFailed(400, "Bad Request", "Unknown Account Number");
+            return ApiResponse.badRequest("Unknown Account Number");
         }
 
-        if(request.getInout_type() != 1 && request.getInout_type() != 0) {
-            return StatusObject.returnFailed(400, "Bad Request", "Not Supported Inout Type");
+        if(!transactionService.isInoutTypeValid(request.getInout_type())) {
+            return ApiResponse.badRequest("Not Supported Inout Type");
         }
 
         if(request.getTran_amt() <= 0) {
-            return StatusObject.returnFailed(400, "Bad Request", "TranAmt Must Be Greater Than 0");
+            return ApiResponse.badRequest("TranAmt Must Be Greater Than 0");
         }
 
         transactionService.insertTransaction(request);
-        return StatusObject.returnSuccessful(request);
+        return ApiResponse.ok(request);
     }
 }

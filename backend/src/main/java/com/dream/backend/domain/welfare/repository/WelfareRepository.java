@@ -24,4 +24,6 @@ public interface WelfareRepository extends JpaRepository<Welfare, Long> {
         String getName();
         String getOrganization();
     }
+
+    boolean existsByWelfareCode(String code);
 }
