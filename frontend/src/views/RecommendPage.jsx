@@ -178,16 +178,22 @@ function Business({ userInput, selectedTags }) {
   useEffect(() => {
     const fetchWelfares = async () => {
       let fetchedData = await AllWelfare();
+      console.log(fetchedData);
       const updateData = fetchedData.map((item) => {
-        const curRegion = item.region_key;
-        const regionName = jsonData.find((item) => curRegion === item.region_key);
-        const parentRegion = jsonData.find((item) => {
-          if (regionName.parent_key !== null) {
-            return regionName.parent_key === item.region_key;
-          } else {
-            return false;
-          }}) || "";
-        const totalRegion = (parentRegion ? parentRegion.name + " " : "") + regionName.name
+        const curRegion = item.regionKey;
+        const regionName = jsonData.find(
+          (item) => curRegion === item.region_key
+        );
+        const parentRegion =
+          jsonData.find((item) => {
+            if (regionName.parent_key !== null) {
+              return regionName.parent_key === item.region_key;
+            } else {
+              return false;
+            }
+          }) || "";
+        const totalRegion =
+          (parentRegion ? parentRegion.name + " " : "") + regionName.name;
         const endDate = new Date(item.end_date).getTime();
         const now = new Date().getTime();
         const remainingTime = endDate - now;
@@ -196,7 +202,9 @@ function Business({ userInput, selectedTags }) {
           d_day = "마감";
         } else {
           const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const hours = Math.floor(
+            (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
           d_day = `${days}일 ${hours}시간`;
         }
         return {
@@ -205,7 +213,6 @@ function Business({ userInput, selectedTags }) {
           totalRegion: totalRegion,
         };
       });
-  
 
       console.log(updateData);
       setWelfares(updateData);
@@ -219,8 +226,11 @@ function Business({ userInput, selectedTags }) {
     // 이름 및 지역에 따른 필터링
     let searched = welfares.filter(
       (welfare) =>
-        (welfare.name.includes(userInput) || welfare.description_origin.includes(userInput)) &&
-        (regionKey === "" || welfare.region_key === regionKey || welfare.region_key === 0)
+        (welfare.name.includes(userInput) ||
+          welfare.description_origin.includes(userInput)) &&
+        (regionKey === "" ||
+          welfare.region_key === regionKey ||
+          welfare.region_key === 0)
     );
 
     // 지역이 있을 때, 지역이름 p태그 안에 띄우기
@@ -283,7 +293,11 @@ function RecommendPage() {
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar userInput={userInput} setUserInput={setUserInput} className="InputBox"/>
+        <SearchBar
+          userInput={userInput}
+          setUserInput={setUserInput}
+          className="InputBox"
+        />
         <Tag selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         <Business userInput={userInput} selectedTags={selectedTags} />
       </RecommandPageBody>

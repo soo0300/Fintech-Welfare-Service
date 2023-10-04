@@ -4,7 +4,7 @@ import MyData from "../components/mydata/MyData";
 import Header from "../components/header/Header";
 
 const Content = styled.div`
-  margin-top: 100px;
+  margin-top: 80px;
   width: 100%;
   height: 100%;
   overflow-y: scroll;

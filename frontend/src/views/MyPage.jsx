@@ -11,7 +11,7 @@ import { Exit } from "../api/mypage/User";
 //정보박스
 const InfoBox = styled.div`
   width: 90%;
-  margin-top: 100px;
+  margin-top: 80px;
   margin-bottom: 20px;
   border-radius: 20px;
   display: flex;

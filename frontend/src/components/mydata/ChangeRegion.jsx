@@ -24,6 +24,7 @@ const FormBox = styled.form`
   border-radius: 20px;
   background-color: white;
   box-shadow: 3px 3px 3px 3px lightgray;
+  margin-bottom: 20px;
 `;
 
 const TextBox = styled.div`
