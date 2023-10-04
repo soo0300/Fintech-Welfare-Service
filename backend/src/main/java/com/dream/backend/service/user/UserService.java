@@ -40,16 +40,17 @@ public class UserService {
 
     public ApiResponse<UserLoginResponse> joinUser(JoinUserDto dto, boolean type) {
         //이메일 중복 검사
-        if (userRepository.existsByEmail(dto.getEmail())) {
+        User user = null;
+        boolean flag = userRepository.existsByEmail(dto.getEmail());
+        if(flag){
+            user = userRepository.findByEmail(dto.getEmail());
+        }
+        if(flag && user.getExited()!=1){
             return ApiResponse.of(HttpStatus.BAD_REQUEST, "중복된 이메일입니다.", null);
         }
-
-        System.out.println("dto region key: " + dto.getRegionKey());
         Optional<Region> savedRegion = regionRepository.findById(dto.getRegionKey());
-        User user = dto.toEntity(savedRegion, type);
-        System.out.println("before Repo: " + user.getName());
+        user = dto.toEntity(savedRegion, type);
         User saveduser = userRepository.save(user);
-        System.out.println("after Repo" + saveduser.getId());
 
         int my_data = 1;
         if (!type) my_data = 0;
