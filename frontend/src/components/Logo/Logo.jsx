@@ -9,8 +9,6 @@ const StyledLogo = styled.div`
   height: 70px;
 `;
 
-const LogoImg = styled.img``;
-
 function Logo() {
   const navigate = useNavigate();
   const moveMain = () => {
@@ -18,7 +16,7 @@ function Logo() {
   };
   return (
     <StyledLogo onClick={moveMain}>
-      <LogoImg src={logo} />
+      <img src={logo} alt="" />
       <h2>함께, 드림</h2>
     </StyledLogo>
   );

@@ -7,7 +7,7 @@ import { ReactComponent as RefreshIcon } from "../../assets/img/Refresh.svg";
 import { ReactComponent as ThreeDotIcon } from "../../assets/img/ThreeDot.svg";
 import { ReactComponent as MailIcon } from "../../assets/img/MailIcon.svg";
 import { Button } from "@mui/material";
-import { BankAll, RefreshUser } from "../../api/mydata/MydataAccount";
+import { MatchWelfare, RefreshUser } from "../../api/mydata/MydataAccount";
 
 //마이데이터 버튼박스
 const ButtonBox = styled.div`
@@ -38,7 +38,6 @@ const TextBox = styled.div`
 //차트박스
 const ChartBox = styled.div`
   width: 90%;
-  margin-top: 20px;
   margin-bottom: 20px;
   border-radius: 20px;
   display: flex;
@@ -57,7 +56,6 @@ const Refresh = styled(RefreshIcon)`
 //알림 문구박스
 const AlertLine = styled.div`
   width: 90%;
-  margin-left: 5%;
   height: 50px;
   display: flex;
   justify-content: space-between;
@@ -113,7 +111,7 @@ const AlertText = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #f66262;
+  color: gray;
 `;
 //현재잔액 관리
 const CurrentText = styled.div`
@@ -144,6 +142,11 @@ const CurrentMoney = styled.p`
   margin-right: 10px;
 `;
 
+const WelfareMoney = styled.p`
+  color: #f66262;
+  margin-right: 10px;
+`;
+
 function MyData() {
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -151,12 +154,14 @@ function MyData() {
   const [myData, setMyData] = useState(localStorage.getItem("myData"));
 
   const month = new Date().getMonth();
+  const monthData = [`${month - 1}월`, `${month}월`, `${month + 1}월`];
+  const [MoneyData, setMoneyData] = useState([0, 0, 0]);
 
   const refreshHandler = async () => {
     setLoading(true);
-    const res = await RefreshUser();
+    await RefreshUser();
+    fetchData();
     localStorage.setItem("myData", true);
-    console.log(res);
     setTimeout(() => {
       setLoading(false);
       setMyData(localStorage.getItem("myData"));
@@ -167,19 +172,38 @@ function MyData() {
     setShowAlert(!showAlert);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (myData === "true") {
-        try {
-          const res = await BankAll();
-          console.log(res);
-          setMessage(res.data.list);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+  const fetchData = async () => {
+    if (myData === "true") {
+      const res = await MatchWelfare();
+      setMessage(res.data.response.reverse());
+      for (let i = 0; i < res.data.response.length; i++) {
+        if (res.data.response[i].welfare != null)
+          if (res.data.response[i].dateTime[5] === "0") {
+            setMoneyData((prev) => {
+              const newMoney = [...prev];
+              newMoney[
+                monthData.indexOf(
+                  `${res.data.response[i].dateTime.slice(6, 7)}월`
+                )
+              ] += res.data.response[i].tranAmt / 10000;
+              return newMoney;
+            });
+          } else {
+            setMoneyData((prev) => {
+              const newMoney = [...prev];
+              newMoney[
+                monthData.indexOf(
+                  `${res.data.response[i].dateTime.slice(5, 7)}월`
+                )
+              ] += res.data.response[i].tranAmt / 10000;
+              return newMoney;
+            });
+          }
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [myData]);
 
@@ -203,16 +227,16 @@ function MyData() {
               xAxis={[
                 {
                   id: "barCategories",
-                  data: [`${month}월`, `${month + 1}월`, `${month + 2}월`],
+                  data: monthData,
                   scaleType: "band",
                 },
               ]}
               series={[
                 {
-                  data: [8, 9, 10],
+                  data: MoneyData,
                 },
               ]}
-              width={300}
+              width={350}
               height={300}
             />
           </ChartBox>
@@ -246,7 +270,14 @@ function MyData() {
 
             <AlertTextBox>
               <AlertText>
-                {alert.tranDesc}
+                {alert.welfare !== null ? (
+                  <WelfareMoney>
+                    {alert.welfare.name.slice(0, 8)}..
+                  </WelfareMoney>
+                ) : (
+                  <>{alert.tranDesc}</>
+                )}
+
                 {alert.type.desc === "입금" ? (
                   <MoneyText>
                     {alert.tranAmt.toLocaleString("en-US")}원
