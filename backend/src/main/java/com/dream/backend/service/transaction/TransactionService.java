@@ -30,6 +30,10 @@ public class TransactionService {
     private final UserLastAlarmService alarmService;
     private final UserRepository userRepository;
 
+    public boolean isAccountValid(Long accountNumber) {
+        return accountRepository.existsById(accountNumber);
+    }
+
     public List<Transaction> getAllTransaction() {
         return transactionRepository.findAll();
     }
