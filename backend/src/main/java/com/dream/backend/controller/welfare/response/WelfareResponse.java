@@ -39,7 +39,7 @@ public class WelfareResponse {
 
     private String welfare_type;
 
-    private Long region_key;
+    private Long regionKey;
 
 
     @Builder
@@ -58,7 +58,7 @@ public class WelfareResponse {
         this.support_period = support_period;
         this.etc = etc;
         this.welfare_type = welfare_type;
-        this.region_key = region_key;
+        this.regionKey = region_key;
 
     }
 
