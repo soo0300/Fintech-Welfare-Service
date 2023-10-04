@@ -178,45 +178,9 @@ function Business({ userInput, selectedTags }) {
   useEffect(() => {
     const fetchWelfares = async () => {
       let fetchedData = await AllWelfare();
-      console.log(fetchedData);
-      const updateData = fetchedData.map((item) => {
-        const curRegion = item.regionKey;
-        const regionName = jsonData.find(
-          (item) => curRegion === item.region_key
-        );
-        const parentRegion =
-          jsonData.find((item) => {
-            if (regionName.parent_key !== null) {
-              return regionName.parent_key === item.region_key;
-            } else {
-              return false;
-            }
-          }) || "";
-        const totalRegion =
-          (parentRegion ? parentRegion.name + " " : "") + regionName.name;
-        const endDate = new Date(item.end_date).getTime();
-        const now = new Date().getTime();
-        const remainingTime = endDate - now;
-        let d_day;
-        if (remainingTime <= 0) {
-          d_day = "마감";
-        } else {
-          const days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
-          const hours = Math.floor(
-            (remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-          );
-          d_day = `${days}일 ${hours}시간`;
-        }
-        return {
-          ...item,
-          d_day: d_day,
-          totalRegion: totalRegion,
-        };
-      });
 
-      console.log(updateData);
-      setWelfares(updateData);
-      setFilteredWelfares(updateData);
+      setWelfares(fetchedData);
+      setFilteredWelfares(fetchedData);
     };
 
     fetchWelfares();
@@ -229,8 +193,8 @@ function Business({ userInput, selectedTags }) {
         (welfare.name.includes(userInput) ||
           welfare.description_origin.includes(userInput)) &&
         (regionKey === "" ||
-          welfare.region_key === regionKey ||
-          welfare.region_key === 0)
+          welfare.regionKey === regionKey ||
+          welfare.regionKey === 0)
     );
 
     // 지역이 있을 때, 지역이름 p태그 안에 띄우기
@@ -273,11 +237,11 @@ function Business({ userInput, selectedTags }) {
             key={welfare.id}
             id={welfare.id}
             title={welfare.name}
-            region={welfare.region_key}
-            totalRegion={welfare.totalRegion}
+            regionKey={welfare.regionKey}
+            start_date={welfare.start_date}
+            end_date={welfare.end_date}
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
-            remainTime={welfare.d_day}
           />
         ))}
       </CardContainer>
