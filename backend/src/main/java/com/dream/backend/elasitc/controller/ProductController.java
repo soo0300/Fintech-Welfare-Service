@@ -1,6 +1,7 @@
 package com.dream.backend.elasitc.controller;
 
 
+import com.dream.backend.controller.ApiResponse;
 import com.dream.backend.elasitc.service.WelfareInfoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,12 @@ public class ProductController {
     private final WelfareInfoService welfareInfoService;
 
     @GetMapping("/{korean_text}")
-    public String getToken(@PathVariable("korean_text") String text) throws IOException {
+    public ApiResponse<String> getToken(@PathVariable("korean_text") String text) throws IOException {
 
         welfareInfoService.setClient();
         String result = welfareInfoService.tokenized(text);
         welfareInfoService.closeAllClient();
 
-        return result;
+        return ApiResponse.ok(result);
     }
 }
