@@ -1,13 +1,10 @@
 package com.dream.backend.elasitc.controller;
 
-import com.dream.backend.elasitc.entity.UserLastAlarm;
 import com.dream.backend.elasitc.entity.UserLastAlarmDto;
 import com.dream.backend.elasitc.service.UserLastAlarmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor

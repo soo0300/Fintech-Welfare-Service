@@ -117,11 +117,11 @@ public class WelfareInfoController {
     }
 
     @GetMapping("/proper/{text}")
-    public String getProperNoun(@PathVariable("text") String text) {
+    public ApiResponse<String> getProperNoun(@PathVariable("text") String text) {
         welfareInfoService.setClient();
         String result = welfareInfoService.tokenizeOnlyProper(text);
         welfareInfoService.closeAllClient();
 
-        return result;
+        return ApiResponse.ok(result);
     }
 }

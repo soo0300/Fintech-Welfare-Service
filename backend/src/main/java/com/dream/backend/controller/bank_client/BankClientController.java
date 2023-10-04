@@ -2,7 +2,6 @@ package com.dream.backend.controller.bank_client;
 
 
 import com.dream.backend.domain.bank_client.BankClient;
-import com.dream.backend.domain.bank_client.repository.BankClientRepository;
 import com.dream.backend.service.bankClient.BankClientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
