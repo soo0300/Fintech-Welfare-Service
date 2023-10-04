@@ -64,7 +64,14 @@ public class TransactionController {
 
         Account acc = result.get(0).getAccount();
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         return TransactionResponse.builder()
@@ -83,7 +90,14 @@ public class TransactionController {
         Account account = result.get(0).getAccount();
 
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         return TransactionResponse.builder()
@@ -104,7 +118,14 @@ public class TransactionController {
         if(account == null) return null;
 
         for(Transaction t: result) {
-            list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
+            list.add(TransactionObject.builder()
+                    .dateTime(t.getTranDate())
+                    .type(t.getInoutType())
+                    .category(null)
+                    .tranDesc(t.getTranDesc())
+                    .tranAmt(t.getTranAmt())
+                    .afterAmt(t.getBalance())
+                    .build());
         }
 
         alarmService.setClient();
