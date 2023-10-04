@@ -55,8 +55,8 @@ public class Welfare {
     @Column
     private String etc;
 
-    @Column
-    private String welfare_code;
+    @Column(name = "welfare_code")
+    private String welfareCode;
 
 
     @Column(length = 225)
