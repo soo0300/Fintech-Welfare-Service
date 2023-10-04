@@ -6,6 +6,7 @@ import ChangePwd from "../components/mydata/ChangePwd";
 import ChangeRegion from "../components/mydata/ChangeRegion";
 import jsonData from "../assets/data/region.json";
 import Header from "../components/header/Header";
+import { Exit } from "../api/mypage/User";
 
 //정보박스
 const InfoBox = styled.div`
@@ -37,6 +38,7 @@ const InfoTextBox = styled.div`
   align-items: center;
   margin: 10px;
   font-size: 1.8vh;
+  height: 24.5px;
 `;
 
 function MyPage() {
@@ -67,7 +69,11 @@ function MyPage() {
     setMode(props);
   };
 
-  const deleteUser = () => {};
+  const deleteUser = async () => {
+    await Exit();
+    localStorage.clear();
+    window.alert("회원탈퇴 되었습니다.");
+  };
 
   useEffect(() => {
     userInfo();
@@ -92,20 +98,11 @@ function MyPage() {
           </Button>
         </InfoTextBox>
         <InfoTextBox>
-          나이{"\u00A0\u00A0\u00A0"} : 만 {info.age}세
-        </InfoTextBox>
-        <div
-          style={{
-            width: "90%",
-            margin: "10px",
-            display: "flex",
-            justifyContent: "flex-end",
-          }}
-        >
+          {"\u00A0\u00A0\u00A0"}나이 : 만 {info.age}세
           <Button onClick={() => changeMode(1)} sx={{ padding: 0 }}>
             비밀번호 변경
           </Button>
-        </div>
+        </InfoTextBox>
       </InfoBox>
       {mode === 0 && null}
       {mode === 1 && <ChangePwd curPwd={info.password} />}
