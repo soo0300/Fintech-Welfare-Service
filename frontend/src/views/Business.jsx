@@ -452,7 +452,7 @@ function Business() {
     <>
       <Header />
       <BusinessContainer>
-        {examine.length > 0 ? (
+        {examine.length > 0 && money ? (
           <ExamineBody
             addExamine={addExamine}
             examine={examine}
@@ -470,7 +470,7 @@ function Business() {
           />
         )}
 
-        {receive.length > 0 ? (
+        {receive.length > 0 && money ? (
           <ReceiveBody
             addReceive={addReceive}
             receiveWelfares={receive}
