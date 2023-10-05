@@ -35,10 +35,12 @@ public class BenefitResponse {
 
     private int support_period;
 
+    private String welfareType;
+
     String etc;
 
     @Builder
-    public BenefitResponse(String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, Long id, Long regionKey) {
+    public BenefitResponse(String name, String organization, LocalDateTime start_date, LocalDateTime end_date, String route, String submission, int support_fund, String description_origin, String url, String img, int support_period, String etc, Long id, Long regionKey, String welfareType) {
         this.name = name;
         this.organization = organization;
         this.start_date = start_date;
@@ -53,5 +55,6 @@ public class BenefitResponse {
         this.etc = etc;
         this.id = id;
         this.regionKey = regionKey;
+        this.welfareType = welfareType;
     }
 }
