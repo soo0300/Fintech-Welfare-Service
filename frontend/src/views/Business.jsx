@@ -261,6 +261,7 @@ function ReceiveBody(props) {
                 start_date={welfare.start_date}
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
+                support_fund={welfare.support_fund}
                 welfare_type={welfare.welfareType}
                 img={welfare.img}
                 origin="receive"
