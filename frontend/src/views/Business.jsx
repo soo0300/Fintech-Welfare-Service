@@ -205,6 +205,7 @@ function ExamineBody(props) {
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
                 support_fund={welfare.support_fund}
+                welfare_type={welfare.welfareType}
                 origin="examine"
               />
             ))}{" "}
@@ -262,6 +263,7 @@ function ReceiveBody(props) {
                 start_date={welfare.start_date}
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
+                welfare_type={welfare.welfareType}
                 origin="receive"
               />
             ))}{" "}
@@ -304,7 +306,6 @@ function CustomBusinesss() {
         // 가져왔다면, id를 이용해서 API보내기
         try {
           const response = await GetMywelfare({ user_id: userId });
-
           setWelfareData(response.data);
         } catch (error) {
           console.error(error);
@@ -341,6 +342,7 @@ function CustomBusinesss() {
             end_date={welfare.end_date}
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
+            welfare_type={welfare.welfareType}
           />
         ))}
       </CustomCardBox>

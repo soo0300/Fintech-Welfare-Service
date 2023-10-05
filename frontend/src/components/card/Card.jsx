@@ -17,7 +17,9 @@ const StyledCard = styled.div`
   background-color: ${(props) =>
     props.isDragging
       ? "rgba(0,0,0,0.5)"
-      : props.backgroundColor || getRandomColor()};
+      : props.backgroundColor ||
+        welfareTypeColors[props.welfare_type.slice(0, 2)] ||
+        "#000000"};
 
   margin-bottom: 2%;
 `;
@@ -97,6 +99,16 @@ const FullscreenImage = styled.img`
   height: auto;
 `;
 
+const welfareTypeColors = {
+  소득: "#EEA8A8",
+  주거: "#F8EBBE",
+  금융: "#9CEFEA",
+  진학: "#EEBEF2",
+  취업: "#B0D5F8",
+  법률: "#f98e11",
+  건강: "#ecd78d",
+  기타: "#5cb85c",
+};
 // 포스터 모달
 function FullscreenImageModal({ src, onClose }) {
   return (
@@ -107,11 +119,11 @@ function FullscreenImageModal({ src, onClose }) {
 }
 
 // 카드 색 랜덤 추출
-function getRandomColor() {
-  const colors = ["#EEA8A8", "#F8EBBE", "#9CEFEA", "#EEBEF2", "#B0D5F8"];
-  const randomIndex = Math.floor(Math.random() * colors.length);
-  return colors[randomIndex];
-}
+// function getRandomColor() {
+//   const colors = ["#EEA8A8", "#F8EBBE", "#9CEFEA", "#EEBEF2", "#B0D5F8"];
+//   const randomIndex = Math.floor(Math.random() * colors.length);
+//   return colors[randomIndex];
+// }
 
 // 모달
 function Modal({ data, onClose }) {
@@ -239,6 +251,7 @@ const Card = (props) => {
     end_date,
     regionKey,
     title,
+    welfare_type,
   } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -297,7 +310,7 @@ const Card = (props) => {
       <StyledCard
         ref={drag}
         onClick={handleCardClick}
-        backgroundColor={getRandomColor()}
+        welfare_type={welfare_type}
         cardWidth={cardWidth}
         cardHeight={cardHeight}
         fontSize={fontSize}

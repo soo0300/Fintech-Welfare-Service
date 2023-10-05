@@ -178,7 +178,6 @@ function Business({ userInput, selectedTags }) {
   useEffect(() => {
     const fetchWelfares = async () => {
       let fetchedData = await AllWelfare();
-
       setWelfares(fetchedData);
       setFilteredWelfares(fetchedData);
     };
@@ -242,6 +241,7 @@ function Business({ userInput, selectedTags }) {
             end_date={welfare.end_date}
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
+            welfare_type={welfare.welfare_type}
           />
         ))}
       </CardContainer>

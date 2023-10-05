@@ -43,7 +43,6 @@ export async function CancelWelfare(props) {
 export async function GetMywelfare(props) {
   try {
     const res = await baseAxios.get(`benefit/${props.user_id}/0`);
-    console.log("비즈니스 API요청 :", res);
     return res;
   } catch (e) {
     console.error(e);

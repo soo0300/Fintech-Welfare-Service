@@ -131,7 +131,6 @@ const Info = () => {
       myData: isMydata ? 1 : 0,
       createdDate: createdDate,
     };
-    console.log(requestData);
     try {
       if (regionKey === 8 || regionKey > 17) {
         // API 요청
@@ -139,7 +138,6 @@ const Info = () => {
 
         // API 응답 처리
         if (response.status === 200) {
-          console.log("회원가입 성공:", response.data);
           localStorage.setItem("id", response.data.data.id);
           localStorage.setItem("myData", requestData.myData);
           const message = [
@@ -228,7 +226,6 @@ const Info = () => {
   };
 
   const handleClickSecondDropdown = () => {
-    console.log(selectedRegion);
     setIsSecondDropdownView(!isSecondDropdownView);
   };
   return (
