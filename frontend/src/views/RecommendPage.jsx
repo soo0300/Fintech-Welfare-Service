@@ -233,6 +233,7 @@ function Business({ userInput, selectedTags }) {
       <CardContainer>
         {filteredWelfares.map((welfare) => (
           <Card
+            canDrag={false}
             key={welfare.id}
             id={welfare.id}
             title={welfare.name}
@@ -242,6 +243,7 @@ function Business({ userInput, selectedTags }) {
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
             welfare_type={welfare.welfare_type}
+            img={welfare.img}
           />
         ))}
       </CardContainer>
