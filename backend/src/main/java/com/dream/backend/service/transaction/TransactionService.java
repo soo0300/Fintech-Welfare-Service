@@ -48,22 +48,24 @@ public class TransactionService {
     }
 
     public List<Transaction> getTransactionByDateRange(LocalDateTime startDate, LocalDateTime endDate, Long accountNumber) {
-        Optional<Account> account = accountRepository.findById(accountNumber);
-        List<Transaction> result = transactionRepository.findAllByAccount(account);
+//        Optional<Account> account = accountRepository.findById(accountNumber);
+//        List<Transaction> result = transactionRepository.findAllByAccount(account);
+//
+//        List<Transaction> filtered = new ArrayList<>();
+//        long unixStartDate = Timestamp.valueOf(startDate).getTime();
+//        long unixEndDate = Timestamp.valueOf(endDate).getTime();
+//
+//        for (Transaction t: result) {
+//            long tranDate = Timestamp.valueOf(t.getTranDate()).getTime();
+//
+//            if(tranDate < unixStartDate) continue;
+//            if(tranDate > unixEndDate) continue;
+//            filtered.add(t);
+//        }
+//
+//        return filtered;
 
-        List<Transaction> filtered = new ArrayList<>();
-        long unixStartDate = Timestamp.valueOf(startDate).getTime();
-        long unixEndDate = Timestamp.valueOf(endDate).getTime();
-
-        for (Transaction t: result) {
-            long tranDate = Timestamp.valueOf(t.getTranDate()).getTime();
-
-            if(tranDate < unixStartDate) continue;
-            if(tranDate > unixEndDate) continue;
-            filtered.add(t);
-        }
-
-        return filtered;
+        return transactionRepository.findAllByDateRangeAndAccount(startDate, endDate, accountNumber);
     }
 
     public List<Transaction> getTransactionFromLastTime(Long userId) {
