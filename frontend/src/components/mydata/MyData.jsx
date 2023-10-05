@@ -161,7 +161,7 @@ function MyData() {
     setLoading(true);
     await RefreshUser();
     fetchData();
-    localStorage.setItem("myData", true);
+    localStorage.setItem("myData", 1);
     setTimeout(() => {
       setLoading(false);
       setMyData(localStorage.getItem("myData"));

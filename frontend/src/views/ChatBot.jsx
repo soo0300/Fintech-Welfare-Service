@@ -22,7 +22,7 @@ const ChatHeader = styled.div`
   gap: 20px;
   position: fixed;
   top: 0;
-  z-index: 9999;
+  z-index: 2;
   max-width: 500px;
 `;
 
@@ -47,7 +47,6 @@ const Footer = styled.div`
   height: 70px;
   bottom: 0;
   position: fixed;
-  z-index: 999;
   background-color: #f2f5fe;
   max-width: 500px;
 `;
@@ -83,13 +82,11 @@ const StyledEllipseIcon = styled.div`
   height: 40px;
   background-color: whitesmoke;
   border-radius: 50%;
-  z-index: 999;
 `;
 
 const BlankIcon = styled.div`
   width: 40px;
   height: 40px;
-  z-index: 999;
 `;
 
 const TodayBox = styled.div`
@@ -163,12 +160,17 @@ function ChatBot() {
           `${detail.data.id}`,
           `${detail.data.id}`,
           `${detail.data.name}`,
-          `${detail.data.region_key}`,
+          `${detail.data.regionKey}`,
           `${detail.data.start_date}`,
+          `${detail.data.end_date}`,
+          `${detail.data.support_fund}`,
+          `${detail.data.welfare_type}`,
+          `${detail.data.img}`,
           "data",
         ],
       ]);
     }
+
     setMyMessage("");
   };
   const moveRef = () => {
@@ -222,13 +224,17 @@ function ChatBot() {
               <>
                 <div className="yours messages">
                   <BlankIcon></BlankIcon>
-
                   <Card
+                    canDrag={false}
                     key={data[0]}
                     id={data[1]}
                     title={data[2]}
-                    region={data[3]}
-                    support_period={data[4]}
+                    regionKey={Number(data[3])}
+                    start_date={data[4]}
+                    end_date={data[5]}
+                    support_fund={data[6]}
+                    welfare_type={data[7]}
+                    img={data[8]}
                   />
                 </div>
               </>
