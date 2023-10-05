@@ -4,6 +4,7 @@ import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDrag } from "react-dnd";
 import jsonData from "../../assets/data/region.json";
+import { green } from "@mui/material/colors";
 
 // 카드
 const StyledCard = styled.div`
@@ -103,7 +104,7 @@ const welfareTypeColors = {
   소득: "#EEA8A8",
   주거: "#F8EBBE",
   금융: "#9CEFEA",
-  진학: "#EEBEF2",
+  교육: "#EEBEF2",
   취업: "#B0D5F8",
   법률: "#f98e11",
   건강: "#ecd78d",
@@ -259,6 +260,13 @@ const Card = (props) => {
   const regionValue = region !== "0" ? region : "전국";
   const supportPeriodValue = support_period || "기간 없음";
 
+  const calculateRemainingMonths = (support_period) => {
+    const today = new Date();
+    const endDate = new Date(support_period);
+
+    return Math.round((today - endDate) / (1000 * 60 * 60 * 24 * 30) + 1);
+  };
+
   // 데이터 가져오기
   async function handleCardClick(e) {
     if (!modalVisible) {
@@ -302,10 +310,26 @@ const Card = (props) => {
       setD_day(`${days}일 ${hours}시간`);
     }
   }, []);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    setMousePosition({
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    });
+  };
+  useEffect(() => {
+    setMousePosition({
+      x: 0,
+      y: 0,
+    });
+  }, [isDragging]);
+
   return (
     <>
       <StyledCard
-        ref={drag}
+        // onTouchMove={handleMouseMove}
+        // ref={drag}
         onClick={handleCardClick}
         welfare_type={welfare_type}
         cardWidth={cardWidth}
@@ -320,9 +344,31 @@ const Card = (props) => {
         support_fund={support_fund}
         isDragging={isDragging}
       >
-        <Poster src={`/welfare/${img}.jpg`} />
+        <Poster
+          onTouchMove={handleMouseMove}
+          ref={drag}
+          src={`/welfare/${img}.jpg`}
+          style={{
+            width: "50%", // 이미지 스타일을 조절할 수 있습니다.
+            height: "95%",
+          }}
+        />
+
+        {isDragging && (
+          <Poster
+            src={`/welfare/${img}.jpg`}
+            style={{
+              width: "100px",
+              height: "100px",
+              position: "absolute",
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y - 50}px`,
+            }}
+          />
+        )}
 
         <ContentBox>
+          <p>{mousePosition.y}</p>
           <h2>{title}</h2>
           <p>
             모집 지역 : {totalRegion}
@@ -337,6 +383,11 @@ const Card = (props) => {
             <p style={{ color: d_day !== "마감" ? "blue" : "red" }}>
               {d_day !== "마감" ? `D-DAY : ${d_day}` : "마감"}
             </p>
+            {props.showPeriod && (
+              <p style={{ color: "green" }}>
+                {calculateRemainingMonths(props.support_period)}달 남았습니다.
+              </p>
+            )}
           </p>
         </ContentBox>
       </StyledCard>

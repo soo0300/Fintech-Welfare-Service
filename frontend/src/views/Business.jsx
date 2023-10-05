@@ -112,12 +112,14 @@ function ExamineNothing(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addExamine(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addExamine(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
-
   return (
     <div ref={drop}>
       <BusinessNothingBox>
@@ -135,7 +137,10 @@ function ReceiveNothing(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addReceive(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addReceive(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -161,7 +166,10 @@ function ExamineBody(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addExamine(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addExamine(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -222,11 +230,15 @@ function ReceiveBody(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addReceive(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addReceive(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
+
   return (
     <div ref={drop}>
       <BusinessBox ref={props.ref}>
@@ -265,6 +277,7 @@ function ReceiveBody(props) {
                 welfare_type={welfare.welfareType}
                 img={welfare.img}
                 origin="receive"
+                showPeriod="true"
               />
             ))}{" "}
           </CardContainer>
@@ -374,6 +387,7 @@ function CustomBusinesss({
             support_fund={welfare.support_fund}
             welfare_type={welfare.welfareType}
             img={welfare.img}
+            origin="custom"
           />
         ))}
       </CustomCardBox>
@@ -410,32 +424,40 @@ function Business() {
   }, []);
 
   const addReceive = async (id) => {
-    const response = await PlusWelfare({
-      user_id: userId,
-      welfare_id: id,
-      status: 1,
-    });
-    if (response.status === 200) {
-      // Fetch new data after the operation
-      fetchData(GetExamine, setExamine);
-      fetchData(GetReceive, setReceive);
-      fetchData(GetFund, setMoney);
-      fetchData(GetMywelfare, setWelfareData);
+    // Check if the item is already in the list
+    const alreadyExists = receive.some((item) => item.id === id);
+    if (!alreadyExists) {
+      const response = await PlusWelfare({
+        user_id: userId,
+        welfare_id: id,
+        status: 1,
+      });
+      if (response.status === 200) {
+        // Fetch new data after the operation
+        fetchData(GetExamine, setExamine);
+        fetchData(GetReceive, setReceive);
+        fetchData(GetFund, setMoney);
+        fetchData(GetMywelfare, setWelfareData);
+      }
     }
   };
 
   const addExamine = async (id) => {
-    const response = await PlusWelfare({
-      user_id: userId,
-      welfare_id: id,
-      status: 2,
-    });
-    if (response.status === 200) {
-      // Fetch new data after the operation
-      fetchData(GetExamine, setExamine);
-      fetchData(GetReceive, setReceive);
-      fetchData(GetFund, setMoney);
-      fetchData(GetMywelfare, setWelfareData);
+    // Check if the item is already in the list
+    const alreadyExists = examine.some((item) => item.id === id);
+    if (!alreadyExists) {
+      const response = await PlusWelfare({
+        user_id: userId,
+        welfare_id: id,
+        status: 2,
+      });
+      if (response.status === 200) {
+        // Fetch new data after the operation
+        fetchData(GetExamine, setExamine);
+        fetchData(GetReceive, setReceive);
+        fetchData(GetFund, setMoney);
+        fetchData(GetMywelfare, setWelfareData);
+      }
     }
   };
 
@@ -443,7 +465,7 @@ function Business() {
     <>
       <Header />
       <BusinessContainer>
-        {examine.length > 0 ? (
+        {examine.length > 0 && money ? (
           <ExamineBody
             addExamine={addExamine}
             examine={examine}
@@ -461,7 +483,7 @@ function Business() {
           />
         )}
 
-        {receive.length > 0 ? (
+        {receive.length > 0 && money ? (
           <ReceiveBody
             addReceive={addReceive}
             receiveWelfares={receive}

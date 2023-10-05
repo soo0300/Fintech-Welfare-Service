@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
 import Button from "../components/button/Button";
 import { ReactComponent as BackIcon } from "../assets/img/arrow-left-bold.svg";
-import { ReactComponent as BotIcon } from "../assets/img/boticon.svg";
+import { ReactComponent as BotIcon } from "../assets/img/chatbot_char.svg";
 import { ReactComponent as SendIcon } from "../assets/img/Send_icon.svg";
 import { useNavigate } from "react-router-dom";
 import TextareaAutosize from "react-textarea-autosize";
