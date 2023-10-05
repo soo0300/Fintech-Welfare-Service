@@ -29,6 +29,8 @@ public class ApiResponse<T> {
         return of(OK, "SUCCESS", data);
     }
 
-    public static <T> ApiResponse<T> badRequest(String message) {return of(BAD_REQUEST, message, null);}
+    public static <T> ApiResponse<T> badRequest(String message) {
+        return of(BAD_REQUEST, message, null);
+    }
 
 }

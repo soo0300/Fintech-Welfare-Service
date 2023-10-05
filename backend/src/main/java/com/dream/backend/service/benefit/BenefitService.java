@@ -126,6 +126,7 @@ public class BenefitService {
                 .etc(welfare.get().getEtc())
                 .id(welfare.get().getId())
                 .regionKey(region_key)
+                .welfareType(welfare.get().getWelfare_type())
                 .build();
 
     }
