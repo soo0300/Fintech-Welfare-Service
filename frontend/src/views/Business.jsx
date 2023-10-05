@@ -112,12 +112,14 @@ function ExamineNothing(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addExamine(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addExamine(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
-
   return (
     <div ref={drop}>
       <BusinessNothingBox>
@@ -135,7 +137,10 @@ function ReceiveNothing(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addReceive(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addReceive(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -161,7 +166,10 @@ function ExamineBody(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addExamine(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addExamine(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -222,11 +230,15 @@ function ReceiveBody(props) {
   // drag & drop
   const [, drop] = useDrop(() => ({
     accept: "card",
-    drop: (item) => props.addReceive(item.id),
+    drop: (item) => {
+      if (item.origin !== "custom") return;
+      props.addReceive(item.id);
+    },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   }));
+
   return (
     <div ref={drop}>
       <BusinessBox ref={props.ref}>
@@ -375,6 +387,7 @@ function CustomBusinesss({
             support_fund={welfare.support_fund}
             welfare_type={welfare.welfareType}
             img={welfare.img}
+            origin="custom"
           />
         ))}
       </CustomCardBox>
