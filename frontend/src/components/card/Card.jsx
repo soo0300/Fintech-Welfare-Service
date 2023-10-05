@@ -103,7 +103,7 @@ const welfareTypeColors = {
   소득: "#EEA8A8",
   주거: "#F8EBBE",
   금융: "#9CEFEA",
-  진학: "#EEBEF2",
+  교육: "#EEBEF2",
   취업: "#B0D5F8",
   법률: "#f98e11",
   건강: "#ecd78d",
