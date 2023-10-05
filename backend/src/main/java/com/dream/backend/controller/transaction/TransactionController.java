@@ -10,6 +10,7 @@ import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.elasitc.service.UserLastAlarmService;
+import com.dream.backend.service.account.AccountService;
 import com.dream.backend.service.transaction.TransactionService;
 import com.dream.backend.service.welfare.WelfareService;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/banking/transaction")
-@Slf4j
 public class TransactionController {
 
     private final TransactionService transactionService;
     private final UserLastAlarmService alarmService;
     private final WelfareService welfareService;
+    private final AccountService accountService;
 
     @GetMapping("/all")
     public List<Transaction> getAllTransaction() {
@@ -43,22 +45,20 @@ public class TransactionController {
             @PathVariable("account_number") Long account,
             @PathVariable("start_date") String start,
             @PathVariable("end_date") String end) {
-        System.out.println(end);
+
         List<TransactionObject> list = new ArrayList<>();
 
         int year = Integer.parseInt(start.substring(0, 4));
         int month = Integer.parseInt(start.substring(5, 7));
         int day = Integer.parseInt(start.substring(8, 10));
-
-        LocalDate sDate = LocalDate.of(year, month, day);
+        LocalDateTime sDate = LocalDate.of(year, month, day).atStartOfDay();
 
         int eYear = Integer.parseInt(end.substring(0, 4));
         int eMonth = Integer.parseInt(end.substring(5, 7));
         int eDay = Integer.parseInt(end.substring(8, 10));
+        LocalDateTime eDate = LocalDate.of(eYear, eMonth, eDay).plusDays(1).atStartOfDay();
 
-        LocalDate eDate = LocalDate.of(eYear, eMonth, eDay);
-
-        List<Transaction> result =  transactionService.getTransactionByDateRange(sDate.atStartOfDay(), eDate.atStartOfDay(), account);
+        List<Transaction> result =  transactionService.getTransactionByDateRange(sDate, eDate, account);
        if(result.isEmpty()) return null;
 
         Account acc = result.get(0).getAccount();
@@ -145,10 +145,9 @@ public class TransactionController {
 
         List<TransactionObject> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionByDateRange(thirtyDaysAgo, today, userId);
+        Account account =  accountService.getAccount(userId).get();
 
-        if(result.isEmpty()) return null;
-        Account account = result.get(0).getAccount();
-        if(account == null) return null;
+        if(result.isEmpty() || account == null) return null;
 
         for(Transaction t: result) {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
@@ -165,10 +164,9 @@ public class TransactionController {
 
         List<WelfareAndTransactionResponse> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionByAccountNumber(accountNumber);
+        Account account =  accountService.getAccount(accountNumber).get();
 
-        if(result.isEmpty()) return null;
-        Account account = result.get(0).getAccount();
-        if(account == null) return null;
+        if(result.isEmpty() || account == null) return null;
 
         for(Transaction t: result) {
             String code = t.getTranDesc();
