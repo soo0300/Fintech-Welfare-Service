@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/banking/transaction")
-@Slf4j
 public class TransactionController {
 
     private final TransactionService transactionService;
