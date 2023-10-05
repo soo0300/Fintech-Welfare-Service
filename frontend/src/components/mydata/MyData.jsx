@@ -175,7 +175,6 @@ function MyData() {
   const fetchData = async () => {
     if (myData === "1") {
       const res = await MatchWelfare();
-      console.log(res);
       setMessage(res.data.list.reverse());
       for (let i = 0; i < res.data.list.length; i++) {
         if (res.data.list[i].welfare != null)
