@@ -314,22 +314,13 @@ const Card = (props) => {
 
   const handleMouseMove = (e) => {
     setMousePosition({
-      x: e.changedTouches[0].clientX,
-      y: e.changedTouches[0].clientY,
+      x: e.changedTouches[0].pageX,
+      y: e.changedTouches[0].pageY,
     });
   };
-  useEffect(() => {
-    setMousePosition({
-      x: 0,
-      y: 0,
-    });
-  }, [isDragging]);
-
   return (
     <>
       <StyledCard
-        // onTouchMove={handleMouseMove}
-        // ref={drag}
         onClick={handleCardClick}
         welfare_type={welfare_type}
         cardWidth={cardWidth}
@@ -349,8 +340,10 @@ const Card = (props) => {
           ref={drag}
           src={`/welfare/${img}.jpg`}
           style={{
-            width: "50%", // 이미지 스타일을 조절할 수 있습니다.
+            minWidth: "50%", // 이미지 스타일을 조절할 수 있습니다.
             height: "95%",
+            borderTopLeftRadius: "10px",
+            borderBottomLeftRadius: "10px",
           }}
         />
 
@@ -368,7 +361,6 @@ const Card = (props) => {
         )}
 
         <ContentBox>
-          <p>{mousePosition.y}</p>
           <h2>{title}</h2>
           <p>
             모집 지역 : {totalRegion}

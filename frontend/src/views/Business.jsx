@@ -26,7 +26,7 @@ const BusinessContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: calc(100%-154px);
+  height: calc(100% - 70px);
   margin-top: 70px;
   margin-bottom: 10px;
 `;
@@ -74,7 +74,7 @@ const CustomContainer = styled.div`
 const CustomCardBox = styled.div`
   display: flex;
   width: 100%;
-  height: 41vh;
+  height: 50vh;
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
@@ -91,7 +91,7 @@ const Money = styled.div`
 const CardContainer = styled.div`
   display: flex;
   width: 100%;
-  height: 23vh;
+  height: 30vh;
   justify-content: center;
   gap: 10px;
   overflow-y: scroll;
@@ -349,6 +349,7 @@ function CustomBusinesss({
         // 가져왔다면, id를 이용해서 API보내기
         try {
           const response = await GetMywelfare({ user_id: userId });
+          console.log(response);
           setWelfareData(response.data);
         } catch (error) {
           console.error(error);
@@ -432,6 +433,7 @@ function Business() {
         welfare_id: id,
         status: 1,
       });
+      console.log(response);
       if (response.status === 200) {
         // Fetch new data after the operation
         fetchData(GetExamine, setExamine);

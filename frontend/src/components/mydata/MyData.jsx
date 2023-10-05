@@ -214,9 +214,9 @@ function MyData() {
           <ChartBox>
             <TextBox>
               <p>월별 지원금 현황</p>
-              <Button onClick={refreshHandler}>
+              {/* <Button onClick={refreshHandler}>
                 <Refresh />
-              </Button>
+              </Button> */}
             </TextBox>
 
             <BarChart

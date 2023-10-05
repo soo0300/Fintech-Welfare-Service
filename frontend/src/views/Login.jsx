@@ -76,9 +76,13 @@ const Login = () => {
 
       // API 응답 처리
       if (response.status === 200 && response.data.data != null) {
-        console.log(response);
         localStorage.setItem("id", response.data.data.id);
-        localStorage.setItem("myData", response.data.data.myData);
+        if (response.data.data.myData === true) {
+          localStorage.setItem("myData", 1);
+        } else {
+          localStorage.setItem("myData", 0);
+        }
+
         const message = [
           ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
         ];
