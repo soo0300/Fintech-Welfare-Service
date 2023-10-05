@@ -15,5 +15,5 @@ import java.util.List;
 public class WelfareListResponse {
 
     private Account account;
-    private List<WelfareAndTransactionResponse> response;
+    private List<WelfareAndTransactionResponse> list;
 }
