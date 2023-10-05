@@ -302,10 +302,26 @@ const Card = (props) => {
       setD_day(`${days}일 ${hours}시간`);
     }
   }, []);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    setMousePosition({
+      x: e.changedTouches[0].clientX,
+      y: e.changedTouches[0].clientY,
+    });
+  };
+  useEffect(() => {
+    setMousePosition({
+      x: 0,
+      y: 0,
+    });
+  }, [isDragging]);
+
   return (
     <>
       <StyledCard
-        ref={drag}
+        // onTouchMove={handleMouseMove}
+        // ref={drag}
         onClick={handleCardClick}
         welfare_type={welfare_type}
         cardWidth={cardWidth}
@@ -320,9 +336,31 @@ const Card = (props) => {
         support_fund={support_fund}
         isDragging={isDragging}
       >
-        <Poster src={`/welfare/${img}.jpg`} />
+        <Poster
+          onTouchMove={handleMouseMove}
+          ref={drag}
+          src={`/welfare/${img}.jpg`}
+          style={{
+            width: "50%", // 이미지 스타일을 조절할 수 있습니다.
+            height: "95%",
+          }}
+        />
+
+        {isDragging && (
+          <Poster
+            src={`/welfare/${img}.jpg`}
+            style={{
+              width: "100px",
+              height: "100px",
+              position: "absolute",
+              left: `${mousePosition.x}px`,
+              top: `${mousePosition.y - 50}px`,
+            }}
+          />
+        )}
 
         <ContentBox>
+          <p>{mousePosition.y}</p>
           <h2>{title}</h2>
           <p>
             모집 지역 : {totalRegion}
