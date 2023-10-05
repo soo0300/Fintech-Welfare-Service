@@ -21,6 +21,8 @@ const FormBox = styled.form`
   flex-direction: column;
   border-radius: 20px;
   background-color: white;
+  box-shadow: 3px 3px 3px 3px lightgray;
+  margin-bottom: 20px;
 `;
 
 const TextBox = styled.div`
@@ -87,7 +89,6 @@ function ChangePwd(props) {
     if (newPwd && newPwd === pwdCheck) {
       setOkPwdCheckValid(true);
     } else {
-      console.log(2);
       setOkPwdCheckValid(false);
     }
   }, [newPwd, pwdCheck]);
@@ -97,8 +98,12 @@ function ChangePwd(props) {
       <FormBox onSubmit={submitPassword}>
         <TextBox>
           <p>비밀번호 변경</p>
-          {okCurValid && okPwdCheckValid && passwordRegEx.test(newPwd) && (
+          {okCurValid && okPwdCheckValid && passwordRegEx.test(newPwd) ? (
             <Button type="submit">변경하기</Button>
+          ) : (
+            <Button type="submit" disabled>
+              변경하기
+            </Button>
           )}
         </TextBox>
         <InfoTextBox>

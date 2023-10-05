@@ -4,8 +4,6 @@ import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
-import Nav from "../components/Nav/Nav";
-import Logo from "../components/Logo/Logo";
 import Header from "../components/header/Header";
 import RegionModal from "../components/modal/RegionModal";
 import jsonData from "../assets/data/region.json";
@@ -18,9 +16,9 @@ const RecommandPageBody = styled.div`
   flex-direction: column;
   width: 100%;
   height: 100%;
-  overflow-y: scroll;
   align-items: center;
   margin-bottom: 10px;
+  margin-top: 70px;
 `;
 
 const SearchBarContainer = styled.div`
@@ -172,7 +170,6 @@ function Business({ userInput, selectedTags }) {
   // 카드 안에 내용
   const [welfares, setWelfares] = useState([]);
   const [filteredWelfares, setFilteredWelfares] = useState([]);
-
   // RegionModal의 상태 관리
   const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
   const [regionKey, setRegionKey] = useState("");
@@ -180,9 +177,9 @@ function Business({ userInput, selectedTags }) {
 
   useEffect(() => {
     const fetchWelfares = async () => {
-      const data = await AllWelfare();
-      setWelfares(data);
-      setFilteredWelfares(data);
+      let fetchedData = await AllWelfare();
+      setWelfares(fetchedData);
+      setFilteredWelfares(fetchedData);
     };
 
     fetchWelfares();
@@ -192,8 +189,11 @@ function Business({ userInput, selectedTags }) {
     // 이름 및 지역에 따른 필터링
     let searched = welfares.filter(
       (welfare) =>
-        welfare.name.includes(userInput) &&
-        (regionKey === "" || welfare.region_key === regionKey)
+        (welfare.name.includes(userInput) ||
+          welfare.description_origin.includes(userInput)) &&
+        (regionKey === "" ||
+          welfare.regionKey === regionKey ||
+          welfare.regionKey === 0)
     );
 
     // 지역이 있을 때, 지역이름 p태그 안에 띄우기
@@ -233,11 +233,17 @@ function Business({ userInput, selectedTags }) {
       <CardContainer>
         {filteredWelfares.map((welfare) => (
           <Card
+            canDrag={false}
             key={welfare.id}
             id={welfare.id}
             title={welfare.name}
-            region={welfare.region_key}
+            regionKey={welfare.regionKey}
+            start_date={welfare.start_date}
+            end_date={welfare.end_date}
             support_period={welfare.start_date}
+            support_fund={welfare.support_fund}
+            welfare_type={welfare.welfare_type}
+            img={welfare.img}
           />
         ))}
       </CardContainer>
@@ -253,7 +259,11 @@ function RecommendPage() {
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar userInput={userInput} setUserInput={setUserInput} />
+        <SearchBar
+          userInput={userInput}
+          setUserInput={setUserInput}
+          className="InputBox"
+        />
         <Tag selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
         <Business userInput={userInput} selectedTags={selectedTags} />
       </RecommandPageBody>

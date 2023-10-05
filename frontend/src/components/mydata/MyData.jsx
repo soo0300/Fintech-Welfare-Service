@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-// import Button from "../button/Button";
 import { useState } from "react";
 import Loading from "../loading/Loading";
 import { BarChart } from "@mui/x-charts/BarChart";
@@ -8,11 +7,11 @@ import { ReactComponent as RefreshIcon } from "../../assets/img/Refresh.svg";
 import { ReactComponent as ThreeDotIcon } from "../../assets/img/ThreeDot.svg";
 import { ReactComponent as MailIcon } from "../../assets/img/MailIcon.svg";
 import { Button } from "@mui/material";
-import { BankAll, RefreshUser } from "../../api/mydata/MydataAccount";
+import { MatchWelfare, RefreshUser } from "../../api/mydata/MydataAccount";
 
 //마이데이터 버튼박스
 const ButtonBox = styled.div`
-  width: 100%;
+  width: 90%;
   height: 200px;
   border-radius: 20px;
   margin-top: 20px;
@@ -23,6 +22,7 @@ const ButtonBox = styled.div`
   align-items: center;
   background-color: white;
   gap: 20px;
+  box-shadow: 3px 3px 3px 3px lightgray;
 `;
 
 //지원금현황 문구박스
@@ -37,20 +37,25 @@ const TextBox = styled.div`
 
 //차트박스
 const ChartBox = styled.div`
-  width: 100%;
-  margin-top: 20px;
+  width: 90%;
   margin-bottom: 20px;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: white;
+  box-shadow: 3px 3px 3px 3px lightgray;
+`;
+
+//지원금현황 리프레시버튼
+const Refresh = styled(RefreshIcon)`
+  width: 30px;
+  height: 30px;
 `;
 
 //알림 문구박스
 const AlertLine = styled.div`
   width: 90%;
-  margin-left: 5%;
   height: 50px;
   display: flex;
   justify-content: space-between;
@@ -66,43 +71,28 @@ const ThreeDot = styled(ThreeDotIcon)`
 
 //알림메세지 한개 박스
 const AlertBox = styled.div`
-  width: 100%;
-  height: 100px;
+  width: 90%;
+  height: auto;
   background-color: white;
   border-radius: 20px;
-  margin-top: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   display: flex;
-`;
-
-//지원금현황 리프레시버튼
-const Refresh = styled(RefreshIcon)`
-  width: 30px;
-  height: 30px;
+  box-shadow: 3px 3px 3px 3px lightgray;
 `;
 
 //기관,입금 전체박스
 const AlertTextBox = styled.div`
-  width: 80%;
+  width: 90%;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-//입금액 박스
-const AlertMoney = styled.div`
-  width: 90%;
-  height: 50px;
-  border-top: 2px solid lightgray;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  font-size: 2vh;
-`;
-
 //메일아이콘 박스
 const AlertMail = styled.div`
   width: 10%;
-  height: 50%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,22 +102,48 @@ const AlertMail = styled.div`
 //메일아이콘 크기
 const Mail = styled(MailIcon)`
   width: 30px;
-  height: 30px;
 `;
 
 //기관명 관리
 const AlertText = styled.div`
   width: 90%;
-  height: 50px;
+  height: 40px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-items: center;
-  color: #f66262;
+  color: gray;
+`;
+//현재잔액 관리
+const CurrentText = styled.div`
+  width: 90%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  font-size: 1.5vh;
 `;
 
 //입금액 관리
 const MoneyText = styled.p`
   color: #006ffd;
+  margin-right: 10px;
+`;
+
+//출금액 관리
+const MinusText = styled.p`
+  color: gray;
+  margin-right: 10px;
+`;
+
+//현재잔액 관리
+const CurrentMoney = styled.p`
+  color: black;
+  margin-right: 10px;
+`;
+
+const WelfareMoney = styled.p`
+  color: #f66262;
   margin-right: 10px;
 `;
 
@@ -138,12 +154,14 @@ function MyData() {
   const [myData, setMyData] = useState(localStorage.getItem("myData"));
 
   const month = new Date().getMonth();
+  const monthData = [`${month - 1}월`, `${month}월`, `${month + 1}월`];
+  const [MoneyData, setMoneyData] = useState([0, 0, 0]);
 
   const refreshHandler = async () => {
     setLoading(true);
-    const res = await RefreshUser();
-    localStorage.setItem("myData", true);
-    console.log(res);
+    await RefreshUser();
+    fetchData();
+    localStorage.setItem("myData", 1);
     setTimeout(() => {
       setLoading(false);
       setMyData(localStorage.getItem("myData"));
@@ -154,18 +172,38 @@ function MyData() {
     setShowAlert(!showAlert);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (myData === "true") {
-        try {
-          const res = await BankAll();
-          setMessage(res.data.list);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+  const fetchData = async () => {
+    if (myData === "1") {
+      const res = await MatchWelfare();
+      setMessage(res.data.response.reverse());
+      for (let i = 0; i < res.data.response.length; i++) {
+        if (res.data.response[i].welfare != null)
+          if (res.data.response[i].dateTime[5] === "0") {
+            setMoneyData((prev) => {
+              const newMoney = [...prev];
+              newMoney[
+                monthData.indexOf(
+                  `${res.data.response[i].dateTime.slice(6, 7)}월`
+                )
+              ] += res.data.response[i].tranAmt / 10000;
+              return newMoney;
+            });
+          } else {
+            setMoneyData((prev) => {
+              const newMoney = [...prev];
+              newMoney[
+                monthData.indexOf(
+                  `${res.data.response[i].dateTime.slice(5, 7)}월`
+                )
+              ] += res.data.response[i].tranAmt / 10000;
+              return newMoney;
+            });
+          }
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     fetchData();
   }, [myData]);
 
@@ -176,7 +214,7 @@ function MyData() {
           <ButtonBox>
             <Loading />
           </ButtonBox>
-        ) : myData === "true" ? (
+        ) : myData === "1" ? (
           <ChartBox>
             <TextBox>
               <p>월별 지원금 현황</p>
@@ -189,16 +227,16 @@ function MyData() {
               xAxis={[
                 {
                   id: "barCategories",
-                  data: [`${month}월`, `${month + 1}월`, `${month + 2}월`],
+                  data: monthData,
                   scaleType: "band",
                 },
               ]}
               series={[
                 {
-                  data: [8, 9, 10],
+                  data: MoneyData,
                 },
               ]}
-              width={300}
+              width={350}
               height={300}
             />
           </ChartBox>
@@ -213,7 +251,7 @@ function MyData() {
           </ButtonBox>
         ))}
       <AlertLine>
-        <p>입금 내역</p>
+        <h3>입금 내역</h3>
         <Button onClick={alertHandler}>
           <ThreeDot />
         </Button>
@@ -232,12 +270,30 @@ function MyData() {
 
             <AlertTextBox>
               <AlertText>
-                <div>{alert.tranDesc}</div>
+                {alert.welfare !== null ? (
+                  <WelfareMoney>
+                    {alert.welfare.name.slice(0, 8)}..
+                  </WelfareMoney>
+                ) : (
+                  <>{alert.tranDesc}</>
+                )}
+
+                {alert.type.desc === "입금" ? (
+                  <MoneyText>
+                    {alert.tranAmt.toLocaleString("en-US")}원
+                  </MoneyText>
+                ) : (
+                  <MinusText>
+                    -{alert.tranAmt.toLocaleString("en-US")}원
+                  </MinusText>
+                )}
               </AlertText>
-              <AlertMoney>
-                <MoneyText>{alert.tranAmt}₩</MoneyText>이 {alert.type.desc}
-                되었습니다.
-              </AlertMoney>
+              <CurrentText>
+                {alert.dateTime.slice(0, 10)}
+                <CurrentMoney>
+                  {alert.afterAmt.toLocaleString("en-US")}원
+                </CurrentMoney>
+              </CurrentText>
             </AlertTextBox>
           </AlertBox>
         ))

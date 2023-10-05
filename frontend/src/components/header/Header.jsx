@@ -1,7 +1,6 @@
 import React from "react";
 import Logo from "../Logo/Logo";
 import Nav from "../Nav/Nav";
-import { ReactComponent as AlarmIcon } from "../../assets/img/Alarm_icon.svg";
 import { styled } from "styled-components";
 
 const BusinessHead = styled.div`
@@ -14,15 +13,16 @@ const BusinessHead = styled.div`
   background-color: #f2f5fe;
   position: fixed;
   top: 0;
-  z-index: 999;
+  z-index: 1;
 `;
 
 function Header() {
   return (
     <BusinessHead>
       <Logo />
-      <AlarmIcon />
-      <Nav />
+      <div style={{ marginRight: "5%" }}>
+        <Nav />
+      </div>
     </BusinessHead>
   );
 }

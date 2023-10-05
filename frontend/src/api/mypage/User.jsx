@@ -31,3 +31,22 @@ export async function Login(props) {
     console.error(e);
   }
 }
+
+export async function Exit() {
+  const id = localStorage.getItem("id");
+  try {
+    const res = await baseAxios.patch(`exit/${id}`, {});
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function EmailCheck(props) {
+  try {
+    const res = await baseAxios.get(`user/check/${props}`, {});
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}

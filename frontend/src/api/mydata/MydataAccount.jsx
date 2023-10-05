@@ -31,3 +31,15 @@ export async function BankRange(props) {
     console.error(e);
   }
 }
+
+export async function MatchWelfare() {
+  try {
+    const res = await baseAxios.get(
+      `banking/transaction/withWelfare/111010011`,
+      {}
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
