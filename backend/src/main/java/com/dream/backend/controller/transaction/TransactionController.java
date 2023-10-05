@@ -10,6 +10,7 @@ import com.dream.backend.domain.account.Account;
 import com.dream.backend.domain.transaction.Transaction;
 import com.dream.backend.domain.welfare.repository.WelfareRepository;
 import com.dream.backend.elasitc.service.UserLastAlarmService;
+import com.dream.backend.service.account.AccountService;
 import com.dream.backend.service.transaction.TransactionService;
 import com.dream.backend.service.welfare.WelfareService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class TransactionController {
     private final TransactionService transactionService;
     private final UserLastAlarmService alarmService;
     private final WelfareService welfareService;
+    private final AccountService accountService;
 
     @GetMapping("/all")
     public List<Transaction> getAllTransaction() {
@@ -145,10 +147,9 @@ public class TransactionController {
 
         List<TransactionObject> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionByDateRange(thirtyDaysAgo, today, userId);
+        Account account =  accountService.getAccount(userId).get();
 
-        if(result.isEmpty()) return null;
-        Account account = result.get(0).getAccount();
-        if(account == null) return null;
+        if(result.isEmpty() || account == null) return null;
 
         for(Transaction t: result) {
             list.add(new TransactionObject(t.getTranDate(), t.getInoutType(), null, t.getTranDesc(), t.getTranAmt(), t.getBalance()));
@@ -165,10 +166,9 @@ public class TransactionController {
 
         List<WelfareAndTransactionResponse> list = new ArrayList<>();
         List<Transaction> result = transactionService.getTransactionByAccountNumber(accountNumber);
+        Account account =  accountService.getAccount(accountNumber).get();
 
-        if(result.isEmpty()) return null;
-        Account account = result.get(0).getAccount();
-        if(account == null) return null;
+        if(result.isEmpty() || account == null) return null;
 
         for(Transaction t: result) {
             String code = t.getTranDesc();
