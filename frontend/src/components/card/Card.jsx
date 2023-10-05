@@ -4,6 +4,7 @@ import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDrag } from "react-dnd";
 import jsonData from "../../assets/data/region.json";
+import { green } from "@mui/material/colors";
 
 // 카드
 const StyledCard = styled.div`
@@ -259,6 +260,13 @@ const Card = (props) => {
   const regionValue = region !== "0" ? region : "전국";
   const supportPeriodValue = support_period || "기간 없음";
 
+  const calculateRemainingMonths = (support_period) => {
+    const today = new Date();
+    const endDate = new Date(support_period);
+
+    return Math.round((today - endDate) / (1000 * 60 * 60 * 24 * 30) + 1);
+  };
+
   // 데이터 가져오기
   async function handleCardClick(e) {
     if (!modalVisible) {
@@ -337,6 +345,11 @@ const Card = (props) => {
             <p style={{ color: d_day !== "마감" ? "blue" : "red" }}>
               {d_day !== "마감" ? `D-DAY : ${d_day}` : "마감"}
             </p>
+            {props.showPeriod && (
+              <p style={{ color: "green" }}>
+                {calculateRemainingMonths(props.support_period)}달 남았습니다.
+              </p>
+            )}
           </p>
         </ContentBox>
       </StyledCard>
