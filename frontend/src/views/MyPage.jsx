@@ -7,6 +7,7 @@ import ChangeRegion from "../components/mydata/ChangeRegion";
 import jsonData from "../assets/data/region.json";
 import Header from "../components/header/Header";
 import { Exit } from "../api/mypage/User";
+import { useNavigate } from "react-router";
 
 //정보박스
 const InfoBox = styled.div`
@@ -42,6 +43,7 @@ const InfoTextBox = styled.div`
 `;
 
 function MyPage() {
+  const navigate = useNavigate();
   const [mode, setMode] = useState(0);
   const [info, setInfo] = useState({
     name: null,
@@ -73,6 +75,7 @@ function MyPage() {
     await Exit();
     localStorage.clear();
     window.alert("회원탈퇴 되었습니다.");
+    navigate("/");
   };
 
   useEffect(() => {

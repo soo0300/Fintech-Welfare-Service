@@ -173,7 +173,7 @@ function MyData() {
   };
 
   const fetchData = async () => {
-    if (myData === "true") {
+    if (myData === "1") {
       const res = await MatchWelfare();
       setMessage(res.data.response.reverse());
       for (let i = 0; i < res.data.response.length; i++) {
@@ -214,7 +214,7 @@ function MyData() {
           <ButtonBox>
             <Loading />
           </ButtonBox>
-        ) : myData === "true" ? (
+        ) : myData === "1" ? (
           <ChartBox>
             <TextBox>
               <p>월별 지원금 현황</p>

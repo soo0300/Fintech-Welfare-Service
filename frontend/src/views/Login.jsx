@@ -75,7 +75,8 @@ const Login = () => {
       const response = await LoginRequest(requestData);
 
       // API 응답 처리
-      if (response.status === 200) {
+      if (response.status === 200 && response.data.data != null) {
+        console.log(response);
         localStorage.setItem("id", response.data.data.id);
         localStorage.setItem("myData", response.data.data.myData);
         const message = [
@@ -84,7 +85,7 @@ const Login = () => {
         localStorage.setItem("message", [JSON.stringify(message)]);
         navigate("/business");
       } else {
-        console.error("로그인 실패:", response.data);
+        window.alert("아이디 혹은 비밀번호가 틀립니다.");
       }
     } catch (error) {
       console.error("API 요청 오류:", error);
