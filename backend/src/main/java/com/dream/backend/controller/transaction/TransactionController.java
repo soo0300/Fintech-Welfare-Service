@@ -45,22 +45,20 @@ public class TransactionController {
             @PathVariable("account_number") Long account,
             @PathVariable("start_date") String start,
             @PathVariable("end_date") String end) {
-        System.out.println(end);
+
         List<TransactionObject> list = new ArrayList<>();
 
         int year = Integer.parseInt(start.substring(0, 4));
         int month = Integer.parseInt(start.substring(5, 7));
         int day = Integer.parseInt(start.substring(8, 10));
-
-        LocalDate sDate = LocalDate.of(year, month, day);
+        LocalDateTime sDate = LocalDate.of(year, month, day).atStartOfDay();
 
         int eYear = Integer.parseInt(end.substring(0, 4));
         int eMonth = Integer.parseInt(end.substring(5, 7));
         int eDay = Integer.parseInt(end.substring(8, 10));
+        LocalDateTime eDate = LocalDate.of(eYear, eMonth, eDay).plusDays(1).atStartOfDay();
 
-        LocalDate eDate = LocalDate.of(eYear, eMonth, eDay);
-
-        List<Transaction> result =  transactionService.getTransactionByDateRange(sDate.atStartOfDay(), eDate.atStartOfDay(), account);
+        List<Transaction> result =  transactionService.getTransactionByDateRange(sDate, eDate, account);
        if(result.isEmpty()) return null;
 
         Account acc = result.get(0).getAccount();
