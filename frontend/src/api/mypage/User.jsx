@@ -41,3 +41,12 @@ export async function Exit() {
     console.error(e);
   }
 }
+
+export async function EmailCheck(props) {
+  try {
+    const res = await baseAxios.get(`user/check/${props}`, {});
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}

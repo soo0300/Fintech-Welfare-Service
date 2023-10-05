@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
 import Input from "../components/input/Input";
-import Button from "../components/button/Button";
 import { useNavigate } from "react-router-dom";
+import { EmailCheck } from "../api/mypage/User";
+import { Button } from "@mui/material";
 
 const SignupContainer = styled.div`
   display: flex;
@@ -25,7 +26,7 @@ const HeaderBox = styled.div`
 `;
 const LineBox = styled.div`
   width: 90%;
-  height: 2%;
+  height: 1px;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -35,7 +36,7 @@ const MainBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 90%;
-  height: 68%;
+  height: 100%;
 `;
 
 const Line = styled.div`
@@ -51,10 +52,10 @@ const LineStatus = styled.div`
   top: 0;
 `;
 const FooterBox = styled.div`
-  width: 90%;
+  width: 100%;
   height: 7%;
   display: flex;
-  bottom: 0px;
+  margin-top: 30px;
 `;
 const Signup = () => {
   const [name, setName] = useState("");
@@ -91,15 +92,19 @@ const Signup = () => {
     setPasswordValid(pwd === passwordCheckValue && passwordRegEx.test(pwd));
   };
 
-  const nextPage = () => {
-    if (isEmailValid && isPasswordValid) {
+  const nextPage = async () => {
+    const res = await EmailCheck(email);
+    console.log(res);
+    if (res.data === false) {
       navigate("/info", { state: { name, email, pwd } });
+    } else if (res.data === null) {
+      alert("이미 탈퇴한 회원입니다.");
     } else {
-      alert("유효한 이메일과 비밀번호를 입력해주세요.");
+      alert("중복된 이메일입니다.");
     }
   };
   return (
-    <SignupContainer>
+    <SignupContainer onSubmit={nextPage}>
       <HeaderBox>
         <Logo />
         <h1>&nbsp;함께, 드림</h1>
@@ -109,7 +114,9 @@ const Signup = () => {
         <LineStatus />
       </LineBox>
       <MainBox>
-        <h2>회원가입</h2>
+        <h3 style={{ marginTop: "10px", marginBottom: "10px" }}>
+          회원정보를 입력해주세요.
+        </h3>
         <Input
           width="100%"
           height="50px"
@@ -125,6 +132,7 @@ const Signup = () => {
           onChange={handleNameChange}
         />
         <Input
+          required
           width="100%"
           height="50px"
           color="gray"
@@ -137,14 +145,15 @@ const Signup = () => {
           id="email"
           onChange={handleEmailChange}
         />
+
         {!isEmailValid && email && name && (
-          <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
+          <p style={{ color: "red" }}>이메일형식이 아닙니다.</p>
         )}
-        <p style={{ fontSize: "14px" }}>비밀번호</p>
+
         <Input
           width="100%"
           height="50px"
-          placeholder="영문,숫자,특수기호를 포함한 8~15자리"
+          placeholder="비밀번호"
           fontFamily="surround"
           border-radius="none"
           border="none"
@@ -154,6 +163,11 @@ const Signup = () => {
           id="pwd"
           onChange={handlePasswordChange}
         />
+        {!passwordRegEx.test(pwd) && (
+          <p style={{ fontSize: "14px", whiteSpace: "pre-line" }}>
+            {"영문,숫자,특수기호를 포함한\n8자리 이상, 15자리 이하"}
+          </p>
+        )}
         <Input
           width="100%"
           height="50px"
@@ -167,23 +181,54 @@ const Signup = () => {
           id="pwdcheck"
           onChange={handlePasswordCheckChange}
         />
-        {!isPasswordValid && pwdcheck && (
-          <p style={{ color: "red" }}>
-            비밀번호가 일치하지 않거나 <br />
-            유효하지 않습니다.
-          </p>
-        )}
+        {pwdcheck &&
+          (!isPasswordValid ? (
+            <p style={{ color: "red" }}>
+              비밀번호가 일치하지 않거나 <br />
+              유효하지 않습니다.
+            </p>
+          ) : (
+            <p style={{ color: "green" }}>비밀번호가 맞습니다.</p>
+          ))}
+        <FooterBox>
+          {name &&
+          email &&
+          pwd &&
+          pwdcheck &&
+          isPasswordValid &&
+          isEmailValid &&
+          passwordRegEx.test(pwd) ? (
+            <Button
+              onClick={nextPage}
+              sx={{
+                width: "100%",
+                fontSize: "15px",
+                fontFamily: "surround",
+                color: "white",
+                backgroundColor: "blue",
+                borderRadius: "10px",
+              }}
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={nextPage}
+              disabled
+              sx={{
+                width: "100%",
+                fontSize: "15px",
+                fontFamily: "surround",
+                color: "white",
+                backgroundColor: "blue",
+                borderRadius: "10px",
+              }}
+            >
+              다음
+            </Button>
+          )}
+        </FooterBox>
       </MainBox>
-      <FooterBox>
-        <Button
-          onClick={nextPage}
-          width="100%"
-          fontSize="15px"
-          fontFamily="surround"
-        >
-          다음
-        </Button>
-      </FooterBox>
     </SignupContainer>
   );
 };

@@ -29,7 +29,7 @@ const HeaderBox = styled.div`
 `;
 const LineBox = styled.div`
   width: 90%;
-  height: 2%;
+  height: 1px;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -55,12 +55,13 @@ const LineStatus = styled(motion.div)`
   left: 0;
 `;
 const FooterBox = styled.div`
-  width: 90%;
+  width: 100%;
   height: 5%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  margin-top: 30px;
 `;
 const BirthBox = styled.div`
   display: flex;
@@ -179,6 +180,7 @@ const Info = () => {
   const [selectedSubRegionText, setSelectedSubRegionText] =
     useState("시/군/구 ▼");
   const handleRegionSelect = (region) => {
+    console.log(region);
     setSelectedRegion(region);
     setSelectedRegionText(region);
     const curRegion = jsonData.find((item) => item.name === region);
@@ -193,9 +195,12 @@ const Info = () => {
       setSubRegions([]);
     }
     setIsFirstDropdownView(false);
+    setIsSecondDropdownView(!isSecondDropdownView);
+    setSelectedSubRegionText("시/군/구 ▼");
   };
 
   const handleSubRegionSelect = (region) => {
+    console.log(region);
     setSelectedSubRegionText(region);
     const curRegion = jsonData.find((item) => item.name === region);
     setRegionKey(curRegion.region_key);
@@ -241,11 +246,11 @@ const Info = () => {
         />
       </LineBox>
       <MainBox className="MainBox">
-        <h3>
+        <h3 style={{ marginTop: "10px", marginBottom: "10px" }}>
           맞춤 정보를 제공하기 위해
           <br /> 입력해주세요 :)
         </h3>
-        <p style={{ fontSize: "18px" }}>생년월일</p>
+        <p style={{ fontSize: "18px", marginBottom: 0 }}>생년월일</p>
         <BirthBox>
           <Input
             type="number"
@@ -277,7 +282,9 @@ const Info = () => {
           />
           ●●●●●●
         </BirthBox>
-        <p style={{ fontSize: "18px" }}>보호종료일</p>
+        <p style={{ fontSize: "18px", marginBottom: 0, marginTop: "18px" }}>
+          보호종료일
+        </p>
         <DateBox>
           <Input
             type="date"
@@ -328,28 +335,28 @@ const Info = () => {
             )}
           </SecondKeyBox>
         </RegionBox>
+        <FooterBox>
+          <Button
+            onClick={() => movePage(true)}
+            width="45%"
+            height="100%"
+            fontSize="15px"
+            background="success"
+            fontFamily="surround"
+          >
+            마이데이터
+          </Button>
+          <Button
+            onClick={() => movePage(false)}
+            width="45%"
+            height="100%"
+            fontSize="15px"
+            fontFamily="surround"
+          >
+            회원가입
+          </Button>
+        </FooterBox>
       </MainBox>
-      <FooterBox>
-        <Button
-          onClick={() => movePage(true)}
-          width="45%"
-          height="100%"
-          fontSize="15px"
-          background="success"
-          fontFamily="surround"
-        >
-          마이데이터
-        </Button>
-        <Button
-          onClick={() => movePage(false)}
-          width="45%"
-          height="100%"
-          fontSize="15px"
-          fontFamily="surround"
-        >
-          회원가입
-        </Button>
-      </FooterBox>
     </InfoContainer>
   );
 };
