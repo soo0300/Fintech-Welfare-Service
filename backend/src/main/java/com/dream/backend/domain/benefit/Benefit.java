@@ -70,4 +70,7 @@ public class Benefit {
         this.status = 0;
     }
 
+    public void cancelBenefit() {
+        this.status = 3;
+    }
 }
