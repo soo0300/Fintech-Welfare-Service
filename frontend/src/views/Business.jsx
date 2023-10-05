@@ -265,6 +265,7 @@ function ReceiveBody(props) {
                 welfare_type={welfare.welfareType}
                 img={welfare.img}
                 origin="receive"
+                showPeriod="true"
               />
             ))}{" "}
           </CardContainer>
@@ -410,32 +411,40 @@ function Business() {
   }, []);
 
   const addReceive = async (id) => {
-    const response = await PlusWelfare({
-      user_id: userId,
-      welfare_id: id,
-      status: 1,
-    });
-    if (response.status === 200) {
-      // Fetch new data after the operation
-      fetchData(GetExamine, setExamine);
-      fetchData(GetReceive, setReceive);
-      fetchData(GetFund, setMoney);
-      fetchData(GetMywelfare, setWelfareData);
+    // Check if the item is already in the list
+    const alreadyExists = receive.some((item) => item.id === id);
+    if (!alreadyExists) {
+      const response = await PlusWelfare({
+        user_id: userId,
+        welfare_id: id,
+        status: 1,
+      });
+      if (response.status === 200) {
+        // Fetch new data after the operation
+        fetchData(GetExamine, setExamine);
+        fetchData(GetReceive, setReceive);
+        fetchData(GetFund, setMoney);
+        fetchData(GetMywelfare, setWelfareData);
+      }
     }
   };
 
   const addExamine = async (id) => {
-    const response = await PlusWelfare({
-      user_id: userId,
-      welfare_id: id,
-      status: 2,
-    });
-    if (response.status === 200) {
-      // Fetch new data after the operation
-      fetchData(GetExamine, setExamine);
-      fetchData(GetReceive, setReceive);
-      fetchData(GetFund, setMoney);
-      fetchData(GetMywelfare, setWelfareData);
+    // Check if the item is already in the list
+    const alreadyExists = examine.some((item) => item.id === id);
+    if (!alreadyExists) {
+      const response = await PlusWelfare({
+        user_id: userId,
+        welfare_id: id,
+        status: 2,
+      });
+      if (response.status === 200) {
+        // Fetch new data after the operation
+        fetchData(GetExamine, setExamine);
+        fetchData(GetReceive, setReceive);
+        fetchData(GetFund, setMoney);
+        fetchData(GetMywelfare, setWelfareData);
+      }
     }
   };
 
