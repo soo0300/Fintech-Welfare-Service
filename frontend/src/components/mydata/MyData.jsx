@@ -175,27 +175,23 @@ function MyData() {
   const fetchData = async () => {
     if (myData === "1") {
       const res = await MatchWelfare();
-      setMessage(res.data.response.reverse());
-      for (let i = 0; i < res.data.response.length; i++) {
-        if (res.data.response[i].welfare != null)
-          if (res.data.response[i].dateTime[5] === "0") {
+      setMessage(res.data.list.reverse());
+      for (let i = 0; i < res.data.list.length; i++) {
+        if (res.data.list[i].welfare != null)
+          if (res.data.list[i].dateTime[5] === "0") {
             setMoneyData((prev) => {
               const newMoney = [...prev];
               newMoney[
-                monthData.indexOf(
-                  `${res.data.response[i].dateTime.slice(6, 7)}월`
-                )
-              ] += res.data.response[i].tranAmt / 10000;
+                monthData.indexOf(`${res.data.list[i].dateTime.slice(6, 7)}월`)
+              ] += res.data.list[i].tranAmt / 10000;
               return newMoney;
             });
           } else {
             setMoneyData((prev) => {
               const newMoney = [...prev];
               newMoney[
-                monthData.indexOf(
-                  `${res.data.response[i].dateTime.slice(5, 7)}월`
-                )
-              ] += res.data.response[i].tranAmt / 10000;
+                monthData.indexOf(`${res.data.list[i].dateTime.slice(5, 7)}월`)
+              ] += res.data.list[i].tranAmt / 10000;
               return newMoney;
             });
           }
