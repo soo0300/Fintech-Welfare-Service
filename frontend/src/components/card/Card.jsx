@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
 import { styled } from "styled-components";
-import Testimg from "../../assets/img/testimg.png";
 import { DetailWelfare } from "../../api/welfare/Welfare";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDrag } from "react-dnd";
@@ -51,7 +50,7 @@ const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 3;
+  z-index: 999;
 `;
 
 const ModalContainer = styled.div`
@@ -66,14 +65,14 @@ const ModalContainer = styled.div`
   flex-direction: column;
   font-size: 2vh;
   border-radius: 10px;
-  z-index: 3;
+  z-index: 9999; // Add this line
 `;
 
 const ModalPoster = styled.img`
-  width: 100%;
+  width: 95%;
   height: 50%;
   object-fit: fill;
-  margin: 3% 0% 3% 0%;
+  margin: 3% 0% 0% 2%;
 `;
 
 const ModalContant = styled.div`
@@ -97,6 +96,7 @@ const FullscreenModalBackground = styled.div`
 const FullscreenImage = styled.img`
   width: 100vw;
   height: auto;
+  z-index: 999;
 `;
 
 const welfareTypeColors = {
@@ -117,13 +117,6 @@ function FullscreenImageModal({ src, onClose }) {
     </FullscreenModalBackground>
   );
 }
-
-// 카드 색 랜덤 추출
-// function getRandomColor() {
-//   const colors = ["#EEA8A8", "#F8EBBE", "#9CEFEA", "#EEBEF2", "#B0D5F8"];
-//   const randomIndex = Math.floor(Math.random() * colors.length);
-//   return colors[randomIndex];
-// }
 
 // 모달
 function Modal({ data, onClose }) {
@@ -168,7 +161,6 @@ function Modal({ data, onClose }) {
     const endDate = new Date(data.end_date).getTime();
     const now = new Date().getTime();
     const remainingTime = endDate - now;
-    console.log("남은시간 :", remainingTime);
     if (remainingTime <= 0) {
       setD_day("마감");
     } else {
@@ -182,11 +174,14 @@ function Modal({ data, onClose }) {
   return (
     <ModalBackground onClick={closeModal}>
       <ModalContainer onClick={stopPropagation}>
-        <ModalPoster src={Testimg} onClick={handlePosterClick} />
+        <ModalPoster
+          src={`/welfare/${data.img}.jpg`}
+          onClick={handlePosterClick}
+        />
 
         {fullscreenVisible && (
           <FullscreenImageModal
-            src={Testimg}
+            src={`/welfare/${data.img}.jpg`}
             onClose={() => setFullscreenVisible(false)}
           />
         )}
@@ -199,7 +194,7 @@ function Modal({ data, onClose }) {
             모집 기한 : {data.start_date.slice(0, -9)} ~{" "}
             {data.end_date.slice(0, -9)}
           </p>
-          <p style={{ color: d_day !== "마감" ? "black" : "red" }}>
+          <p style={{ color: d_day !== "마감" ? "blue" : "red" }}>
             {d_day !== "마감" ? `D-DAY : ${d_day}` : "마감"}
           </p>
           <p>기관명 : {data.organization}</p>
@@ -232,6 +227,7 @@ const Card = (props) => {
   const [{ isDragging }, drag] = useDrag(() => ({
     type: "card",
     item: { id: props.id, origin: props.origin },
+    canDrag: () => props.canDrag !== false,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -252,6 +248,7 @@ const Card = (props) => {
     regionKey,
     title,
     welfare_type,
+    img,
   } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -323,7 +320,7 @@ const Card = (props) => {
         support_fund={support_fund}
         isDragging={isDragging}
       >
-        <Poster src={Testimg} />
+        <Poster src={`/welfare/${img}.jpg`} />
 
         <ContentBox>
           <h2>{title}</h2>
@@ -337,19 +334,19 @@ const Card = (props) => {
                 : `${support_fund}원`
               : "없음"}
             <br />
-            <p style={{ color: d_day !== "마감" ? "black" : "red" }}>
+            <p style={{ color: d_day !== "마감" ? "blue" : "red" }}>
               {d_day !== "마감" ? `D-DAY : ${d_day}` : "마감"}
             </p>
           </p>
-          {modalVisible && (
-            <Modal
-              data={welfareData}
-              onClose={() => setModalVisible(false)}
-              backgroundColor={props.backgroundColor}
-            />
-          )}
         </ContentBox>
       </StyledCard>
+      {modalVisible && (
+        <Modal
+          data={welfareData}
+          onClose={() => setModalVisible(false)}
+          backgroundColor={props.backgroundColor}
+        />
+      )}
     </>
   );
 };

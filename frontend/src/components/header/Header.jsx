@@ -13,7 +13,7 @@ const BusinessHead = styled.div`
   background-color: #f2f5fe;
   position: fixed;
   top: 0;
-  z-index: 999;
+  z-index: 1;
 `;
 
 function Header() {

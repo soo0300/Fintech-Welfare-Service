@@ -206,6 +206,7 @@ function ExamineBody(props) {
                 support_period={welfare.start_date}
                 support_fund={welfare.support_fund}
                 welfare_type={welfare.welfareType}
+                img={welfare.img}
                 origin="examine"
               />
             ))}{" "}
@@ -264,6 +265,7 @@ function ReceiveBody(props) {
                 end_date={welfare.end_date}
                 support_period={welfare.start_date}
                 welfare_type={welfare.welfareType}
+                img={welfare.img}
                 origin="receive"
               />
             ))}{" "}
@@ -275,8 +277,24 @@ function ReceiveBody(props) {
 }
 
 // 맞춤 지원 사업
-function CustomBusinesss() {
-  const [welfareData, setWelfareData] = useState([]);
+function CustomBusinesss({
+  welfareData,
+  setWelfareData,
+  setExamine,
+  setReceive,
+  setMoney,
+}) {
+  const fetchData = async (apiFunc, setStateFunc) => {
+    const userId = localStorage.getItem("id");
+    if (userId) {
+      try {
+        const response = await apiFunc({ user_id: userId });
+        setStateFunc(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   const cancelReceive = async (id) => {
     const userId = localStorage.getItem("id");
@@ -285,7 +303,14 @@ function CustomBusinesss() {
       welfare_id: id,
       status: 1,
     });
-    console.log(response);
+
+    if (response.status === 200) {
+      // Fetch new data after the operation
+      fetchData(GetMywelfare, setWelfareData);
+      fetchData(GetExamine, setExamine);
+      fetchData(GetReceive, setReceive);
+      fetchData(GetFund, setMoney);
+    }
   };
 
   const cancelExamine = async (id) => {
@@ -295,7 +320,14 @@ function CustomBusinesss() {
       welfare_id: id,
       status: 2,
     });
-    console.log(response);
+
+    if (response.status === 200) {
+      // Fetch new data after the operation
+      fetchData(GetMywelfare, setWelfareData);
+      fetchData(GetExamine, setExamine);
+      fetchData(GetReceive, setReceive);
+      fetchData(GetFund, setMoney);
+    }
   };
 
   // 로컬 스토리지에서 id가져오기
@@ -343,6 +375,7 @@ function CustomBusinesss() {
             support_period={welfare.start_date}
             support_fund={welfare.support_fund}
             welfare_type={welfare.welfareType}
+            img={welfare.img}
           />
         ))}
       </CustomCardBox>
@@ -355,6 +388,8 @@ function Business() {
   const [examine, setExamine] = useState([]);
   const [receive, setReceive] = useState([]);
   const [money, setMoney] = useState();
+  const [welfareData, setWelfareData] = useState([]);
+  const userId = localStorage.getItem("id");
 
   // 공통으로 사용하는 데이터 fetch 함수
   const fetchData = async (apiFunc, setStateFunc) => {
@@ -373,31 +408,36 @@ function Business() {
     fetchData(GetExamine, setExamine); // 심사 중인 지원 사업 데이터 fetch
     fetchData(GetReceive, setReceive); // 지원 받고 있는 사업 정보 fetch
     fetchData(GetFund, setMoney); // Money fetch
+    fetchData(GetMywelfare, setWelfareData);
   }, []);
 
   const addReceive = async (id) => {
-    const userId = localStorage.getItem("id");
     const response = await PlusWelfare({
       user_id: userId,
       welfare_id: id,
       status: 1,
     });
-    console.log(response);
     if (response.status === 200) {
-      setReceive([...receive, response.data]);
+      // Fetch new data after the operation
+      fetchData(GetExamine, setExamine);
+      fetchData(GetReceive, setReceive);
+      fetchData(GetFund, setMoney);
+      fetchData(GetMywelfare, setWelfareData);
     }
   };
 
   const addExamine = async (id) => {
-    const userId = localStorage.getItem("id");
     const response = await PlusWelfare({
       user_id: userId,
       welfare_id: id,
       status: 2,
     });
-    console.log(response);
     if (response.status === 200) {
-      setExamine([...examine, response.data]);
+      // Fetch new data after the operation
+      fetchData(GetExamine, setExamine);
+      fetchData(GetReceive, setReceive);
+      fetchData(GetFund, setMoney);
+      fetchData(GetMywelfare, setWelfareData);
     }
   };
 
@@ -441,7 +481,13 @@ function Business() {
           />
         )}
 
-        <CustomBusinesss />
+        <CustomBusinesss
+          setExamine={setExamine}
+          setReceive={setReceive}
+          setMoney={setMoney}
+          welfareData={welfareData}
+          setWelfareData={setWelfareData}
+        />
       </BusinessContainer>
     </>
   );
