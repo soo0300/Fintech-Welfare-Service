@@ -191,7 +191,7 @@ public class TransactionController {
 
         return WelfareListResponse.builder()
                 .account(account)
-                .response(list)
+                .list(list)
                 .build();
     }
 
