@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react"; // useState import
 import { styled } from "styled-components";
 import Header from "../components/header/Header";
 import Card from "../components/card/Card";
-import jsonData from "../assets/data/region.json";
 
 // Drag & Drop
 import { useDrop } from "react-dnd";
@@ -76,9 +75,8 @@ const CustomCardBox = styled.div`
   display: flex;
   width: 100%;
   height: 41vh;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
-  margin-left: 6%;
   flex-wrap: wrap;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -94,9 +92,8 @@ const CardContainer = styled.div`
   display: flex;
   width: 100%;
   height: 23vh;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 10px;
-  margin-left: 6%;
   overflow-y: scroll;
   flex-wrap: wrap;
 `;
