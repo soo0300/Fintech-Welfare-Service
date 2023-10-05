@@ -78,7 +78,7 @@ const HR = styled.hr`
   color: black;
 `;
 
-const tags1 = ["소득", "주거", "금융", "진학"];
+const tags1 = ["소득", "주거", "금융", "교육"];
 const tags2 = ["취업", "건강", "법률", "기타"];
 
 function Tag({ selectedTags, setSelectedTags }) {
@@ -87,7 +87,7 @@ function Tag({ selectedTags, setSelectedTags }) {
     소득: false,
     주거: false,
     금융: false,
-    진학: false,
+    교육: false,
     취업: false,
     건강: false,
     법률: false,
