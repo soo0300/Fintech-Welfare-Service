@@ -178,7 +178,6 @@ function Business({ userInput, selectedTags }) {
   useEffect(() => {
     const fetchWelfares = async () => {
       let fetchedData = await AllWelfare();
-      console.log("웰페어 타입", fetchedData[20].welfare_type.slice(0, 2));
       setWelfares(fetchedData);
       setFilteredWelfares(fetchedData);
     };

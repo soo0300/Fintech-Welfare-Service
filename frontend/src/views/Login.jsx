@@ -76,7 +76,6 @@ const Login = () => {
 
       // API 응답 처리
       if (response.status === 200) {
-        console.log("로그인 성공:", response.data);
         localStorage.setItem("id", response.data.data.id);
         localStorage.setItem("myData", response.data.data.myData);
         const message = [
