@@ -1,6 +1,7 @@
 # 핀테크 특화 프로젝트
 
 **`[커밋 컨벤션입니다.]`**
+![dream](./frontend/src/assets/img/Modified_logo.svg)
 
 - **✨feat: 새로운 기능을 추가할 경우**
 - **🌈style: 기능에 영향을 주지 않는 commit, 코드 순서, CSS등의 포맷에 관한 commit**
