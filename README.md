@@ -1,5 +1,7 @@
 # ![dream](./frontend/src/assets/img/Modified_logo.svg) 함께, 드림
 
+![Intro](./frontend/src/assets/img/Intro_picture.svg)
+
 ## Contents
 
 1. [개요](#1-개요)
@@ -13,6 +15,9 @@
 7. [팀원](#7-팀원)
 
 ## 1. 개요
+
+- 개발기간 : 2023.08.21 ~ 2023.10.06
+- 삼성 청년 소프트웨어 아카데미(SSAFY) 핀테크 프로젝트
 
 ## 2. 프로젝트 소개
 
@@ -34,6 +39,176 @@
 
 ## 5. 프로젝트 구조도
 
+```plaintext
+📦frontend
+ ┣ 📂build
+ ┃ ┣ 📂static
+ ┃ ┃ ┣ 📂css
+ ┃ ┃ ┣ 📂js
+ ┃ ┃ ┗ 📂media
+ ┣ 📂public
+ ┣ 📂src
+ ┃ ┣ 📂api
+ ┃ ┣ 📂assets
+ ┃ ┃ ┣ 📂data
+ ┃ ┃ ┣ 📂fonts
+ ┃ ┃ ┗ 📂img
+ ┃ ┣ 📂components
+ ┃ ┃ ┣ 📂button
+ ┃ ┃ ┣ 📂card
+ ┃ ┃ ┣ 📂dropdown
+ ┃ ┃ ┣ 📂header
+ ┃ ┃ ┣ 📂input
+ ┃ ┃ ┣ 📂loading
+ ┃ ┃ ┣ 📂Logo
+ ┃ ┃ ┣ 📂modal
+ ┃ ┃ ┣ 📂mydata
+ ┃ ┃ ┗ 📂Nav
+ ┃ ┣ 📂router
+ ┃ ┣ 📂store
+ ┃ ┣ 📂style
+ ┃ ┣ 📂views
+ ┃ ┣ 📜App.css
+ ┃ ┣ 📜App.js
+ ┃ ┣ 📜index.css
+ ┃ ┣ 📜index.js
+ ┃ ┣ 📜service-worker.js
+ ┃ ┗ 📜serviceWorkerRegistration.js
+```
+
+```
+📦backend
+ ┣ 📂.gradle
+ ┃ ┣ 📂8.2.1
+ ┃ ┃ ┣ 📂checksums
+ ┃ ┃ ┃ ┣ 📜checksums.lock
+ ┃ ┃ ┃ ┣ 📜md5-checksums.bin
+ ┃ ┃ ┃ ┗ 📜sha1-checksums.bin
+ ┃ ┃ ┣ 📂dependencies-accessors
+ ┃ ┃ ┃ ┣ 📜dependencies-accessors.lock
+ ┃ ┃ ┃ ┗ 📜gc.properties
+ ┃ ┃ ┣ 📂executionHistory
+ ┃ ┃ ┃ ┣ 📜executionHistory.bin
+ ┃ ┃ ┃ ┗ 📜executionHistory.lock
+ ┃ ┃ ┣ 📂fileChanges
+ ┃ ┃ ┃ ┗ 📜last-build.bin
+ ┃ ┃ ┣ 📂fileHashes
+ ┃ ┃ ┃ ┣ 📜fileHashes.bin
+ ┃ ┃ ┃ ┣ 📜fileHashes.lock
+ ┃ ┃ ┃ ┗ 📜resourceHashesCache.bin
+ ┃ ┃ ┗ 📜gc.properties
+ ┃ ┣ 📂buildOutputCleanup
+ ┃ ┃ ┣ 📜buildOutputCleanup.lock
+ ┃ ┃ ┣ 📜cache.properties
+ ┃ ┃ ┗ 📜outputFiles.bin
+ ┃ ┣ 📂vcs-1
+ ┃ ┃ ┗ 📜gc.properties
+ ┃ ┗ 📜file-system.probe
+ ┣ 📂.idea
+ ┃ ┣ 📜.gitignore
+ ┃ ┣ 📜compiler.xml
+ ┃ ┣ 📜gradle.xml
+ ┃ ┣ 📜jarRepositories.xml
+ ┃ ┣ 📜misc.xml
+ ┃ ┣ 📜uiDesigner.xml
+ ┃ ┗ 📜vcs.xml
+ ┣ 📂build
+ ┃ ┣ 📂classes
+ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┗ 📂main
+ ┃ ┃ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂youth
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂dream
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜DreamApplication.class
+ ┃ ┣ 📂resources
+ ┃ ┃ ┗ 📂main
+ ┃ ┃ ┃ ┗ 📜application.properties
+ ┃ ┗ 📂tmp
+ ┃ ┃ ┗ 📂compileJava
+ ┃ ┃ ┃ ┗ 📜previous-compilation-data.bin
+ ┣ 📂dream
+ ┃ ┣ 📂gradle
+ ┃ ┃ ┗ 📂wrapper
+ ┃ ┃ ┃ ┣ 📜gradle-wrapper.jar
+ ┃ ┃ ┃ ┗ 📜gradle-wrapper.properties
+ ┃ ┣ 📂src
+ ┃ ┃ ┣ 📂main
+ ┃ ┃ ┃ ┣ 📂java
+ ┃ ┃ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂youth
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂dream
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂account
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜accountController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂benefit
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜benefitController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂transaction
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜transactionController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂user
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜userController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂welfare
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜welfareController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂domain
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂account
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜accountRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Account.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂benefit
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜benefitRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Benefit.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂transaction
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜transactionRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Transaction.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂user
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜userRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜User.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂welfare
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜welfareRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜Welfare.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂account
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜accountDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜accountService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂benefit
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜benefitDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜benefitService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂transaction
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜transactionDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜transactionService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂user
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜userDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜userService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂welfare
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜welfareDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜welfareService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜DreamApplication.java
+ ┃ ┃ ┃ ┗ 📂resources
+ ┃ ┃ ┃ ┃ ┗ 📜application.yml
+ ┃ ┃ ┗ 📂test
+ ┃ ┃ ┃ ┗ 📂java
+ ┃ ┃ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂youth
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂dream
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜DreamApplicationTests.java
+ ┃ ┣ 📜.gitignore
+ ┃ ┣ 📜build.gradle
+ ┃ ┣ 📜gradlew
+ ┃ ┣ 📜gradlew.bat
+ ┃ ┗ 📜settings.gradle
+ ┗ 📜HELP.md
+```
+
 ## 6. 아키텍쳐
+
+![architecture](./frontend/src/assets/img/architecture.png)
 
 ## 7. 팀원
