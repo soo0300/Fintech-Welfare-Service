@@ -9,9 +9,9 @@ export async function AllWelfare() {
   }
 }
 
-export async function DetailWelfare(props) {
+export async function DetailWelfare(id) {
   try {
-    const res = await baseAxios.get(`welfare/${props}`);
+    const res = await baseAxios.get(`welfare/detail/${id}`);
     return res;
   } catch (e) {
     console.error(e);

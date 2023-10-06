@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../assets/img/Modified_logo.svg";
 import Input from "../components/input/Input";
-import Button from "../components/button/Button";
 import { useNavigate } from "react-router-dom";
+import { EmailCheck } from "../api/mypage/User";
+import { Button } from "@mui/material";
 
 const SignupContainer = styled.div`
   display: flex;
@@ -11,20 +12,21 @@ const SignupContainer = styled.div`
   justify-content: center;
   align-items: center;
   text-align: left;
+  width: 80%;
   min-height: 100vh;
 `;
 
 const HeaderBox = styled.div`
-  width: 70vw;
-  height: 20vh;
+  width: 90%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 20px;
 `;
 const LineBox = styled.div`
-  width: 70vw;
-  height: 2vh;
+  width: 90%;
+  height: 1px;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -33,27 +35,27 @@ const LineBox = styled.div`
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
-  height: 50vh;
+  width: 90%;
+  height: 100%;
 `;
 
 const Line = styled.div`
-  width: 70vw;
+  width: 100%;
   height: 1px;
   background-color: gray;
 `;
 const LineStatus = styled.div`
-  width: 35vw;
+  width: 50%;
   height: 2px;
   background-color: black;
   position: absolute;
   top: 0;
 `;
 const FooterBox = styled.div`
-  width: 70vw;
-  height: 28vh;
+  width: 100%;
+  height: 7%;
   display: flex;
-  bottom: 0px;
+  margin-top: 30px;
 `;
 const Signup = () => {
   const [name, setName] = useState("");
@@ -75,7 +77,9 @@ const Signup = () => {
   };
   const handleNameChange = (e) => {
     const nameValue = e.target.value;
-    setName(nameValue);
+    if (nameValue.length <= 6) {
+      setName(nameValue);
+    }
   };
   const handlePasswordChange = (e) => {
     const passwordValue = e.target.value;
@@ -88,15 +92,19 @@ const Signup = () => {
     setPasswordValid(pwd === passwordCheckValue && passwordRegEx.test(pwd));
   };
 
-  const nextPage = () => {
-    if (isEmailValid && isPasswordValid) {
+  const nextPage = async () => {
+    const res = await EmailCheck(email);
+    console.log(res);
+    if (res.data === false) {
       navigate("/info", { state: { name, email, pwd } });
+    } else if (res.data === null) {
+      alert("이미 탈퇴한 회원입니다.");
     } else {
-      alert("유효한 이메일과 비밀번호를 입력해주세요.");
+      alert("중복된 이메일입니다.");
     }
   };
   return (
-    <SignupContainer>
+    <SignupContainer onSubmit={nextPage}>
       <HeaderBox>
         <Logo />
         <h1>&nbsp;함께, 드림</h1>
@@ -106,9 +114,11 @@ const Signup = () => {
         <LineStatus />
       </LineBox>
       <MainBox>
-        <h2>회원가입</h2>
+        <h3 style={{ marginTop: "10px", marginBottom: "10px" }}>
+          회원정보를 입력해주세요.
+        </h3>
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           color="gray"
           placeholder="이름"
@@ -118,10 +128,12 @@ const Signup = () => {
           borderBottom="1px solid gray"
           background="--bgColor"
           id="name"
+          value={name}
           onChange={handleNameChange}
         />
         <Input
-          width="270px"
+          required
+          width="100%"
           height="50px"
           color="gray"
           placeholder="이메일 입력"
@@ -133,13 +145,15 @@ const Signup = () => {
           id="email"
           onChange={handleEmailChange}
         />
+
         {!isEmailValid && email && name && (
-          <p style={{ color: "red" }}>유효한 이메일을 입력해주세요.</p>
+          <p style={{ color: "red" }}>이메일형식이 아닙니다.</p>
         )}
+
         <Input
-          width="270px"
+          width="100%"
           height="50px"
-          placeholder="비밀번호 입력"
+          placeholder="비밀번호"
           fontFamily="surround"
           border-radius="none"
           border="none"
@@ -149,8 +163,13 @@ const Signup = () => {
           id="pwd"
           onChange={handlePasswordChange}
         />
+        {!passwordRegEx.test(pwd) && (
+          <p style={{ fontSize: "14px", whiteSpace: "pre-line" }}>
+            {"영문,숫자,특수기호를 포함한\n8자리 이상, 15자리 이하"}
+          </p>
+        )}
         <Input
-          width="270px"
+          width="100%"
           height="50px"
           placeholder="비밀번호 확인"
           fontFamily="surround"
@@ -162,22 +181,54 @@ const Signup = () => {
           id="pwdcheck"
           onChange={handlePasswordCheckChange}
         />
-        {!isPasswordValid && pwdcheck && (
-          <p style={{ color: "red" }}>
-            비밀번호가 일치하지 않거나 유효하지 않습니다.
-          </p>
-        )}
+        {pwdcheck &&
+          (!isPasswordValid ? (
+            <p style={{ color: "red" }}>
+              비밀번호가 일치하지 않거나 <br />
+              유효하지 않습니다.
+            </p>
+          ) : (
+            <p style={{ color: "green" }}>비밀번호가 맞습니다.</p>
+          ))}
+        <FooterBox>
+          {name &&
+          email &&
+          pwd &&
+          pwdcheck &&
+          isPasswordValid &&
+          isEmailValid &&
+          passwordRegEx.test(pwd) ? (
+            <Button
+              onClick={nextPage}
+              sx={{
+                width: "100%",
+                fontSize: "15px",
+                fontFamily: "surround",
+                color: "white",
+                backgroundColor: "blue",
+                borderRadius: "10px",
+              }}
+            >
+              다음
+            </Button>
+          ) : (
+            <Button
+              onClick={nextPage}
+              disabled
+              sx={{
+                width: "100%",
+                fontSize: "15px",
+                fontFamily: "surround",
+                color: "white",
+                backgroundColor: "blue",
+                borderRadius: "10px",
+              }}
+            >
+              다음
+            </Button>
+          )}
+        </FooterBox>
       </MainBox>
-      <FooterBox>
-        <Button
-          onClick={nextPage}
-          width="270px"
-          fontSize="15px"
-          fontFamily="surround"
-        >
-          다음
-        </Button>
-      </FooterBox>
     </SignupContainer>
   );
 };

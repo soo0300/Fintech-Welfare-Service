@@ -3,17 +3,20 @@ import styled from "styled-components";
 
 const DropdownContainer = styled.div`
   background-color: none;
-  width: 35vw;
-  height: 170px;
-  font-size: 12px;
+  width: 100%;
+  height: 160px;
+  font-size: 18px;
   color: black;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: red transparent;
 `;
 
 const DropdownUl = styled.ul`
   list-style: none;
   height: auto;
   max-height: 100%;
+  padding-left: 0;
 `;
 
 const DropdownItem = styled.li`
@@ -21,9 +24,9 @@ const DropdownItem = styled.li`
   &:hover {
     background-color: lightgray;
   }
-  height: 20px;
+  height: ${(props) => props.height};
 `;
-const Dropdown = ({ items, onItemClick }) => {
+const Dropdown = ({ items, onItemClick, height }) => {
   return (
     <DropdownContainer className="DropDownContainer">
       <DropdownUl className="DropdownUl">
@@ -33,6 +36,7 @@ const Dropdown = ({ items, onItemClick }) => {
             onClick={() => onItemClick(item)}
             className={item}
             color="black"
+            height={height}
           >
             {item}
           </DropdownItem>

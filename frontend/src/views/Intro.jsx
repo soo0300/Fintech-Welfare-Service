@@ -12,7 +12,7 @@ const IntroContainer = styled(motion.div)`
   justify-content: center;
   align-items: center;
   text-align: center;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
 `;
 
@@ -20,7 +20,7 @@ const TitleBox = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 20vh;
+  height: 10%;
   font-size: 50px;
   font-weight: bolder;
   text-align: center;
@@ -28,13 +28,12 @@ const TitleBox = styled.div`
 `;
 
 const LogoImg = styled.img`
-  width: 35vw;
+  width: 35%;
   max-width: 100%;
 `;
 
 const TextBelowIntroPicture = styled(motion.div)`
   font-size: 24px;
-  margin-top: 20px;
 `;
 
 const BoxVariants = {

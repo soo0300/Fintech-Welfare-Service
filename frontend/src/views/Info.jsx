@@ -12,23 +12,24 @@ import jsonData from "../assets/data/region.json";
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: left;
+  width: 80%;
   min-height: 100vh;
 `;
 
 const HeaderBox = styled.div`
-  width: 70vw;
-  height: 20vh;
+  width: 90%;
+  height: 20%;
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 20px;
 `;
 const LineBox = styled.div`
-  width: 70vw;
-  height: 2vh;
+  width: 90%;
+  height: 1px;
   display: flex;
   flex-direction: row;
   position: relative;
@@ -37,28 +38,30 @@ const LineBox = styled.div`
 const MainBox = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70vw;
-  height: 50vh;
+  width: 90%;
+  height: 90%;
 `;
 
 const Line = styled.div`
-  width: 70vw;
+  width: 90%;
   height: 1px;
   background-color: gray;
 `;
 const LineStatus = styled(motion.div)`
-  width: 35vw;
+  width: 50%;
   height: 2px;
   background-color: black;
   position: absolute;
   left: 0;
 `;
 const FooterBox = styled.div`
-  width: 70vw;
-  height: 28vh;
+  width: 100%;
+  height: 5%;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
+  margin-top: 30px;
 `;
 const BirthBox = styled.div`
   display: flex;
@@ -77,25 +80,43 @@ const RegionBox = styled.div`
 `;
 
 const FirstKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 const SecondKeyBox = styled.div`
-  width: 35vw;
+  width: 100%;
   display: flex;
   flex-direction: column;
 `;
 const Info = () => {
   const [regionKey, setRegionKey] = useState();
-  const [myData, setMydata] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { name, email, pwd } = location.state || {};
   const movePage = async (isMydata) => {
-    if (isMydata) {
-      setMydata(true);
-    }
+    let now = new Date();
+    let todayYear = now.getFullYear();
+    let todayMonth =
+      now.getMonth() + 1 > 9 ? now.getMonth() + 1 : "0" + (now.getMonth() + 1);
+    let todayDate = now.getDate() > 9 ? now.getDate() : "0" + now.getDate();
+    let hours = now.getHours() > 9 ? now.getHours() : "0" + now.getHours();
+    let minutes =
+      now.getMinutes() > 9 ? now.getMinutes() : "0" + now.getMinutes();
+    let seconds =
+      now.getSeconds() > 9 ? now.getSeconds() : "0" + now.getSeconds();
+    let createdDate =
+      todayYear +
+      "-" +
+      todayMonth +
+      "-" +
+      todayDate +
+      "T" +
+      hours +
+      ":" +
+      minutes +
+      ":" +
+      seconds;
     const currentDate = new Date();
     const isEnded = selectedTimestamp < currentDate;
     const endDate = selectedDate + "T23:59:59";
@@ -103,23 +124,32 @@ const Info = () => {
       name: name,
       email: email,
       password: pwd,
-      regionKey: regionKey,
-      residence_info: residenceInfo.concat(residenceBack),
+      regionKey: Number(regionKey),
+      residenceInfo: Number(residenceInfo.concat(residenceBack)),
       endDate: endDate,
       isEnded: isEnded,
-      myData: myData,
+      myData: isMydata ? 1 : 0,
+      createdDate: createdDate,
     };
-    console.log(requestData);
     try {
-      // API 요청
-      const response = await Signup(requestData);
+      if (regionKey === 8 || regionKey > 17) {
+        // API 요청
+        const response = await Signup(requestData);
 
-      // API 응답 처리
-      if (response.status === 200) {
-        console.log("회원가입 성공:", response.data);
-        navigate("/business");
+        // API 응답 처리
+        if (response.status === 200) {
+          localStorage.setItem("id", response.data.data.id);
+          localStorage.setItem("myData", requestData.myData);
+          const message = [
+            ["안녕하세요!\n저는 드림이 입니다^^\n무엇을 도와드릴까요?", "bot"],
+          ];
+          localStorage.setItem("message", [JSON.stringify(message)]);
+          navigate("/business");
+        } else {
+          console.error("회원가입 실패:", response.data);
+        }
       } else {
-        console.error("회원가입 실패:", response.data);
+        alert("거주지를 정확히 입력해주세요");
       }
     } catch (error) {
       console.error("API 요청 오류:", error);
@@ -129,11 +159,15 @@ const Info = () => {
   const [residenceBack, setResidenceBack] = useState("");
   const handleResidenceChange = (e) => {
     const residenceValue = e.target.value;
-    setResidenceInfo(residenceValue);
+    if (residenceValue.length <= 6) {
+      setResidenceInfo(residenceValue);
+    }
   };
   const handleResidenceBackChange = (e) => {
     const residenceValue = e.target.value;
-    setResidenceBack(residenceValue);
+    if (residenceValue.length <= 1 && residenceValue <= 4) {
+      setResidenceBack(residenceValue);
+    }
   };
 
   const [regions, setRegions] = useState([]);
@@ -143,6 +177,7 @@ const Info = () => {
   const [selectedSubRegionText, setSelectedSubRegionText] =
     useState("시/군/구 ▼");
   const handleRegionSelect = (region) => {
+    console.log(region);
     setSelectedRegion(region);
     setSelectedRegionText(region);
     const curRegion = jsonData.find((item) => item.name === region);
@@ -157,9 +192,12 @@ const Info = () => {
       setSubRegions([]);
     }
     setIsFirstDropdownView(false);
+    setIsSecondDropdownView(!isSecondDropdownView);
+    setSelectedSubRegionText("시/군/구 ▼");
   };
 
   const handleSubRegionSelect = (region) => {
+    console.log(region);
     setSelectedSubRegionText(region);
     const curRegion = jsonData.find((item) => item.name === region);
     setRegionKey(curRegion.region_key);
@@ -167,11 +205,10 @@ const Info = () => {
   };
 
   useEffect(() => {
-    const filteredNames = jsonData.slice(0, 17).map((item) => item.name);
+    const filteredNames = jsonData.slice(1, 18).map((item) => item.name);
     setRegions(filteredNames);
   }, []);
 
-  // 날짜를 저장할 상태 변수
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isFirstDropdownView, setIsFirstDropdownView] = useState(false);
   const [isSecondDropdownView, setIsSecondDropdownView] = useState(false);
@@ -190,7 +227,6 @@ const Info = () => {
   const handleClickSecondDropdown = () => {
     setIsSecondDropdownView(!isSecondDropdownView);
   };
-
   return (
     <InfoContainer>
       <HeaderBox>
@@ -201,19 +237,20 @@ const Info = () => {
         <Line />
         <LineStatus
           initial={{ left: 0 }}
-          animate={{ left: "35vw" }}
+          animate={{ left: "50%" }}
           transition={{ duration: 0.5 }}
         />
       </LineBox>
       <MainBox className="MainBox">
-        <h2>
+        <h3 style={{ marginTop: "10px", marginBottom: "10px" }}>
           맞춤 정보를 제공하기 위해
           <br /> 입력해주세요 :)
-        </h2>
+        </h3>
+        <p style={{ fontSize: "18px", marginBottom: 0 }}>생년월일</p>
         <BirthBox>
           <Input
             type="number"
-            width="135px"
+            width="50%"
             height="50px"
             color="gray"
             placeholder="생년월일"
@@ -222,12 +259,13 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="none"
             fontFamily="surround"
+            value={residenceInfo}
             onChange={handleResidenceChange}
           />
           -
           <Input
             type="number"
-            width="20px"
+            width="10%"
             height="50px"
             color="gray"
             border-radius="none"
@@ -235,14 +273,18 @@ const Info = () => {
             borderBottom="1px solid gray"
             background="--bgColor"
             fontFamily="surround"
+            value={residenceBack}
             onChange={handleResidenceBackChange}
           />
           ●●●●●●
         </BirthBox>
+        <p style={{ fontSize: "18px", marginBottom: 0, marginTop: "18px" }}>
+          보호종료일
+        </p>
         <DateBox>
           <Input
             type="date"
-            width="270px"
+            width="100%"
             height="50px"
             border-radius="none"
             border="none"
@@ -254,6 +296,7 @@ const Info = () => {
             onChange={handleDateChange}
           />
         </DateBox>
+        <p style={{ fontSize: "18px" }}>거주지</p>
         <RegionBox>
           <FirstKeyBox>
             <Button
@@ -261,8 +304,9 @@ const Info = () => {
               onClick={handleClickFirstDropdown}
               background="none"
               color="black"
-              width="35vw"
+              width="100%"
               fontFamily="surround"
+              fontSize="18px"
             />
             {isFirstDropdownView && (
               <Dropdown items={regions} onItemClick={handleRegionSelect} />
@@ -274,37 +318,41 @@ const Info = () => {
               onClick={handleClickSecondDropdown}
               background="none"
               color="black"
-              width="35vw"
+              width="100%"
               fontFamily="surround"
+              fontSize="18px"
             />
             {isSecondDropdownView && (
               <Dropdown
                 items={subRegions}
                 onItemClick={handleSubRegionSelect}
+                height="20px"
               />
             )}
           </SecondKeyBox>
         </RegionBox>
+        <FooterBox>
+          <Button
+            onClick={() => movePage(true)}
+            width="45%"
+            height="100%"
+            fontSize="15px"
+            background="success"
+            fontFamily="surround"
+          >
+            마이데이터
+          </Button>
+          <Button
+            onClick={() => movePage(false)}
+            width="45%"
+            height="100%"
+            fontSize="15px"
+            fontFamily="surround"
+          >
+            회원가입
+          </Button>
+        </FooterBox>
       </MainBox>
-      <FooterBox>
-        <Button
-          onClick={() => movePage(true)}
-          width="270px"
-          fontSize="15px"
-          background="success"
-          fontFamily="surround"
-        >
-          마이데이터
-        </Button>
-        <Button
-          onClick={() => movePage(false)}
-          width="270px"
-          fontSize="15px"
-          fontFamily="surround"
-        >
-          회원가입
-        </Button>
-      </FooterBox>
     </InfoContainer>
   );
 };

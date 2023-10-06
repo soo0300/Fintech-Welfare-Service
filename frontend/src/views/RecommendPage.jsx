@@ -1,10 +1,12 @@
-import { React, useState, useEffect } from "react";
-import Header from "../components/header/Header";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../assets/img/Search_icon.svg";
 import { ReactComponent as PlusIcon } from "../assets/img/Plus_icon.svg";
 import Button from "../components/button/Button";
 import Card from "../components/card/Card";
+import Header from "../components/header/Header";
+import RegionModal from "../components/modal/RegionModal";
+import jsonData from "../assets/data/region.json";
 
 // API
 import { AllWelfare } from "../api/welfare/Welfare";
@@ -13,21 +15,22 @@ const RecommandPageBody = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  overflow-y: scroll;
+  height: 100%;
   align-items: center;
+  margin-bottom: 10px;
+  margin-top: 70px;
 `;
 
 const SearchBarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative; // 상대적 위치 지정
-  /* padding-top: 70px; */
+  position: relative;
 `;
 
 const StyledSearchIcon = styled(SearchIcon)`
-  position: absolute; // 절대적 위치 지정
-  left: 4%; // input 바의 왼쪽에서 약간 떨어진 위치에 배치
+  position: absolute;
+  left: 4%;
   width: 7%;
 `;
 
@@ -36,16 +39,21 @@ const SearchInput = styled.input`
   height: 4vh;
   border-radius: 30px;
   font-size: 2vh;
-
-  // 아이콘 때문에 가려지는 텍스트를 피하기 위해 padding-left 추가
   padding-left: 5vh;
 `;
 
-function SearchBar() {
+const BlueText = styled.span`
+  color: blue;
+`;
+function SearchBar({ userInput, setUserInput }) {
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
   return (
     <SearchBarContainer>
       <StyledSearchIcon />
-      <SearchInput />
+      <SearchInput value={userInput} onChange={handleInputChange} />
     </SearchBarContainer>
   );
 }
@@ -70,32 +78,34 @@ const HR = styled.hr`
   color: black;
 `;
 
-const tags1 = ["소득", "주거", "금융", "진학"];
+const tags1 = ["소득", "주거", "금융", "교육"];
 const tags2 = ["취업", "건강", "법률", "기타"];
 
-function Tag() {
+function Tag({ selectedTags, setSelectedTags }) {
   // 각 버튼의 활성/비활성 상태를 useState를 통해 관리
   const [tagState, setTagState] = useState({
     소득: false,
     주거: false,
     금융: false,
-    진학: false,
+    교육: false,
     취업: false,
     건강: false,
     법률: false,
     기타: false,
   });
 
-  // 버튼 클릭 핸들러
   const handleTagClick = (tag) => {
-    // 현재 상태를 복사하여 새 객체를 생성
     const updatedTagState = { ...tagState };
-
-    // 클릭한 버튼의 상태를 토글 (true -> false 또는 false -> true)
     updatedTagState[tag] = !updatedTagState[tag];
-
-    // 변경된 상태로 업데이트
     setTagState(updatedTagState);
+
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(
+        selectedTags.filter((selectedTag) => selectedTag !== tag)
+      );
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
   };
 
   return (
@@ -107,9 +117,9 @@ function Tag() {
             weight="bold"
             fontSize="2vh"
             width="8vh"
-            background={tagState[tag] ? "primary" : "white"} // 상태에 따라 배경색 변경
-            color={tagState[tag] ? "white" : "#000"} // 상태에 따라 글자색 변경
-            onClick={() => handleTagClick(tag)} // 클릭 핸들러 연결
+            background={tagState[tag] ? "primary" : "white"}
+            color={tagState[tag] ? "white" : "#000"}
+            onClick={() => handleTagClick(tag)}
           >
             #{tag}
           </Button>
@@ -123,9 +133,9 @@ function Tag() {
             weight="bold"
             fontSize="2vh"
             width="8vh"
-            background={tagState[tag] ? "primary" : "white"} // 상태에 따라 배경색 변경
-            color={tagState[tag] ? "white" : "#000"} // 상태에 따라 글자색 변경
-            onClick={() => handleTagClick(tag)} // 클릭 핸들러 연결
+            background={tagState[tag] ? "primary" : "white"}
+            color={tagState[tag] ? "white" : "#000"}
+            onClick={() => handleTagClick(tag)}
           >
             #{tag}
           </Button>
@@ -156,54 +166,106 @@ const CardContainer = styled.div`
   margin-left: 6%;
 `;
 
-function Business() {
-  const [welfares, setWalfares] = useState([]);
+function Business({ userInput, selectedTags }) {
+  // 카드 안에 내용
+  const [welfares, setWelfares] = useState([]);
+  const [filteredWelfares, setFilteredWelfares] = useState([]);
+  // RegionModal의 상태 관리
+  const [isRegionModalOpen, setIsRegionModalOpen] = useState(false);
+  const [regionKey, setRegionKey] = useState("");
+  const [selectedRegion, setSelectedRegion] = useState("");
 
   useEffect(() => {
     const fetchWelfares = async () => {
-      const data = await AllWelfare();
-      setWalfares(data);
+      let fetchedData = await AllWelfare();
+      setWelfares(fetchedData);
+      setFilteredWelfares(fetchedData);
     };
 
     fetchWelfares();
   }, []);
 
-  console.log(welfares);
+  useEffect(() => {
+    // 이름 및 지역에 따른 필터링
+    let searched = welfares.filter(
+      (welfare) =>
+        (welfare.name.includes(userInput) ||
+          welfare.description_origin.includes(userInput)) &&
+        (regionKey === "" ||
+          welfare.regionKey === regionKey ||
+          welfare.regionKey === 0)
+    );
+
+    // 지역이 있을 때, 지역이름 p태그 안에 띄우기
+    if (regionKey) {
+      const curRegion = jsonData.find((item) => item.region_key === regionKey);
+      setSelectedRegion(curRegion.name);
+    } else {
+      setSelectedRegion("전국");
+    }
+    // 선택된 해시태그로 더 필터링
+    if (selectedTags.length > 0) {
+      searched = searched.filter((welfare) =>
+        selectedTags.some((tag) => welfare.welfare_type.includes(tag))
+      );
+    }
+
+    setFilteredWelfares(searched);
+  }, [userInput, regionKey, selectedTags, welfares]);
+
   return (
     <BusinessContainer>
       <BusinessHeader>
-        <p>전국 지원 / 복지 사업</p>
-        <PlusIcon width="7%" />
+        <p>
+          <BlueText>{selectedRegion ? selectedRegion : "전국"}</BlueText> 지원 /
+          복지 사업
+        </p>
+
+        <PlusIcon onClick={() => setIsRegionModalOpen(true)} width="7%" />
       </BusinessHeader>
       <HR />
+      {isRegionModalOpen && (
+        <RegionModal
+          onClose={() => setIsRegionModalOpen(false)}
+          setRegionKeyInParent={setRegionKey}
+        />
+      )}
       <CardContainer>
-        {welfares &&
-          welfares.map((welfare) => (
-            <Card
-              key={welfare.id}
-              cardWidth="45%"
-              cardHeight="23vh"
-              posterWidth="30rem"
-              fontSize=" 2vw"
-              // welfare props
-              title={welfare.name}
-              region="전국"
-              support_period={welfare.start_date}
-            />
-          ))}
+        {filteredWelfares.map((welfare) => (
+          <Card
+            canDrag={false}
+            key={welfare.id}
+            id={welfare.id}
+            title={welfare.name}
+            regionKey={welfare.regionKey}
+            start_date={welfare.start_date}
+            end_date={welfare.end_date}
+            support_period={welfare.start_date}
+            support_fund={welfare.support_fund}
+            welfare_type={welfare.welfare_type}
+            img={welfare.img}
+          />
+        ))}
       </CardContainer>
     </BusinessContainer>
   );
 }
 
 function RecommendPage() {
+  const [userInput, setUserInput] = useState("");
+  const [selectedTags, setSelectedTags] = useState([]);
+
   return (
     <>
       <Header />
       <RecommandPageBody>
-        <SearchBar />
-        <Tag />
-        <Business />
+        <SearchBar
+          userInput={userInput}
+          setUserInput={setUserInput}
+          className="InputBox"
+        />
+        <Tag selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+        <Business userInput={userInput} selectedTags={selectedTags} />
       </RecommandPageBody>
     </>
   );

@@ -2,7 +2,7 @@ import { baseAxios } from "../Api";
 
 export async function GetUser(props) {
   try {
-    const res = await baseAxios.get(`user/get/${props}`);
+    const res = await baseAxios.get(`user/${props}`);
     return res;
   } catch (e) {
     console.error(e);
@@ -29,6 +29,32 @@ export async function PutUser(props) {
       end_date: props.end_date,
       is_ended: props.is_ended,
     });
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function ChangePassword(props) {
+  try {
+    const res = await baseAxios.patch(
+      `user/${localStorage.getItem("id")}/pwd`,
+      {
+        pwd: props,
+      }
+    );
+    return res;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+export async function ChangeRegionAxios(props) {
+  try {
+    const res = await baseAxios.patch(
+      `user/${localStorage.getItem("id")}/region/${props}`,
+      {}
+    );
     return res;
   } catch (e) {
     console.error(e);
