@@ -153,7 +153,6 @@ const Info = () => {
       }
     } catch (error) {
       console.error("API 요청 오류:", error);
-      // 에러 처리 로직 추가
     }
   };
   const [residenceInfo, setResidenceInfo] = useState("");
