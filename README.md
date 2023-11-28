@@ -20,6 +20,7 @@
 - 삼성 청년 소프트웨어 아카데미(SSAFY) 핀테크 프로젝트
 
 ## 2. 프로젝트 소개
+![Uploading ezgif.com-video-to-gif.gif…]()
 
 ## 3. 주요기능
 
