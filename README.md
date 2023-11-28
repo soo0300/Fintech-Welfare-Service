@@ -1,8 +1,13 @@
 # ![dream](./frontend/src/assets/img/Modified_logo.svg) 함께, 드림
 ### [함께, 드림]은 자립준비청년을 위한 맞춤형 복지 추천 및 관리 플랫폼입니다. 
-2022년 시설퇴소 청년 생활실태조사 보고서와 자립준비청년의 이해관계자들의 면담 및 실질적 요구사항을 담아 기획했습니다. 
-<br>모든 자립준비청년들의 독립을 응원합니다.
+💙 2022년 시설퇴소 청년 생활실태조사 보고서와 자립준비청년의 이해관계자들의 면담 및 실질적 요구사항을 담아 기획했습니다. 
+<br>💙 자립 청년의 맞춤형 지원 사업 수혜율 100%로 될 때까지 모든 자립준비청년들의 독립을 응원합니다.                 
 <br>
+<img src="./frontend/src/assets/img/Intro_picture.svg" alt="Intro" width="180">
+<img src="https://github.com/Team-MukJa/MukJa/assets/46624130/62ba9d05-1a11-41f1-b1fa-d5c36025e9db" alt="단체사진" width="250">
+<img src="./frontend/src/assets/img/Intro_picture.svg" alt="Intro" width="180">
+
+
 ## **:sparkles: 목차**
  1. [개요](#1-개요) <br>2. [프로젝트 소개](#2-프로젝트-소개) <br> 3. [주요기능](#3-주요기능)
 4. [기술스택](#4-기술스택)
@@ -99,7 +104,6 @@
 <img src="https://img.shields.io/badge/amazon aws-232f3e?style=for-the-badge&logo=amazon aws&logoColor=black"><img src="https://img.shields.io/badge/docker-2496ed?style=for-the-badge&logo=docker&logoColor=black"><img src="https://img.shields.io/badge/jenkins-d24939?style=for-the-badge&logo=jenkins&logoColor=black"><img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=black">
 
 ## 5. 프로젝트 구조도
-![Intro](./frontend/src/assets/img/Intro_picture.svg)
 
 ```plaintext
 📦frontend
