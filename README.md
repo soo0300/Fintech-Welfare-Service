@@ -282,6 +282,6 @@
 
 | 신대혁 (팀장) | 김수진 | 김범규 | 양건호 | 홍주영 |
 | --------------------------------------- | ------------------------------------- | --------------------------------------------- | -------------------- | ---------- | 
-|![shindaehyuk](https://avatars.githubusercontent.com/u/122503937?v=4) | ![soo0300](https://avatars.githubusercontent.com/u/46624130?v=4) | 큐티범규자리  | ![KurogA49](https://avatars.githubusercontent.com/u/29363448?v=4) | 섹시주영자리
-| [shindaehyuk](https://github.com/shindaehyuk)  | [soo0300](https://github.com/soo0300)  | 범규자리찜 | [KurogA49](https://github.com/KurogA49)  |  주영자리뿅 |
+|![shindaehyuk](https://avatars.githubusercontent.com/u/122503937?v=4) | ![soo0300](https://avatars.githubusercontent.com/u/46624130?v=4) | 큐티범규자리  | ![KurogA49](https://avatars.githubusercontent.com/u/29363448?v=4) |![shindaehyuk](https://avatars.githubusercontent.com/u/122503937?v=4)
+| [shindaehyuk](https://github.com/shindaehyuk)  | [soo0300](https://github.com/soo0300)  | 범규자리찜 | [KurogA49](https://github.com/KurogA49)  |  (https://github.com/Juaaang) |
 | Front-end             | Back-end                              | Front-end&Design                                     | Back-end&Infra| Front-end |
